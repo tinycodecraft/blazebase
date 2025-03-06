@@ -87,6 +87,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+//**this is for razor components
+//**not just element for mvc
 app.UseAntiforgery();
 app.UseAuthorization();
 
