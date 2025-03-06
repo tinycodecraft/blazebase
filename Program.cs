@@ -67,7 +67,8 @@ builder.Services.AddSession(options =>
 
 
 var app = builder.Build();
-
+//Please don't apply to "ApplyCurrentCultureToResponseHeaders"
+//otherwise, the cookie localization not work
 app.UseRequestLocalization();
 
 

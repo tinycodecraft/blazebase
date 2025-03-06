@@ -26,7 +26,9 @@ public  class ViewModelFactory
 
     public static T CreateViewModelWithResource<T,R>(IStringLocalizer<R> loc, string suffix = "FromLoc") where T : class, new()
     {
-        var rmgr = new ResourceManager(typeof(R).Name, typeof(Program).Assembly);
+        //Please note that R is not the true name of the resource file
+        //it is namespace for stringlocalizer to find the resource file
+        var rmgr = new ResourceManager(typeof(R).FullName.Replace(typeof(R).Name,"")+ "Resources."+typeof(R).Name, typeof(Program).Assembly);
         
         var model = new T();
 
