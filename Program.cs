@@ -2,6 +2,7 @@ using blazelogBase.Components;
 using blazelogBase.Middlewares;
 using blazelogBase.Resources;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Text.Json.Serialization;
@@ -67,12 +68,20 @@ builder.Services.AddSession(options =>
 
 
 var app = builder.Build();
+
+
 //Please don't apply to "ApplyCurrentCultureToResponseHeaders"
 //otherwise, the cookie localization not work
 app.UseRequestLocalization();
 
 
 app.UseApiExceptionHandling();
+
+app.MapGet("/api/hello", () => "Hello, World!");
+//test successful
+//app.MapGet("/api/throw", () => { throw new Exception("This is a test exception"); return Results.Ok("Not Ok"); });
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
