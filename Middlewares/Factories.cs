@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Resources;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
+using blazelogBase.Resources;
 
 namespace blazelogBase.Middlewares;
 
@@ -24,11 +25,11 @@ public  class ViewModelFactory
         return model;
     }
 
-    public static T CreateViewModelWithResource<T,R>(IStringLocalizer<R> loc, string suffix = "FromLoc") where T : class, new()
+    public static T CreateViewModelWithResource<T>(IStringLocalizer loc, string suffix = "FromLoc") where T : class, new()
     {
         //Please note that R is not the true name of the resource file
         //it is namespace for stringlocalizer to find the resource file
-        var rmgr = new ResourceManager(typeof(R).FullName.Replace(typeof(R).Name,"")+ "Resources."+typeof(R).Name, typeof(Program).Assembly);
+        var rmgr = new ResourceManager(typeof(SharedResource).FullName!, typeof(Program).Assembly);
         
         var model = new T();
 

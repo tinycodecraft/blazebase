@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
-@using blazelogBase.Resources
 @model PrivacyViewModel
-@inject IStringLocalizer<blazelogBase.SharedResource> Localizer
+@inject IStringLocalizerFactory stringFactory
+
 @{
     ViewData["Title"] = "Privacy Policy";
+    var Localizer = stringFactory.Create(typeof(blazelogBase.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
 }
 <h1>@ViewData["Title"]</h1>
 

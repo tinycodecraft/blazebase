@@ -11,12 +11,13 @@ namespace blazelogBase.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IStringLocalizer<blazelogBase.SharedResource> _stringLocalizer;
+    private readonly IStringLocalizer _stringLocalizer;
 
-    public HomeController(ILogger<HomeController> logger,IStringLocalizer<blazelogBase.SharedResource> localizer)
+    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory)
     {
         _logger = logger;
-        _stringLocalizer = localizer;
+        //using Factory instead of Dummy type blazelogBase.SharedResource as generic type of IStringLocalizer<>
+        _stringLocalizer = stringFactory.Create(typeof(blazelogBase.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
     }
 
     public IActionResult Index()
@@ -31,7 +32,7 @@ public class HomeController : Controller
             CookieRequestCultureProvider.DefaultCookieName, out cultureCookieValue);
 
 
-        var model = ViewModelFactory.CreateViewModelWithResource<PrivacyViewModel,blazelogBase.SharedResource>(_stringLocalizer);
+        var model = ViewModelFactory.CreateViewModelWithResource<PrivacyViewModel>(_stringLocalizer);
         string text = "Thread CurrentUICulture is [" + @Thread.CurrentThread.CurrentUICulture.ToString() + "] ; ";
         text += "Thread CurrentCulture is [" + @Thread.CurrentThread.CurrentCulture.ToString() + "]";
 
