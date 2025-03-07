@@ -1,6 +1,7 @@
 using blazelogBase.Components;
 using blazelogBase.Middlewares;
 using blazelogBase.Resources;
+using blazelogBase.Shared;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

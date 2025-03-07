@@ -2,11 +2,12 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using blazelogBase.Store.Setup;
 using Microsoft.EntityFrameworkCore;
 
 namespace blazelogBase.Store.Models;
 
-public partial class BlazeLogDbContext : DbContext
+public partial class BlazeLogDbContext : DbContext, IBlazeLogDbContext
 {
     public BlazeLogDbContext(DbContextOptions<BlazeLogDbContext> options)
         : base(options)
