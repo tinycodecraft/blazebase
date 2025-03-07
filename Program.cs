@@ -5,7 +5,15 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Serilog;
 using System.Text.Json.Serialization;
+
+/*Bootstrap logger
+ */
+Log.Logger = new LoggerConfiguration().MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -34,7 +42,17 @@ builder.Services.Configure<IISServerOptions>(opt =>
     opt.MaxRequestBodySize = 512 * 1024 * 1024;
 
 });
-
+builder.Services.AddHttpContextAccessor();
+/*UseSerilog configuration
+ */
+builder.Host.UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
+.ReadFrom.Configuration(context.Configuration)
+.ReadFrom.Services(services)
+//.WriteTo.Console(new ExpressionTemplate(
+//    // Include trace and span ids when present.
+//    "[{@t:HH:mm:ss} {@l:u3}{#if @tr is not null} ({substring(@tr,0,4)}:{substring(@sp,0,4)}){#end}] {@m}\n{@x}"))
+//
+);
 
 builder.Services.AddTransient<ProblemDetailsFactory, CustomProblemDetailsFactory>();
 
@@ -91,6 +109,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+/*Use SerilogRequestLogging
+ */
+app.UseSerilogRequestLogging(option =>
+{
+    option.EnrichDiagnosticContext = (diagnostic, http) =>
+    {
+        diagnostic.Set("LocalTime", DateTime.Now.ToString("yyyyMMdd+HHmmss"));
+
+    };
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
