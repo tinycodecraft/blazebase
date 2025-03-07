@@ -105,7 +105,7 @@ namespace blazelogBase.Shared
             public const string TemplateSetting = nameof(TemplateSetting);
             public const string CorsPolicySetting = nameof(CorsPolicySetting);
             public const int JWTExpirationInMins = 12 * 30 * 2;
-
+            public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         }
 
     }
