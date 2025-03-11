@@ -9,6 +9,13 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Serilog;
 using System.Text.Json.Serialization;
 
+/*
+ * Please study 
+ * https://www.fluentui-blazor.net/
+ * https://github.com/microsoft/fluentui-blazor
+ * for using blazor easily
+ */
+
 /*Bootstrap logger
  */
 Log.Logger = new LoggerConfiguration().MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)

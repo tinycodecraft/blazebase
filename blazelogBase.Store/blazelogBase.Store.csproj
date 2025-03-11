@@ -22,8 +22,4 @@
     <ProjectReference Include="..\blazelogBase.Shared\blazelogBase.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
