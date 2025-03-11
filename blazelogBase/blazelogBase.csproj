@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -12,8 +12,6 @@
 		</EmbeddedResource>
 	</ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.13" />
