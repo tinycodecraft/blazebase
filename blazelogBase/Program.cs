@@ -2,6 +2,7 @@ using blazelogBase.Components;
 using blazelogBase.Middlewares;
 using blazelogBase.Resources;
 using blazelogBase.Shared;
+using blazelogBase.Store.Setup;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,12 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) => loggerConfig
 );
 
 builder.Services.AddTransient<ProblemDetailsFactory, CustomProblemDetailsFactory>();
+
+
+builder.Services.AddCommandMapper();
+
+builder.Services.AddStore(builder.Configuration);
+
 
 // Add services to the container.
 //builder.Services.AddControllersWithViews();

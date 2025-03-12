@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace blazelogBase.Store.Commands
 {
 
-    public record GetUsersQuery(string AskSearch,int Start,int Size,params SortDescription[] Sorts): IRequest<List<UserDto>>;
+    public record GetUsersQuery(string AskSearch,int Start=1,int Size=10,params SortDescription[] Sorts): IRequest<List<UserDto>>;
 
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<UserDto>>
@@ -35,7 +35,7 @@ namespace blazelogBase.Store.Commands
                 query= query.Where(x => x.UserName.Contains(request.AskSearch) || x.Email.Contains(request.AskSearch));
                 
             }
-            if (request.Sorts.Length > 0)
+            if (request.Sorts!=null && request.Sorts.Length > 0)
             {
                 query= query.BuildOrder(request.Sorts).Skip(request.Start).Take(request.Size);
             }
