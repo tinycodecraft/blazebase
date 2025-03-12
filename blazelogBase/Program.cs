@@ -4,8 +4,10 @@ using blazelogBase.Resources;
 using blazelogBase.Shared;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -51,6 +53,7 @@ builder.Services.Configure<IISServerOptions>(opt =>
 
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 /*UseSerilog configuration
  */
 builder.Host.UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
@@ -81,6 +84,8 @@ builder.Services
 .AddRazorComponents()
 .AddInteractiveServerComponents()
 .AddCircuitOptions(options => options.DetailedErrors = true); // for debugging razor components
+
+builder.Services.AddScoped<IUrlHelper>(sp => sp.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(sp.GetRequiredService<IActionContextAccessor>().ActionContext));
 
 builder.Services.AddDistributedMemoryCache();
 
