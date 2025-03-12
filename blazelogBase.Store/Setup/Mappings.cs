@@ -13,7 +13,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<UserDto, CoreUser>().ReverseMap();
+        CreateMap<CoreUser, UserDto>().ReverseMap();
     }
 }
 
