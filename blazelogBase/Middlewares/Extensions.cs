@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace blazelogBase.Middlewares;
 
-
+//let the controller to use this.RazorView<T>(model) instead of View(model)
 public static class ControllerExtensions
 {
     public static IResult RazorView<T>(this Controller controller) where T : IComponent
