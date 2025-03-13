@@ -1,5 +1,6 @@
 using blazelogBase.Components;
 using blazelogBase.Middlewares;
+using blazelogBase.Models;
 using blazelogBase.Resources;
 using blazelogBase.Shared;
 using blazelogBase.Store.Setup;
@@ -55,6 +56,10 @@ builder.Services.Configure<IISServerOptions>(opt =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+//Add razor view global state
+builder.Services.AddScoped<LayoutStateModel>();
+
 /*UseSerilog configuration
  */
 builder.Host.UseSerilog((context, services, loggerConfiguration) => loggerConfiguration

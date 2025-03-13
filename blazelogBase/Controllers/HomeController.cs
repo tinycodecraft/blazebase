@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
 using MediatR;
 using blazelogBase.Store.Commands;
+using blazelogBase.Components.Pages;
 
 namespace blazelogBase.Controllers;
 
@@ -30,6 +31,11 @@ public class HomeController : Controller
 
         var result = await commander.Send(query, cn);
         return View(result);
+    }
+
+    public IResult Sample(bool hideSideBar = false)
+    {
+        return this.RazorView<Sample>(new { HideSideBar=hideSideBar });
     }
 
     public IActionResult Privacy()
