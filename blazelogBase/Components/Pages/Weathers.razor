@@ -1,0 +1,38 @@
+﻿@using blazelogBase.Components.Layout
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Infrastructure
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.Routing
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using blazelogBase.Controllers
+@using blazelogBase.Store.Dtos
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IActionContextAccessor ActionContextAccessor
+@inject IUrlHelper Url
+@inject LayoutStateModel GlobalState
+
+@{
+    var firstWeather = Forecasts.FirstOrDefault();
+}
+
+<LayoutView Layout="typeof(SimpleLayout)">
+    <PageTitle>Weather Forecasts</PageTitle>
+    <HeadContent>
+        <style>
+            main { background: #f0f088; }
+        </style>
+    </HeadContent>
+    <p>This is a Weather Forecast Page</p>
+    @if(firstWeather!=null)
+    {
+        <p>@firstWeather.Date.ToString("yyyy-MM-dd")</p>
+        <p>@firstWeather.Summary</p>
+    }
+</LayoutView>
+
+
+@code {
+    [Parameter]
+    public List<WeatherForecastDto> Forecasts { get; set; }
+    
+}

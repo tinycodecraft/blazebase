@@ -7,6 +7,8 @@ using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
 using MediatR;
 using blazelogBase.Store.Commands;
+using blazelogBase.Store.Dtos;
+
 using blazelogBase.Components.Pages;
 
 namespace blazelogBase.Controllers;
@@ -31,6 +33,15 @@ public class HomeController : Controller
 
         var result = await commander.Send(query, cn);
         return View(result);
+    }
+
+    public async Task<IResult> Weather(GetWeatherForecastsQuery query)
+    {
+        var cn = new CancellationToken();
+        var result = await commander.Send(query, cn);
+
+        return this.RazorView<Weathers>(new { Forecasts =result });
+
     }
 
     public IResult Sample(bool hideSideBar = false)
