@@ -1,4 +1,5 @@
 @page "/students"
+@inject ExampleJsInterop InterJs
 @rendermode InteractiveServer
 
 <PageTitle>Students</PageTitle>
@@ -19,6 +20,11 @@
 
 <Paginator State="@pagination" />
 
+<a href="#" @onclick="OnCallInterJs">Click Me (Example to inject JavaScript to invoke)</a>
+
+
+
+
 
 @code {
     IQueryable<Student> students = Student.GetStudents();
@@ -26,4 +32,6 @@
 
     GridSort<Student> sortByName = GridSort<Student>
     .ByAscending(_ => _.FirstName).ThenAscending(_ => _.LastName);
+
+    private async Task OnCallInterJs() => await InterJs.Prompt("Please Give Student Name?");
 }

@@ -16,7 +16,7 @@ public class ExampleJsInterop : IAsyncDisposable
     public ExampleJsInterop(IJSRuntime jsRuntime)
     {
         moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/blazelogBase.Control/exampleJsInterop.js").AsTask());
+            "import", "./_content/blazelogBase.Control/js/exampleJsInterop.js").AsTask());
     }
 
     public async ValueTask<string> Prompt(string message)

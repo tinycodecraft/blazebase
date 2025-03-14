@@ -1,4 +1,5 @@
 using blazelogBase.Components;
+using blazelogBase.Control;
 using blazelogBase.Middlewares;
 using blazelogBase.Models;
 using blazelogBase.Resources;
@@ -59,6 +60,8 @@ builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 //Add razor view global state
 builder.Services.AddScoped<LayoutStateModel>();
+//Add razor Js module 
+builder.Services.AddScoped<ExampleJsInterop>();
 
 /*UseSerilog configuration
  */
