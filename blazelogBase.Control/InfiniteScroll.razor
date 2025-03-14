@@ -1,0 +1,52 @@
+﻿@implements IAsyncDisposable
+
+@inject IJSRuntime JSRuntime
+<div class="infinite-format">
+    @ChildContent
+</div>
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string ObserverTargetId { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ObservableTargetReached { get; set; }
+
+    private DotNetObjectReference<InfiniteScroll> objectRef;
+
+    private Lazy<Task<IJSObjectReference>> moduleTask;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objectRef = DotNetObjectReference.Create(this);
+
+            moduleTask = new(() => JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./_content/blazelogBase.Control/js/observer.js").AsTask());
+
+            var module = await moduleTask.Value;
+
+            var initResult = await module.InvokeAsync<dynamic>("Observer.Initialize", objectRef, ObserverTargetId);
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnIntersection()
+    {
+        await ObservableTargetReached.InvokeAsync(true);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (moduleTask.IsValueCreated)
+        {
+            var module = await moduleTask.Value;
+            await module.DisposeAsync();
+        }
+    }
+}
