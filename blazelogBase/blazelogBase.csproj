@@ -20,6 +20,7 @@
     <PackageReference Include="Serilog.Expressions" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\blazelogBase.Control\blazelogBase.Control.csproj" />
     <ProjectReference Include="..\blazelogBase.Shared\blazelogBase.Shared.csproj" />
     <ProjectReference Include="..\blazelogBase.Store\blazelogBase.Store.csproj" />
     <ProjectReference Include="..\OpenXmlPowerTools\OpenXmlPowerTools.csproj" />
