@@ -1,38 +1,76 @@
-﻿@using blazelogBase.Components.Layout
-@using Microsoft.AspNetCore.Mvc
-@using Microsoft.AspNetCore.Mvc.Infrastructure
-@using Microsoft.AspNetCore.Mvc.Rendering
-@using Microsoft.AspNetCore.Mvc.Routing
-@using Microsoft.AspNetCore.Mvc.ViewFeatures
-@using blazelogBase.Controllers
-@using blazelogBase.Store.Dtos
-@inject IHttpContextAccessor HttpContextAccessor
-@inject IActionContextAccessor ActionContextAccessor
-@inject IUrlHelper Url
-@inject LayoutStateModel GlobalState
-
+﻿@inject LayoutStateModel GlobalState
+@inject ISender Commander
+@rendermode InteractiveServer
 @{
-    var firstWeather = Forecasts.FirstOrDefault();
+
 }
 
-<LayoutView Layout="typeof(SimpleLayout)">
-    <PageTitle>Weather Forecasts</PageTitle>
-    <HeadContent>
-        <style>
-            main { background: #f0f088; }
-        </style>
-    </HeadContent>
-    <p>This is a Weather Forecast Page</p>
-    @if(firstWeather!=null)
-    {
-        <p>@firstWeather.Date.ToString("yyyy-MM-dd")</p>
-        <p>@firstWeather.Summary</p>
-    }
-</LayoutView>
+<p>This is a Weather Forecast Page</p>
+@if (forecastDtos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div style="max-height: 200px; overflow: auto;">
+        <InfiniteScroll ObserverTargetId="itemtargetid" ObservableTargetReached="(e) => FetchForecasts()">
+            <ul>
+                @foreach (var forecast in forecastDtos)
+                {
+                    <li class="list-group-item"> @forecast.Date: @forecast.TemperatureC-@forecast.TemperatureF (@forecast.Summary)</li>
+                }
+                <li class="list-group-item" id="itemtargetid"></li>
+            </ul>
+
+
+        </InfiniteScroll>
+    </div>
+}
 
 
 @code {
     [Parameter]
-    public List<WeatherForecastDto> Forecasts { get; set; }
+    public int Total { get; set; }
+
+    [Parameter]
+    public int Size { get; set; }
+
+    [Parameter]
+    public int Start { get; set; } = 1;
+    private bool Stop { get; set; }= false;
+
+    private List<WeatherForecastDto> forecastDtos=new List<WeatherForecastDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchForecasts();
+    }
+
+    private async Task FetchForecasts()
+    {
+
+        forecastDtos.AddRange(await Commander.Send(new GetWeatherForecastsQuery(Total,Start, Size)));
+
+        if(Start< Total)
+        {
+            Start += Size;
+
+            if (Start > Total)
+            {
+                Start = Start - Size;
+                Size = Total - Start;
+            }
+
+            
+
+        }
+        else
+        {
+            Stop = true;
+        }
+
+        
+    }
+
     
 }

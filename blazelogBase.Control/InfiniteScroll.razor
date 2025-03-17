@@ -1,10 +1,6 @@
-﻿@implements IAsyncDisposable
+﻿@inject IJSRuntime JSRuntime
 
-@inject IJSRuntime JSRuntime
-<div class="infinite-format">
-    @ChildContent
-</div>
-
+@ChildContent
 
 @code {
     [Parameter]
@@ -18,20 +14,23 @@
 
     private DotNetObjectReference<InfiniteScroll> objectRef;
 
-    private Lazy<Task<IJSObjectReference>> moduleTask;
+    private readonly Lazy<Task<IJSObjectReference>> moduleTask;
+
+    public InfiniteScroll()
+    {
+        moduleTask = new(() => JSRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/blazelogBase.Control/js/observer.js").AsTask());
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            objectRef = DotNetObjectReference.Create(this);
-
-            moduleTask = new(() => JSRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./_content/blazelogBase.Control/js/observer.js").AsTask());
 
             var module = await moduleTask.Value;
+            objectRef = DotNetObjectReference.Create(this);
 
-            var initResult = await module.InvokeAsync<dynamic>("Observer.Initialize", objectRef, ObserverTargetId);
+            var initResult = await module.InvokeAsync<dynamic>("initObserver", objectRef, ObserverTargetId);
         }
     }
 
@@ -39,14 +38,5 @@
     public async Task OnIntersection()
     {
         await ObservableTargetReached.InvokeAsync(true);
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (moduleTask.IsValueCreated)
-        {
-            var module = await moduleTask.Value;
-            await module.DisposeAsync();
-        }
     }
 }

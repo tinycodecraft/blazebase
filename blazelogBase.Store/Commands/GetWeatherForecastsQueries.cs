@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace blazelogBase.Store.Commands
 {
-    public record GetWeatherForecastsQuery(int Start = 1, int Size = 0) : IRequest<List<WeatherForecastDto>>;
+    public record GetWeatherForecastsQuery(int Total, int Start = 1, int Size = 0) : IRequest<List<WeatherForecastDto>>;
 
     public class GetWeatherForcecastsQueryHandler: IRequestHandler<GetWeatherForecastsQuery, List<WeatherForecastDto>>
     {

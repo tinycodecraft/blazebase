@@ -35,12 +35,10 @@ public class HomeController : Controller
         return View(result);
     }
 
-    public async Task<IResult> Weather(GetWeatherForecastsQuery query)
+    public IActionResult Weather(int total =5000)
     {
-        var cn = new CancellationToken();
-        var result = await commander.Send(query, cn);
 
-        return this.RazorView<Weathers>(new { Forecasts =result });
+        return View(new GetWeatherForecastsQuery(total,1, 20));
 
     }
 
