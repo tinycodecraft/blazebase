@@ -35,7 +35,7 @@ public class HomeController : Controller
         return View(result);
     }
 
-    public IActionResult Weather(int total =5000)
+    public IActionResult Weather(int total =100)
     {
 
         return View(new GetWeatherForecastsQuery(total,1, 20));

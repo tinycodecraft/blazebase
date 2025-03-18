@@ -12,14 +12,18 @@
 }
 else
 {
-    <div style="max-height: 200px; overflow: auto;">
+    <div style="max-height: 400px; overflow: auto;">
         <InfiniteScroll ObserverTargetId="itemtargetid" ObservableTargetReached="(e) => FetchForecasts()">
             <ul>
                 @foreach (var forecast in forecastDtos)
                 {
                     <li class="list-group-item"> @forecast.Date: @forecast.TemperatureC-@forecast.TemperatureF (@forecast.Summary)</li>
                 }
-                <li class="list-group-item" id="itemtargetid"></li>
+                @if(!Stop)
+                {
+                    <li class="list-group-item" id="itemtargetid"></li>
+                }
+
             </ul>
 
 
@@ -43,31 +47,27 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await FetchForecasts();
+        //await FetchForecasts();
     }
 
     private async Task FetchForecasts()
     {
 
-        forecastDtos.AddRange(await Commander.Send(new GetWeatherForecastsQuery(Total,Start, Size)));
-
-        if(Start< Total)
+        if(forecastDtos.Count < Total)
         {
-            Start += Size;
 
-            if (Start > Total)
-            {
-                Start = Start - Size;
-                Size = Total - Start;
-            }
 
-            
+            forecastDtos.AddRange(await Commander.Send(new GetWeatherForecastsQuery(Total, Start, Size)));
 
+            Start = forecastDtos.Count + 1;
         }
-        else
+
+        if(Start >Total)
         {
             Stop = true;
         }
+
+
 
         
     }
