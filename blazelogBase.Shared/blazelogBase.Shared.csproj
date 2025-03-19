@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="ErrorOr\" />
     <Folder Include="ExcelPart\" />
-    <Folder Include="Models\" />
     <Folder Include="Handles\" />
   </ItemGroup>
 

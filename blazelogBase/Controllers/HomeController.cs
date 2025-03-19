@@ -10,6 +10,8 @@ using blazelogBase.Store.Commands;
 using blazelogBase.Store.Dtos;
 
 using blazelogBase.Components.Pages;
+using blazelogBase.Shared.Tools;
+using AutoMapper;
 
 namespace blazelogBase.Controllers;
 
@@ -18,18 +20,26 @@ public class HomeController : Controller
     private readonly ISender commander;
     private readonly ILogger<HomeController> _logger;
     private readonly IStringLocalizer _stringLocalizer;
+    private readonly IN.ITokenService tokener;
+    private readonly IMapper mapper;
 
-    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator )
+    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper )
     {
         _logger = logger;
         //using Factory instead of Dummy type blazelogBase.SharedResource as generic type of IStringLocalizer<>
         _stringLocalizer = stringFactory.Create(typeof(blazelogBase.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
         commander = mediator;
+        tokener = tokenHelper;
+        mapper = itmapper;
     }
 
     public async Task<IActionResult> Index(GetUsersQuery query)
     {
         var cn = new CancellationToken();
+        var user = await commander.Send( new GetUserQuery("UXKBS"),cn);
+        var authuser = mapper.Map<AuthUserModel>(user);
+        var token = tokener.CreateToken(authuser);
+        var resultuser = tokener.DecodeTokenToUser(token);
 
         var result = await commander.Send(query, cn);
         return View(result);

@@ -11,17 +11,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace blazelogBase.Store.Commands
 {
+
+    public record GetUserQuery(string userId) : IRequest<UserDto>;
+
+    public class GetUserQueryHandler: IRequestHandler<GetUserQuery, UserDto>
+    {
+        private readonly IMapper mapper;
+        private readonly IBlazeLogDbContext context;
+        public GetUserQueryHandler(IBlazeLogDbContext ctx,IMapper mp)
+        {
+            context = ctx;
+            mapper = mp;
+        }
+        public async Task<UserDto> Handle(GetUserQuery query,CancellationToken cancellationToken)
+        {
+            var data = context.CoreUsers.AsQueryable();
+            var user = await data.FirstOrDefaultAsync(e => e.UserId == query.userId);
+            if(user!=null)
+                return mapper.Map<UserDto>(user);
+            return null;
+        }
+        
+    }
+
 
     public record GetUsersQuery(string AskSearch,int Start=1,int Size=0,params SortDescription[] Sorts): IRequest<List<UserDto>>;
 
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<UserDto>>
     {
-        public readonly IBlazeLogDbContext context;
-        public readonly IMapper mapper;
+        private readonly IBlazeLogDbContext context;
+        private readonly IMapper mapper;
         public GetUsersQueryHandler(IBlazeLogDbContext ctx,IMapper mp)
         {
             context = ctx;

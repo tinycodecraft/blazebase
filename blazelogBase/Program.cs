@@ -3,16 +3,16 @@ using blazelogBase.Control;
 using blazelogBase.Middlewares;
 using blazelogBase.Models;
 using blazelogBase.Resources;
-using blazelogBase.Shared;
+using blazelogBase.Shared.Tools;
 using blazelogBase.Store.Setup;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Serilog;
 using System.Text.Json.Serialization;
+
 
 /*
  * Please study 
@@ -39,6 +39,11 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 var baseurl = builder.WebHost.GetSetting(WebHostDefaults.ServerUrlsKey);
 
+//Setting configurations
+var authsetting = builder.Configuration.GetSection(CN.Setting.AuthSetting);
+builder.Services.Configure<AuthSetting>(authsetting);
+
+
 
 builder.Services.Configure<FormOptions>(opt =>
 {
@@ -57,6 +62,9 @@ builder.Services.Configure<IISServerOptions>(opt =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+//add common service
+builder.Services.AddScoped<IN.ITokenService,TokenService>();
 
 //Add razor view global state
 builder.Services.AddScoped<LayoutStateModel>();

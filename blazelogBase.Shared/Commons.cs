@@ -7,6 +7,13 @@ namespace blazelogBase.Shared
 
     public class Interfaces
     {
+
+        public interface ITokenService
+        {
+            string CreateToken(IAuthResult user);
+            IAuthResult? DecodeTokenToUser(string token);
+        }
+
         //this interface is for mediatr , which require connectionid provided during subscription of signalr event
 
         //the detail can be found in vtecore, WeatherForcastHandler
@@ -43,12 +50,20 @@ namespace blazelogBase.Shared
             Task<string> DownloadFilesAsync(Stream fileStream, string type, string filename, bool inupload = false);
             Task<FileUploadSummary> UploadFileAsync(Stream fileStream, string contentType, string type);
         }
-
         public interface IAuthResult
         {
-            string UserName { get; }
-            string Email { get; }
-            string UserId { get; }
+            string userID { get; }
+            string userName { get; }
+
+            string level { get; }
+
+            string post { get; }
+
+            bool isadmin { get; }
+
+            string division { get; }
+            string email { get; }
+            
         }
     }
 
@@ -108,6 +123,12 @@ namespace blazelogBase.Shared
             public static int PageSize = 20;
             public static int PageStart = 1;
             public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
+            public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
+            public const string SEARCH_SEPARATOR = "$";
+            public const string SecretKey = "HYD.abcqwe123";
+            public const string Issuer = "HYD";
+            public const string Audience = "";
+            public const string Subject = "HYD.ENG";
         }
 
     }
