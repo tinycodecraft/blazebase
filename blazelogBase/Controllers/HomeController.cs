@@ -52,6 +52,11 @@ public class HomeController : Controller
 
     }
 
+    public IResult Login()
+    {
+        return this.RazorView<Login>();
+    }
+
     public IResult Sample(bool hideSideBar = false)
     {
         return this.RazorView<Sample>(new { HideSideBar=hideSideBar });
