@@ -108,6 +108,8 @@ builder.Services
 .AddInteractiveServerComponents()
 .AddCircuitOptions(options => options.DetailedErrors = true); // for debugging razor components
 
+builder.WebHost.UseStaticWebAssets();
+
 builder.Services.AddScoped<IUrlHelper>(sp => sp.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(sp.GetRequiredService<IActionContextAccessor>().ActionContext));
 
 builder.Services.AddDistributedMemoryCache();

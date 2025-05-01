@@ -1,12 +1,20 @@
 {
-  "profiles": {
-    "blazelogBase": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:51596;http://localhost:51597"
+    "profiles": {
+        "blazelogBase": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "applicationUrl": "https://localhost:51593;http://localhost:51596"
+        },
+        "blazelogHomeBase": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "HomeDevelop"
+            },
+            "applicationUrl": "https://localhost:51593;http://localhost:51596"
+        }
     }
-  }
 }
