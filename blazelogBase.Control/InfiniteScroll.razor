@@ -7,6 +7,9 @@
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
+    public string ObserverContainerId { get; set; }
+
+    [Parameter]
     public string ObserverTargetId { get; set; }
 
     [Parameter]
@@ -30,7 +33,7 @@
             var module = await moduleTask.Value;
             objectRef = DotNetObjectReference.Create(this);
 
-            var initResult = await module.InvokeAsync<dynamic>("initObserver", objectRef, ObserverTargetId);
+            var initResult = await module.InvokeAsync<dynamic>("initObserver", objectRef, ObserverTargetId,ObserverContainerId);
         }
     }
 

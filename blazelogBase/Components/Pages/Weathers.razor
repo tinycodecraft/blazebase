@@ -12,9 +12,9 @@
 }
 else
 {
-    <div style="max-height: 400px; overflow: auto;">
-        <InfiniteScroll ObserverTargetId="itemtargetid" ObservableTargetReached="(e) => FetchForecasts()">
-            <ul>
+    
+        <InfiniteScroll ObserverContainerId="itemcontainerid" ObserverTargetId="itemtargetid" ObservableTargetReached="(e) => FetchForecasts()">
+        <ul style="height: 400px; overflow-y: scroll; width: 100%; position:relative " id="itemcontainerid">
                 @foreach (var forecast in forecastDtos)
                 {
                     <li class="list-group-item"> @forecast.Date: @forecast.TemperatureC-@forecast.TemperatureF (@forecast.Summary)</li>
@@ -28,7 +28,7 @@ else
 
 
         </InfiniteScroll>
-    </div>
+    
 }
 
 

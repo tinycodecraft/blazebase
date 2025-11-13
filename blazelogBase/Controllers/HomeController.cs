@@ -56,7 +56,7 @@ public class HomeController : Controller
     {
         return this.RazorView<Login>();
     }
-
+    //The Sample has problem because accessor could not be injected
     public IResult Sample(bool hideSideBar = false)
     {
         return this.RazorView<Sample>(new { HideSideBar=hideSideBar });
