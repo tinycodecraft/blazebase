@@ -22,7 +22,7 @@ public class HomeController : Controller
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
     private readonly IMapper mapper;
-    private readonly ISession session;
+    private readonly ISession? session;
 
     public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper, IHttpContextAccessor accessor)
     {
