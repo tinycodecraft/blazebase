@@ -129,7 +129,14 @@ namespace blazelogBase.Shared
             public const string Issuer = "HYD";
             public const string Audience = "";
             public const string Subject = "HYD.ENG";
+            
         }
 
+        public static class SessionKey
+        {
+            public const string SESSION_USERID = "HYDbz.Session.UserId";
+
+
+        }
     }
 }

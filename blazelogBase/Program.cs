@@ -166,6 +166,7 @@ app.UseRouting();
 //**not just element for mvc
 app.UseAntiforgery();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

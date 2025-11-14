@@ -22,8 +22,9 @@ public class HomeController : Controller
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
     private readonly IMapper mapper;
+    private readonly ISession session;
 
-    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper )
+    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper, IHttpContextAccessor accessor)
     {
         _logger = logger;
         //using Factory instead of Dummy type blazelogBase.SharedResource as generic type of IStringLocalizer<>
@@ -31,12 +32,25 @@ public class HomeController : Controller
         commander = mediator;
         tokener = tokenHelper;
         mapper = itmapper;
+        logger.LogDebug("HomeController created");
+        var sessionId = accessor.HttpContext?.Session.Id;
+        logger.LogDebug("try to get session : " + sessionId);
+        if(!string.IsNullOrEmpty(sessionId))
+        {
+            session = accessor.HttpContext!.Session;
+        }
+        
     }
 
     public async Task<IActionResult> Index(GetUsersQuery query)
     {
         var cn = new CancellationToken();
-        var user = await commander.Send( new GetUserQuery("UXKBS"),cn);
+        if(session!=null && session.GetString(SK.SESSION_USERID) == null)
+        {
+            session.SetString(SK.SESSION_USERID, "UXKBS");
+        }
+        var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
+        var user = await commander.Send( new GetUserQuery(userid),cn);
         var authuser = mapper.Map<AuthUserModel>(user);
         var token = tokener.CreateToken(authuser);
         var resultuser = tokener.DecodeTokenToUser(token);
