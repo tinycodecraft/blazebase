@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using blazelogBase.Shared.ErrorOr;
 using blazelogBase.Shared.Models;
 using blazelogBase.Shared.Tools;
 using blazelogBase.Store.Dtos;
@@ -16,9 +17,9 @@ using System.Xml;
 namespace blazelogBase.Store.Commands
 {
 
-    public record GetUserQuery(string userId) : IRequest<UserDto>;
+    public record GetUserQuery(string userId) : IRequest<ErrorOr<UserDto>>;
 
-    public class GetUserQueryHandler: IRequestHandler<GetUserQuery, UserDto>
+    public class GetUserQueryHandler: IRequestHandler<GetUserQuery,ErrorOr<UserDto>>
     {
         private readonly IMapper mapper;
         private readonly IBlazeLogDbContext context;
@@ -27,13 +28,13 @@ namespace blazelogBase.Store.Commands
             context = ctx;
             mapper = mp;
         }
-        public async Task<UserDto> Handle(GetUserQuery query,CancellationToken cancellationToken)
+        public async Task<ErrorOr<UserDto>> Handle(GetUserQuery query,CancellationToken cancellationToken)
         {
             var data = context.CoreUsers.AsQueryable();
             var user = await data.FirstOrDefaultAsync(e => e.UserId == query.userId);
             if(user!=null)
                 return mapper.Map<UserDto>(user);
-            return null;
+            return Error.NotFound("UserNotFound", $"User not found for id {query.userId}");
         }
         
     }
