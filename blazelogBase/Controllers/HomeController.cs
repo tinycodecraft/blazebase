@@ -51,7 +51,9 @@ public class HomeController : Controller
         }
         var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
         var user = await commander.Send( new GetUserQuery(userid),cn);
-        var authuser = mapper.Map<AuthUserModel>(user);
+
+
+        var authuser = mapper.Map<AuthUserModel>(user.Value);
         var token = tokener.CreateToken(authuser);
         var resultuser = tokener.DecodeTokenToUser(token);
 
