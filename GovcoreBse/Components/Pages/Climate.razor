@@ -1,0 +1,75 @@
+﻿@using GovcoreBse.Components.Layout
+@rendermode InteractiveServer
+@inject ISender Commander
+
+
+<style>
+	.virtualized-table-container {
+		height: 400px;
+		overflow: auto;
+	}
+</style>
+<LayoutView Layout="typeof(HxHLayout)">
+
+	<PageTitle>Weather</PageTitle>
+
+	<h1>Weather</h1>
+
+	<p>This component demonstrates showing data.</p>
+	<HxCard>
+		<BodyTemplate>
+			<HxGrid TItem="WeatherForecastDto"
+					TableContainerCssClass="virtualized-table-container"
+					ContentNavigationMode="GridContentNavigationMode.InfiniteScroll"
+					ItemRowHeight="41"
+					TableHeaderCssClass="sticky-top"
+					PlaceholdersRowCount="1"
+					PageSize="5"
+					Responsive="true"
+					DataProvider="GetGridData" SelectionEnabled="false" Hover="true">
+				<Columns>
+					<HxGridColumn HeaderText="Date" ItemTextSelector="forecast => forecast.Date.ToShortDateString()" />
+					<HxGridColumn HeaderText="Temp. (C)" ItemTextSelector="forecast => forecast.TemperatureC.ToString()" />
+					<HxGridColumn HeaderText="Temp. (F)" ItemTextSelector="forecast => forecast.TemperatureF.ToString()" />
+					<HxGridColumn HeaderText="Summary" ItemTextSelector="forecast => forecast.Summary" />
+				</Columns>
+			</HxGrid>
+		</BodyTemplate>
+	</HxCard>
+</LayoutView>
+
+@code {
+
+	[Parameter]
+	public int Total { get; set; }
+
+	[Parameter]
+	public int Start { get; set; }
+
+	[Parameter]
+	public int Size { get; set; }
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		//await FetchForecasts();
+	}
+
+
+	private async Task<GridDataProviderResult<WeatherForecastDto>> GetGridData(GridDataProviderRequest<WeatherForecastDto> request)
+	{
+		// Simulate asynchronous loading to demonstrate a loading indicator
+
+		await Task.Delay(500);
+		var forecasts = await Commander.Send(new GetWeatherForecastsQuery(Total, request.StartIndex, request.Count ?? Size));
+
+
+		return new GridDataProviderResult<WeatherForecastDto>()
+			{
+				Data = forecasts,
+				TotalCount = Total
+			};
+	}
+
+
+}
