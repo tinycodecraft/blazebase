@@ -19,6 +19,7 @@ public class Constants
     {
         suggests,
         weathers,
+        login
 
     }
 

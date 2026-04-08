@@ -146,6 +146,13 @@ app.MapGet("/api/hello", () => "Hello, World!");
 //test successful
 //app.MapGet("/api/throw", () => { throw new Exception("This is a test exception"); return Results.Ok("Not Ok"); });
 
+app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.weathers))
+    .MapApiFor(CN.AutocompleteGroup.weathers)
+    .WithTags(nameof(CN.AutocompleteGroup.weathers));
+
+app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.suggests))
+    .MapApiFor(CN.AutocompleteGroup.suggests)
+    .WithTags(nameof(CN.AutocompleteGroup.suggests));
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
