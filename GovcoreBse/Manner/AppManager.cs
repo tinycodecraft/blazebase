@@ -16,6 +16,20 @@ public class AppManager
         }
     }
 
+    public bool ClearState()
+    {
+        if (http.HttpContext == null)
+        {
+            return false;
+        }
+        if (http.HttpContext.Request.Cookies.ContainsKey(Constants.Setting.AuthorizeCookieKey))
+        {
+            http.HttpContext.Response.Cookies.Delete(Constants.Setting.AuthorizeCookieKey);
+            return true;
+        }
+        return false;
+    }
+
     public bool SaveState(UserState userv)
     {
         if(http.HttpContext == null)

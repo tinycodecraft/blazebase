@@ -54,8 +54,9 @@ public class HomeController : Controller
         }
         var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
         var user = await commander.Send( new GetUserQuery(userid),cn);
-        
-        if (manner.UserState== null && !user.IsError)
+        var hasclear = manner.ClearState();
+
+        if (!hasclear && manner.UserState== null && !user.IsError)
         {
             var userv = mapper.Map<UserState>(user.Value);
             if(!manner.SaveState(userv))
