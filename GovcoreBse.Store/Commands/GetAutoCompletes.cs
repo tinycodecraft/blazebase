@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-
+using Cortex.Mediator.Queries;
 using GovcoreBse.Store.Setup;
-using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace GovcoreBse.Store.Commands;
 
-public record GetAutoCompleteQuery(CN.AutoSuggestType returntype, string userid, string? search = null) : IRequest<ErrorOr<KeyValuePair<string, string>[]>>;
-public class GetAutoCompleteQueryHandler : IRequestHandler<GetAutoCompleteQuery, ErrorOr<KeyValuePair<string, string>[]>>
+public record GetAutoCompleteQuery(CN.AutoSuggestType returntype, string userid, string? search = null) : IQuery<ErrorOr<KeyValuePair<string, string>[]>>;
+public class GetAutoCompleteQueryHandler : IQueryHandler<GetAutoCompleteQuery, ErrorOr<KeyValuePair<string, string>[]>>
 {
     public readonly IBlazeLogDbContext context;
     public readonly IMapper mapper;

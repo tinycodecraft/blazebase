@@ -1,5 +1,5 @@
 ﻿@inject LayoutStateModel GlobalState
-@inject ISender Commander
+@inject IMediator Commander
 @rendermode InteractiveServer
 @{
 
@@ -57,7 +57,7 @@ else
         {
 
 
-            forecastDtos.AddRange(await Commander.Send(new GetWeatherForecastsQuery(Total, Start, Size)));
+            forecastDtos.AddRange(await Commander.SendQueryAsync(new GetWeatherForecastsQuery(Total, Start, Size)));
 
             Start = forecastDtos.Count + 1;
         }

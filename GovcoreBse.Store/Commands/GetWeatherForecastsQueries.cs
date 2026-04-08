@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using GovcoreBse.Store.Setup;
 using GovcoreBse.Store.Dtos;
-using MediatR;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cortex.Mediator.Queries;
 
 namespace GovcoreBse.Store.Commands
 {
-    public record GetWeatherForecastsQuery(int Total, int Start = 1, int Size = 0) : IRequest<List<WeatherForecastDto>>;
+    public record GetWeatherForecastsQuery(int Total, int Start = 1, int Size = 0) : IQuery<List<WeatherForecastDto>>;
 
-    public class GetWeatherForcecastsQueryHandler: IRequestHandler<GetWeatherForecastsQuery, List<WeatherForecastDto>>
+    public class GetWeatherForcecastsQueryHandler: IQueryHandler<GetWeatherForecastsQuery, List<WeatherForecastDto>>
     {
         public readonly IBlazeLogDbContext context;
         public readonly IMapper mapper;

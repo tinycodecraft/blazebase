@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +26,10 @@ public class Interfaces
     //not using here for HyD project
     //the type argument in the interface is data type to be requested
     //a concrete interface (non-generic) is also required for mediatr to work
-    public interface IRqBase<T> : IRequest<ErrorOr<T>>
-    {
-        string ConnectionId { get; set; }
-    }
+    //public interface IRqBase<T> : IRequest<ErrorOr<T>>
+    //{
+    //    string ConnectionId { get; set; }
+    //}
 
     public interface IResultGateway<T> : IObservable<KeyValuePair<string, T>>
     {

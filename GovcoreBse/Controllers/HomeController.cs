@@ -5,7 +5,7 @@ using GovcoreBse.Middlewares;
 using GovcoreBse.Resources;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
-using MediatR;
+
 using GovcoreBse.Store.Commands;
 using GovcoreBse.Store.Dtos;
 
@@ -13,12 +13,13 @@ using GovcoreBse.Components.Pages;
 using GovcoreBse.Shared.Tools;
 using AutoMapper;
 using GovcoreBse.Manner;
+using Cortex.Mediator;
 
 namespace GovcoreBse.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ISender commander;
+    private readonly IMediator commander;
     private readonly ILogger<HomeController> logger;
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
@@ -53,7 +54,7 @@ public class HomeController : Controller
             session.SetString(SK.SESSION_USERID, "UXKBS");
         }
         var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
-        var user = await commander.Send( new GetUserQuery(userid),cn);
+        var user = await commander.SendQueryAsync( new GetUserQuery(userid));
         var hasclear = manner.ClearState();
 
         if (!hasclear && manner.UserState== null && !user.IsError)
@@ -70,7 +71,7 @@ public class HomeController : Controller
         var token = tokener.CreateToken(authuser);
         var resultuser = tokener.DecodeTokenToUser(token);
 
-        var result = await commander.Send(query, cn);
+        var result = await commander.SendQueryAsync(query, cn);
         return View(result);
     }
 

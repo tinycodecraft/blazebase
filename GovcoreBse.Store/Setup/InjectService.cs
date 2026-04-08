@@ -1,5 +1,5 @@
 ﻿using GovcoreBse.Store.Models;
-using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +14,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using GovcoreBse.Shared.Tools;
+using Cortex.Mediator.Commands;
+using Cortex.Mediator.DependencyInjection;
+using Cortex.Mediator.Queries;
 
 namespace GovcoreBse.Store.Setup
 {
@@ -23,15 +26,12 @@ namespace GovcoreBse.Store.Setup
         public static IServiceCollection AddCommandMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(cfg => { },Assembly.GetExecutingAssembly());
-            services.AddMediatR(config =>
+            services.AddCortexMediator(new[] { typeof(InjectService) },cfg =>
             {
-                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddOpenQueryPipelineBehavior(typeof(LoggingPipelineBehavior<,>));
+
             });
 
-            //MediatR Pipelines
-            services.AddScoped(
-                typeof(IPipelineBehavior<,>),
-                typeof(LoggingPipelineBehavior<,>));
 
             return services;
         }

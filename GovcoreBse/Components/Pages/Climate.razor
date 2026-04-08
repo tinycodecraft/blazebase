@@ -1,6 +1,6 @@
 ﻿@using GovcoreBse.Components.Layout
 @rendermode InteractiveServer
-@inject ISender Commander
+@inject IMediator Commander
 
 
 <style>
@@ -61,7 +61,7 @@
 		// Simulate asynchronous loading to demonstrate a loading indicator
 
 		await Task.Delay(500);
-		var forecasts = await Commander.Send(new GetWeatherForecastsQuery(Total, request.StartIndex, request.Count ?? Size));
+		var forecasts = await Commander.SendQueryAsync(new GetWeatherForecastsQuery(Total, request.StartIndex, request.Count ?? Size));
 
 
 		return new GridDataProviderResult<WeatherForecastDto>()

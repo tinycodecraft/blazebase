@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Cortex.Mediator.Queries;
 using GovcoreBse.Shared.Tools;
 using GovcoreBse.Store.Dtos;
 using GovcoreBse.Store.Setup;
-using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ using System.Xml;
 namespace GovcoreBse.Store.Commands
 {
 
-    public record GetUserQuery(string userId) : IRequest<ErrorOr<UserDto>>;
+    public record GetUserQuery(string userId) : IQuery<ErrorOr<UserDto>>;
 
-    public class GetUserQueryHandler: IRequestHandler<GetUserQuery,ErrorOr<UserDto>>
+    public class GetUserQueryHandler: IQueryHandler<GetUserQuery,ErrorOr<UserDto>>
     {
         private readonly IMapper mapper;
         private readonly IBlazeLogDbContext context;
@@ -38,10 +39,10 @@ namespace GovcoreBse.Store.Commands
     }
 
 
-    public record GetUsersQuery(string AskSearch,int Start=1,int Size=0,params SortDescription[] Sorts): IRequest<List<UserDto>>;
+    public record GetUsersQuery(string AskSearch,int Start=1,int Size=0,params SortDescription[] Sorts): IQuery<List<UserDto>>;
 
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<UserDto>>
+    public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, List<UserDto>>
     {
         private readonly IBlazeLogDbContext context;
         private readonly IMapper mapper;

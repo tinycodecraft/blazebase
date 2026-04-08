@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Cortex.Mediator.Commands;
+using Cortex.Mediator.Queries;
 using Microsoft.Extensions.Logging;
 
 namespace GovcoreBse.Store.Setup;
@@ -6,7 +7,7 @@ namespace GovcoreBse.Store.Setup;
 
 
 
-public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+public class LoggingPipelineBehavior<TRequest, TResponse> : IQueryPipelineBehavior<TRequest, TResponse> where TRequest : IQuery<TResponse>
 {
     private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger;
 
@@ -17,7 +18,7 @@ public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TR
 
     public async Task<TResponse> Handle(
         TRequest request,
-        RequestHandlerDelegate<TResponse> next,
+        QueryHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
