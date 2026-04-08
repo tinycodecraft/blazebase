@@ -1,4 +1,4 @@
-namespace GovcoreBse.Shared.ErrorOr;
+namespace GovcoreBse.Common.ErrorOr;
 
 /// <summary>
 /// A discriminated union of errors or a value.

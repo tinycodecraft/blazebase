@@ -1,4 +1,4 @@
-namespace GovcoreBse.Shared.ErrorOr;
+namespace GovcoreBse.Common.ErrorOr;
 
 /// <summary>
 /// Provides factory methods for creating instances of <see cref="ErrorOr{TValue}"/>.

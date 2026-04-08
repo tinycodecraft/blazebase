@@ -12,26 +12,29 @@ using GovcoreBse.Store.Dtos;
 using GovcoreBse.Components.Pages;
 using GovcoreBse.Shared.Tools;
 using AutoMapper;
+using GovcoreBse.Manner;
 
 namespace GovcoreBse.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ISender commander;
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> logger;
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
     private readonly IMapper mapper;
     private readonly ISession? session;
+    private readonly AppManager manner;
 
-    public HomeController(ILogger<HomeController> logger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper, IHttpContextAccessor accessor)
+    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper, IHttpContextAccessor accessor,AppManager appManager)
     {
-        _logger = logger;
+        logger = mlogger;
         //using Factory instead of Dummy type GovcoreBse.SharedResource as generic type of IStringLocalizer<>
         _stringLocalizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
         commander = mediator;
         tokener = tokenHelper;
         mapper = itmapper;
+        manner = appManager;
         logger.LogDebug("HomeController created");
         var sessionId = accessor.HttpContext?.Session.Id;
         logger.LogDebug("try to get session : " + sessionId);
@@ -51,9 +54,18 @@ public class HomeController : Controller
         }
         var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
         var user = await commander.Send( new GetUserQuery(userid),cn);
+        
+        if (manner.UserState== null && !user.IsError)
+        {
+            var userv = mapper.Map<UserState>(user.Value);
+            if(!manner.SaveState(userv))
+            {
+                logger.LogDebug(userid + " state could not be saved to cookie");
+            }
+        }
 
 
-        var authuser = mapper.Map<AuthUserModel>(user.Value);
+        var authuser = mapper.Map<UserState>(user.Value);
         var token = tokener.CreateToken(authuser);
         var resultuser = tokener.DecodeTokenToUser(token);
 

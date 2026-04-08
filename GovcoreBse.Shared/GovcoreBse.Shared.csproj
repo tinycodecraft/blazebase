@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ErrorOr\**" />
+    <EmbeddedResource Remove="ErrorOr\**" />
+    <None Remove="ErrorOr\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Tools\FileService.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
@@ -24,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ErrorOr\" />
     <Folder Include="ExcelPart\" />
     <Folder Include="Handles\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GovcoreBse.Common\GovcoreBse.Common.csproj" />
     <ProjectReference Include="..\OpenXmlPowerTools\OpenXmlPowerTools.csproj" />
   </ItemGroup>
 

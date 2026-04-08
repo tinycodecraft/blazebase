@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using GovcoreBse.Shared.ErrorOr;
-using GovcoreBse.Shared.Models;
 using GovcoreBse.Shared.Tools;
 using GovcoreBse.Store.Dtos;
 using GovcoreBse.Store.Setup;

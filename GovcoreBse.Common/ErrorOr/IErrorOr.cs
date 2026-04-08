@@ -1,4 +1,4 @@
-namespace GovcoreBse.Shared.ErrorOr;
+namespace GovcoreBse.Common.ErrorOr;
 
 public interface IErrorOr<out TValue> : IErrorOr
 {

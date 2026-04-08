@@ -4,7 +4,6 @@ using GovcoreBse.Control;
 using GovcoreBse.Middlewares;
 using GovcoreBse.Models;
 using GovcoreBse.Resources;
-using GovcoreBse.Shared.Tools;
 using GovcoreBse.Store.Setup;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Serilog;
 using System.Text.Json.Serialization;
+using GovcoreBse.Manner;
 
 
 /*
@@ -35,6 +35,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     ApplicationName = typeof(Program).Assembly.GetName().Name,
     ContentRootPath = Directory.GetCurrentDirectory(),
     //WebRootPath = "wwwroot",
+    
 
 });
 
@@ -63,6 +64,7 @@ builder.Services.Configure<IISServerOptions>(opt =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+builder.Services.AddSingleton<AppManager>();
 
 //add common service
 builder.Services.AddScoped<IN.ITokenService,TokenService>();

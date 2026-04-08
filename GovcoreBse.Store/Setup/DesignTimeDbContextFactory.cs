@@ -19,11 +19,11 @@ public class DesignTimeDbContextFactory:IDesignTimeDbContextFactory<BlazeLogDbCo
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(@Directory.GetCurrentDirectory() + $"/../{Constants.Setting.AppName}/appsettings.json")
+            .AddJsonFile(@Directory.GetCurrentDirectory() + $"/../{CN.Setting.AppName}/appsettings.json")
             .Build();
         var builder = new DbContextOptionsBuilder<BlazeLogDbContext>();
         var connectionString = configuration.GetConnectionString(nameof(BlazeLogDbContext).Replace(nameof(DbContext),""));
-        builder.UseSqlServer(connectionString, opt => opt.MigrationsAssembly($"{Constants.Setting.AppName}.Store"));
+        builder.UseSqlServer(connectionString, opt => opt.MigrationsAssembly($"{CN.Setting.AppName}.Store"));
         return new BlazeLogDbContext(builder.Options);
 
     }

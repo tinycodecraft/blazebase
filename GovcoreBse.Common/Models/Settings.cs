@@ -1,11 +1,12 @@
 ﻿
-namespace GovcoreBse.Shared.Models;
+namespace GovcoreBse.Common.Models;
 public class AuthSetting
 {
-    public string SecretKey { get; set; } = string.Empty;
-    public string Secret { get; set; } = string.Empty;
+
     public string Issuer { get; set; } = string.Empty;
     public string Audience { get; set; } = string.Empty;
+
+    public string ExpireInHrs { get; set; } = "4";
 
 }
 
@@ -36,7 +37,7 @@ public class PathSetting
 
 }
 
-public class DBRCUSetting:IDBSetting
+public class DBRCUSetting:IN.IDBSetting
 {
     
     public string DBsource { get; set; } = string.Empty;

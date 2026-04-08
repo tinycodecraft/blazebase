@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace GovcoreBse.Shared.ErrorOr;
+namespace GovcoreBse.Common.ErrorOr;
 
 /// <summary>
 /// Represents an error.
