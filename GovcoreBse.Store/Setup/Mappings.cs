@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+﻿
 using GovcoreBse.Store.Dtos;
 using GovcoreBse.Store.Models;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,22 @@ using System.Threading.Tasks;
 
 namespace GovcoreBse.Store.Setup;
 
-public class MappingProfile : Profile
+
+public class MappingRegister: IRegister
 {
-    public MappingProfile()
+    public void Register(TypeAdapterConfig config)
     {
-        CreateMap<CoreUser, UserDto>().ReverseMap();
-        CreateMap<UserDto, UserState>()
-            .ForMember(dt=> dt.Email,ex=> ex.MapFrom(ex=> ex.Email))
-            .ForMember(dt => dt.IsAdmin, ex => ex.MapFrom(ex => ex.IsAdmin))
-            .ForMember(dt => dt.Post, ex => ex.MapFrom(ex => ex.Post))
-            .ForMember(dt => dt.UserID, ex => ex.MapFrom(ex => ex.UserId))
-            .ForMember(dt => dt.UserName, ex => ex.MapFrom(ex => ex.UserName))
-            .ForMember(dt => dt.Division, ex => ex.MapFrom(ex => ex.Division))
-            .ForMember(dt => dt.Level, ex => ex.MapFrom(ex => ex.Level));
+        config.NewConfig<CoreUser, UserDto>().TwoWays();
+        config.NewConfig<UserDto, UserState>()            
+            .Map(dt => dt.Email, ex => ex.Email)
+            .Map(dt => dt.IsAdmin, ex => ex.IsAdmin)
+            .Map(dt => dt.Post, ex => ex.Post)
+            .Map(dt => dt.UserID, ex => ex.UserId)
+            .Map(dt => dt.UserName, ex => ex.UserName)
+            .Map(dt => dt.Division, ex => ex.Division)
+            .Map(dt => dt.Level, ex => ex.Level);
+        //IgnoreNonMapped, which will ignore the properties that are not mapped explicitly
+        //IgnoreIf, skip if the condition is met
 
     }
 }
-

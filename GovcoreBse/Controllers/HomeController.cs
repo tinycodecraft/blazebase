@@ -11,9 +11,11 @@ using GovcoreBse.Store.Dtos;
 
 using GovcoreBse.Components.Pages;
 using GovcoreBse.Shared.Tools;
-using AutoMapper;
+
 using GovcoreBse.Manner;
 using Cortex.Mediator;
+using Mapster;
+
 
 namespace GovcoreBse.Controllers;
 
@@ -23,18 +25,18 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> logger;
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
-    private readonly IMapper mapper;
+    
     private readonly ISession? session;
     private readonly AppManager manner;
 
-    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper,IMapper itmapper, IHttpContextAccessor accessor,AppManager appManager)
+    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper, IHttpContextAccessor accessor,AppManager appManager)
     {
         logger = mlogger;
         //using Factory instead of Dummy type GovcoreBse.SharedResource as generic type of IStringLocalizer<>
         _stringLocalizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
         commander = mediator;
         tokener = tokenHelper;
-        mapper = itmapper;
+        
         manner = appManager;
         logger.LogDebug("HomeController created");
         var sessionId = accessor.HttpContext?.Session.Id;
@@ -59,7 +61,7 @@ public class HomeController : Controller
 
         if (!hasclear && manner.UserState== null && !user.IsError)
         {
-            var userv = mapper.Map<UserState>(user.Value);
+            var userv = user.Value.Adapt<UserState>();
             if(!manner.SaveState(userv))
             {
                 logger.LogDebug(userid + " state could not be saved to cookie");
@@ -67,7 +69,7 @@ public class HomeController : Controller
         }
 
 
-        var authuser = mapper.Map<UserState>(user.Value);
+        var authuser = user.Value.Adapt<UserState>();
         var token = tokener.CreateToken(authuser);
         var resultuser = tokener.DecodeTokenToUser(token);
 

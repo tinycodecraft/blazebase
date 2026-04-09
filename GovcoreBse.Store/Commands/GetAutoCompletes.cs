@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using Cortex.Mediator.Queries;
 using GovcoreBse.Store.Setup;
 
@@ -15,11 +15,11 @@ public record GetAutoCompleteQuery(CN.AutoSuggestType returntype, string userid,
 public class GetAutoCompleteQueryHandler : IQueryHandler<GetAutoCompleteQuery, ErrorOr<KeyValuePair<string, string>[]>>
 {
     public readonly IBlazeLogDbContext context;
-    public readonly IMapper mapper;
-    public GetAutoCompleteQueryHandler(IBlazeLogDbContext ctx, IMapper mp)
+    
+    public GetAutoCompleteQueryHandler(IBlazeLogDbContext ctx)
     {
         context = ctx;
-        mapper = mp;
+        
     }
 
     public async Task<ErrorOr<KeyValuePair<string, string>[]>> Handle(GetAutoCompleteQuery request, CancellationToken cancellationToken)

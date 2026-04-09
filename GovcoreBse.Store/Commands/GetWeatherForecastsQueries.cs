@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using GovcoreBse.Store.Setup;
 using GovcoreBse.Store.Dtos;
 
@@ -16,12 +16,12 @@ namespace GovcoreBse.Store.Commands
     public class GetWeatherForcecastsQueryHandler: IQueryHandler<GetWeatherForecastsQuery, List<WeatherForecastDto>>
     {
         public readonly IBlazeLogDbContext context;
-        public readonly IMapper mapper;
+        
 
-        public GetWeatherForcecastsQueryHandler(IBlazeLogDbContext ctx, IMapper mp)
+        public GetWeatherForcecastsQueryHandler(IBlazeLogDbContext ctx)
         {
             context = ctx;
-            mapper = mp;
+            
         }
 
 
