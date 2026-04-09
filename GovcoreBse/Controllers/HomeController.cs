@@ -15,6 +15,7 @@ using GovcoreBse.Shared.Tools;
 using GovcoreBse.Manner;
 using Cortex.Mediator;
 using Mapster;
+using GovcoreBse.Store.Setup;
 
 
 namespace GovcoreBse.Controllers;
@@ -57,24 +58,23 @@ public class HomeController : Controller
         }
         var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
         var user = await commander.SendQueryAsync( new GetUserQuery(userid));
-        var hasclear = manner.ClearState();
+        
 
-        if (!hasclear && manner.UserState== null && !user.IsError)
+        if ( manner.UserState== null && !user.IsError)
         {
-            var userv = user.Value.Adapt<UserState>();
+            var userv = user.Value.Adapt<UserState>().AsEmptyWhenNull();
             if(!manner.SaveState(userv))
             {
                 logger.LogDebug(userid + " state could not be saved to cookie");
             }
         }
 
+        //var authuser = user.Value.Adapt<UserState>();
+        //var token = tokener.CreateToken(authuser);
+        //var resultuser = tokener.DecodeTokenToUser(token);
 
-        var authuser = user.Value.Adapt<UserState>();
-        var token = tokener.CreateToken(authuser);
-        var resultuser = tokener.DecodeTokenToUser(token);
-
-        var result = await commander.SendQueryAsync(query, cn);
-        return View(result);
+        var listofusers = await commander.SendQueryAsync(query, cn);
+        return View(listofusers);
     }
 
     public IActionResult Weather(int total =5000)

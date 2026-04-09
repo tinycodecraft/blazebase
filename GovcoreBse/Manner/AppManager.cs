@@ -71,7 +71,11 @@ public class AppManager
                 return null;
 
             var encodeTokenInfo = JWTHelper.GetDecodingToken(tokenInfo);
-
+            if (string.IsNullOrEmpty(encodeTokenInfo))
+            {
+                ClearState();
+                return null;
+            }
             UserState userState = JWTHelper.DElize<UserState>(encodeTokenInfo);
 
             if (userState != null && NowSeconds > userState.exp)

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Serilog;
 using System.Text.Json.Serialization;
 using GovcoreBse.Manner;
+using Microsoft.AspNetCore.Components.Authorization;
 
 
 /*
@@ -64,8 +65,9 @@ builder.Services.Configure<IISServerOptions>(opt =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-builder.Services.AddSingleton<AppManager>();
 
+builder.Services.AddSingleton<AppManager>();
+builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthStateProvider>();
 //add common service
 builder.Services.AddScoped<IN.ITokenService,TokenService>();
 

@@ -3,28 +3,40 @@
 @inject ExampleJsInterop InterJs
 @rendermode InteractiveServer
 
-<PageTitle>Students</PageTitle>
 
-<h1>Students</h1>
-<LayoutView Layout="typeof(HxHLayout)">
-    <PageTitle>Students</PageTitle>
-    <QuickGrid Items="@students" Pagination="@pagination">
-        <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
-        <TemplateColumn Title="Name" SortBy="@sortByName">
-            <div class="flex items-center">
-                <nobr>
-                    <strong>@context.FirstName @context.LastName</strong>
-                </nobr>
-            </div>
-        </TemplateColumn>
-        <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
-    </QuickGrid>
+<AuthorizeView Context="authContext">
+    <Authorized>
+        <LayoutView Layout="typeof(HxHLayout)">
+            <PageTitle>Students</PageTitle>
+            <h1>Students</h1>
+            <QuickGrid Items="@students" Pagination="@pagination">
+                <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
+                <TemplateColumn Title="Name" SortBy="@sortByName">
+                    <div class="flex items-center">
+                        <nobr>
+                            <strong>@context.FirstName @context.LastName</strong>
+                        </nobr>
+                    </div>
+                </TemplateColumn>
+                <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
+            </QuickGrid>
 
-    <Paginator State="@pagination" />
+            <Paginator State="@pagination" />
 
-    <a href="#" @onclick="OnCallInterJs">Click Me (Example to inject JavaScript to invoke)</a>
+            <a href="#" @onclick="OnCallInterJs">Click Me (Example to inject JavaScript to invoke)</a>
 
-</LayoutView>
+        </LayoutView>
+    </Authorized>
+    <NotAuthorized>
+        <LayoutView Layout="typeof(HxHLayout)">
+            <PageTitle>Not Authorized</PageTitle>
+            <h1>Not Authorized</h1>
+            <p>You are not authorized to view this Students page.</p>
+        </LayoutView>
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 
 

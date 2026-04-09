@@ -29,7 +29,7 @@ namespace GovcoreBse.Store.Commands
         public async Task<ErrorOr<UserDto>> Handle(GetUserQuery query,CancellationToken cancellationToken)
         {
             var data = context.CoreUsers.AsQueryable();
-            var user = await data.FirstOrDefaultAsync(e => e.UserId == query.userId);
+            var user = await data.FirstOrDefaultAsync(e => e.UserId == query.userId && !e.Disabled);
             if(user!=null)
                 return user.Adapt<UserDto>();
             return Error.NotFound("UserNotFound", $"User not found for id {query.userId}");

@@ -18,6 +18,7 @@ using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Cortex.Mediator.Queries;
 using Mapster;
+using AgileObjects.AgileMapper;
 
 namespace GovcoreBse.Store.Setup
 {
@@ -26,11 +27,13 @@ namespace GovcoreBse.Store.Setup
         
         public static IServiceCollection AddCommandMapper(this IServiceCollection services)
         {
-            services.AddMapster();
-            var config = TypeAdapterConfig.GlobalSettings;
+            Mapper.WhenMapping.UseConfigurations.From<NullMappingConfiguration>();
+
+            var config = TypeAdapterConfig.GlobalSettings;            
             config.Scan(typeof(InjectService).Assembly);
             services.AddSingleton(config);
-            
+            services.AddMapster();
+
             services.AddCortexMediator(new[] { typeof(InjectService) },cfg =>
             {
                 cfg.AddOpenQueryPipelineBehavior(typeof(LoggingPipelineBehavior<,>));
