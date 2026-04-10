@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GovcoreBse.Common.Interfaces;
 
 namespace GovcoreBse.Store.Setup;
 
@@ -34,6 +35,13 @@ public class MappingRegister: IRegister
             .Map(dt => dt.Division, ex => ex.Division)            
             .Map(dt => dt.Level, ex => ex.Level)            
             ;
+
+        config.NewConfig<IDocItem, UrlItem>()
+            .Map(dt => dt.Url, ex => ex.RelativePath)
+            .Map(dt => dt.Type, ex => ex.DocType)
+            .Map(dt => dt.Name, ex => ex.RelativePath)
+            .Map(dt => dt.Thumb, ex => ex.Id);
+
         //IgnoreNonMapped, which will ignore the properties that are not mapped explicitly
         //IgnoreIf, skip if the condition is met
 

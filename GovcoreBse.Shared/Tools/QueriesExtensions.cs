@@ -1,4 +1,5 @@
 ﻿
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
@@ -6,6 +7,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using static GovcoreBse.Common.StringHelper;
 
 
 namespace GovcoreBse.Shared.Tools;
@@ -188,6 +191,94 @@ public static class QueriesExtensions
         return mi;
     }
 
+    public static KeyValuePair<UrlModel, string[]> GetUrlModel<T>(PathSetting setting, Dictionary<string,string> doctypes, List<T> items, int docmaxcnt, params string[] types) where T : class, IDocItem
+    {
+
+        //the key is the description
+        
+        var model = new KeyValuePair<UrlModel, string[]>(new UrlModel(), new string[types.Length * docmaxcnt]);
+        model.Key.UrlTitle = string.Join(ST.CONTENT_SEPARATOR, doctypes.Values);
+        model.Key.BaseUrl = setting.Stream;
+        model.Key.BaseUrlByName = setting.StreamByName;
+
+        model.Key.MaxCount = types.Length * docmaxcnt;
+        model.Key.Urls = new UrlItem[] { }.ToArray();
+
+        var sharepath = setting.Share;
+        var rg = new Regex(@"(?<index>\d+)(?<type>[A-Z])");
+
+        foreach (var e in Geturlquerylist(items, docmaxcnt, types))
+        {
+            var item = e.Value;
+            var index = e.Key;
+            var itempath = item == null ? "" : item.UploadFilePath.Replace("{0}", sharepath);
+            var match = rg.Match(index);
+            var i = HelperT.TryValue(match.Groups["index"].Value, -1);
+            var t = match.Groups["type"].Value;
+            var urlmodel = item == null ? new UrlItem { Type = t, Url = "" } : item.Adapt(new UrlItem());
+            var urlid = item == null ? 0 : item.Id;
+            if (!string.IsNullOrEmpty(urlmodel.Url))
+            {
+                urlmodel.Url = urlmodel.Url.ItRevertAmpSign();
+            }
+
+            if (string.IsNullOrEmpty(itempath) || !System.IO.File.Exists(itempath))
+            {
+
+                urlmodel.Caption = string.IsNullOrEmpty(itempath) ? "" : "(Not Found)" + item.RelativePath;
+
+            }
+            else
+            {
+                urlmodel.Size = new FileInfo(itempath).Length;
+                urlmodel.CanLoad = true;
+                urlmodel.Caption = item.RelativePath;
+                //urlmodel.Caption = string.IsNullOrEmpty(item.DocDesc) ? item.RelativePath : item.DocDesc;
+
+                model.Value[i] = $"{urlmodel.Url}|{urlmodel.Thumb}";
+                urlmodel.Name = doctypes[t] + $" {(i) % docmaxcnt + 1}";
+                urlmodel.Thumb = urlid;
+
+            }
+            model.Key.Urls = model.Key.Urls.Union(new[] { (IUrl)urlmodel }).ToArray();
+
+        }
+        ;
+
+        return model;
+
+
+
+    }
+
+    public static List<KeyValuePair<string, T>> Geturlquerylist<T>(List<T> docs, int maxcnt, params string[] doctypes) where T : class, IDocItem
+    {
+        var urlquerylist = new List<KeyValuePair<string, T>>();
+        int count = 0;
+        foreach (var dc in doctypes)
+        {
+
+            var typeddocs = docs.Where(e => e.DocType == dc).OrderBy(e => e.Id).ToList();
+            var urlquery = from r in Enumerable.Range(0, maxcnt)
+                           join u in typeddocs on r equals typeddocs.IndexOf(u) into w
+                           from u in w.DefaultIfEmpty()
+                           select new
+                           {
+                               index = r + (maxcnt * count),
+                               item = u
+
+                           };
+
+            urlquery.OrderBy(x => x.index).Select(e => new KeyValuePair<int, T>(e.index, e.item)).ToList().ForEach(e =>
+            {
+                urlquerylist.Add(new KeyValuePair<string, T>($"{e.Key}{dc}", e.Value));
+            });
+            //avoid the query not lazy execution
+            count++;
+
+        }
+        return urlquerylist;
+    }
 
     public static IQueryable<T> GetFilter<T>(this DbContext db,Dictionary<string, string> searchvalues) where T : class
     {

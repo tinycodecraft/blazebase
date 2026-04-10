@@ -55,14 +55,21 @@ public static class StringHelper
         return new Dictionary<string, string>();
     }
 
-    public static string ItRevertAmpSign(this string str, string sub = "--")
+    public static string ItRevertAmpSign(this string str)
     {
-        return (str ?? "").Replace("&", "--");
+        return (str ?? "").Replace("&", "`3").Replace("\\", "`1").Replace("/", "`8").Replace("!", "`2");
     }
-    public static string ItRestoreAmpSign(this string str, string sub = "--")
+    public static string ItRestoreAmpSign(this string str)
     {
-        return (str ?? "").Replace("--", "&");
+        return (str ?? "").Replace("`3", "&").Replace("`1", "\\").Replace("`8", "/").Replace("`2", "!");
     }
+    public static string ItSubStr(this string strval, string sep = "_")
+    {
+        if (string.IsNullOrEmpty(strval))
+            return "";
+        return strval.Substring(strval.IndexOf(sep) + 1);
+    }
+
 
     public static dynamic GetDynamicObjFromJSON(string jsonvalues)
     {

@@ -28,7 +28,9 @@ public class Constants
     {
         Share,
         Upload,
+        Docs,
         Stream,
+        StreamByName,
         Template
     }
 
@@ -80,11 +82,32 @@ public class Constants
         public static int PageStart = 1;
         public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
-        public const string SEARCH_SEPARATOR = "$";
+        
         public const string SecretKey = "HYD.abcqwe123";
         public const string Issuer = "HYD";
         public const string Audience = "";
         public const string Subject = "HYD.ENG";
+
+        public const string SEARCH_SEPARATOR = "$";
+        public const string CONTENT_SEPARATOR = "|";
+        public const string KEY_SEPARATOR = "!";
+        public const string GROUP_SEPARATOR = "--";
+        public const string FILEPOND_ATTCHTYPE = "AttachType";
+
+    }
+
+    public static class DataKey
+    {
+        public const string SETT_USERGUIDE = "userguidefile";
+        public const string SETT_SIMPUSRGUIDE = "simrguidefile";
+        public const string NOTIFY_SUBJ = "NOTIFY.SUBJECT";
+        public const string NOTIFY_CC = "NOTIFY.CC";
+        public const string NOTIFY_SERVER = "NOTIFY.SERVER";
+        public const string NOTIFY_PORT = "NOTIFY.PORT";
+        public const string NOTIFY_TO = "NOTIFY.TO";
+
+
+        public const string SETT_ATTCHTYPE = "DocType";
 
     }
 

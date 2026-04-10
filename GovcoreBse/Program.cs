@@ -47,6 +47,8 @@ var authsetting = builder.Configuration.GetSection(CN.Setting.AuthSetting);
 builder.Services.Configure<AuthSetting>(authsetting);
 var dbrcusetting = builder.Configuration.GetSection(CN.Setting.DBRCUSetting);
 builder.Services.Configure<DBRCUSetting>(dbrcusetting);
+var pathsetting = builder.Configuration.GetSection(CN.Setting.PathSetting);
+builder.Services.Configure<PathSetting>(pathsetting);
 
 builder.Services.Configure<FormOptions>(opt =>
 {

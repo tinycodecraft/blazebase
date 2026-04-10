@@ -1,4 +1,6 @@
 ﻿global using CN = GovcoreBse.Common.Constants;
+global using ST= GovcoreBse.Common.Constants.Setting;
+global using DK = GovcoreBse.Common.Constants.DataKey;
 global using SK = GovcoreBse.Common.Constants.SessionKey;
 global using IN = GovcoreBse.Common.Interfaces;
 global using HelperT = GovcoreBse.Common.TypeHelper;
