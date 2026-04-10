@@ -23,7 +23,7 @@ public partial class BlazeLogDbContext : DbContext
     {
         modelBuilder.Entity<CoreFileDoc>(entity =>
         {
-            entity.Property(e => e.UpdatedAt)
+            entity.Property(e => e.updatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreFileDoc_updatedAt");
         });
@@ -36,8 +36,8 @@ public partial class BlazeLogDbContext : DbContext
         modelBuilder.Entity<CoreUser>(entity =>
         {
             entity.Property(e => e.Disabled).HasAnnotation("Relational:DefaultConstraintName", "DF_CoreUser_Disabled");
-            entity.Property(e => e.Level).HasAnnotation("Relational:DefaultConstraintName", "DF_CoreUser_level");
-            entity.Property(e => e.UpdatedAt)
+            entity.Property(e => e.level).HasAnnotation("Relational:DefaultConstraintName", "DF_CoreUser_level");
+            entity.Property(e => e.updatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreUser_updatedAt");
         });

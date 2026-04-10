@@ -14,16 +14,16 @@ public class UserDto
     public int Id { get; set; }
 
 
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
 
-    public string UserName { get; set; }
+    public string UserName { get; set; } = null!;
+
+
+    public string? Person { get; set; }
 
     
-    public string Person { get; set; }
-
-    
-    public string EncPassword { get; set; }
+    public string EncPassword { get; set; } = null!;
 
     public bool Disabled { get; set; }
 
@@ -32,28 +32,30 @@ public class UserDto
     public bool IsReset { get; set; }
 
 
-    public DateTime? LoginedAt { get; set; }
+    public DateTime? loginedAt { get; set; }
 
     
-    public DateTime UpdatedAt { get; set; }
+    public DateTime updatedAt { get; set; }
 
 
-    public string UpdatedBy { get; set; }
-
-    
-    public DateTime? CreatedAt { get; set; }
+    public string updatedBy { get; set; } = null!;
 
     
-    public int Level { get; set; }
+    public DateTime? createdAt { get; set; }
+
+    
+    public int level { get; set; }
 
 
-    public string Post { get; set; }
+    public string? post { get; set; }
 
 
-    public string Tel { get; set; }
+    public string? tel { get; set; }
 
    
-    public string Email { get; set; }
+    public string? email { get; set; }
 
-    public string Division { get; set; }
+    public string? Division { get; set; }
+
+    public string? AdminScope { get; set; }
 }

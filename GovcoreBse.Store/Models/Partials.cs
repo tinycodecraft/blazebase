@@ -12,3 +12,7 @@ public partial class  BlazeLogDbContext: IBlazeLogDbContext
     
 }
 
+public partial class CoreFileDoc: IN.IDocItem
+{
+
+}

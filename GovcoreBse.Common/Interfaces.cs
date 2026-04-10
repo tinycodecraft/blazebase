@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,7 +85,7 @@ public class Interfaces
     }
     public interface IDocItem
     {
-        int Id { get; set; }
+        long Id { get; set; }
         string DocType { get; set; }
         string UploadFilePath { get; set; }
         string RelativePath { get; set; }
@@ -98,7 +99,7 @@ public class Interfaces
         string Url { get; set; }
         string Type { get; set; }
         string Name { get; set; }
-        int Thumb { get; set; }
+        long Thumb { get; set; }
     }
 
     public interface IUrlModel

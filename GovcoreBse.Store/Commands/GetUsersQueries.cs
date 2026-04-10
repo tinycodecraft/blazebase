@@ -64,7 +64,7 @@ namespace GovcoreBse.Store.Commands
             
             if (request.AskSearch != null)
             {
-                query= query.Where(x => x.UserName.Contains(request.AskSearch) || x.Email.Contains(request.AskSearch));
+                query= query.Where(x => x.UserName.Contains(request.AskSearch) || x.email.Contains(request.AskSearch));
                 
             }
             if (request.Sorts!=null && request.Sorts.Length > 0)

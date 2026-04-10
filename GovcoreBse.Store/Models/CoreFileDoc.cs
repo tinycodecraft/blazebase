@@ -27,14 +27,12 @@ public partial class CoreFileDoc
     [StringLength(128)]
     public string RelativePath { get; set; } = null!;
 
-    [Column("updatedAt", TypeName = "datetime")]
-    public DateTime? UpdatedAt { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime? updatedAt { get; set; }
 
-    [Column("updatedBy")]
     [StringLength(50)]
-    public string? UpdatedBy { get; set; }
+    public string? updatedBy { get; set; }
 
-    [Column("updatedPost")]
     [StringLength(50)]
-    public string? UpdatedPost { get; set; }
+    public string? updatedPost { get; set; }
 }

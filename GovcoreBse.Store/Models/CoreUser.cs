@@ -31,29 +31,25 @@ public partial class CoreUser
 
     public bool IsReset { get; set; }
 
-    [Column("loginedAt", TypeName = "datetime")]
-    public DateTime? LoginedAt { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime? loginedAt { get; set; }
 
-    [Column("updatedAt", TypeName = "datetime")]
-    public DateTime UpdatedAt { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime updatedAt { get; set; }
 
-    [Column("updatedBy")]
     [StringLength(100)]
-    public string UpdatedBy { get; set; } = null!;
+    public string updatedBy { get; set; } = null!;
 
-    [Column("createdAt", TypeName = "datetime")]
-    public DateTime? CreatedAt { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime? createdAt { get; set; }
 
-    [Column("level")]
-    public int Level { get; set; }
+    public int level { get; set; }
 
-    [Column("post")]
     [StringLength(50)]
-    public string? Post { get; set; }
+    public string? post { get; set; }
 
-    [Column("tel")]
     [StringLength(50)]
-    public string? Tel { get; set; }
+    public string? tel { get; set; }
 
     [StringLength(50)]
     public string? Division { get; set; }
@@ -61,7 +57,6 @@ public partial class CoreUser
     [StringLength(50)]
     public string? AdminScope { get; set; }
 
-    [Column("email")]
     [StringLength(250)]
-    public string? Email { get; set; }
+    public string? email { get; set; }
 }

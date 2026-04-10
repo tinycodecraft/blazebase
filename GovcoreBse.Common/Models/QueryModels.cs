@@ -48,7 +48,7 @@ public class UrlItem : IUrl
     public string Type { get; set; }
     public string Name { get; set; }
 
-    public int Thumb { get; set; }
+    public long Thumb { get; set; }
 }
 
 //using in react mantine table

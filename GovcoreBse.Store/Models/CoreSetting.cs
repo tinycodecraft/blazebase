@@ -22,10 +22,9 @@ public partial class CoreSetting
 
     public bool CanEdit { get; set; }
 
-    [Column("updatedAt", TypeName = "datetime")]
-    public DateTime? UpdatedAt { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime? updatedAt { get; set; }
 
-    [Column("updatedBy")]
     [StringLength(50)]
-    public string? UpdatedBy { get; set; }
+    public string? updatedBy { get; set; }
 }

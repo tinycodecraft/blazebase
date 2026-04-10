@@ -30,8 +30,8 @@ public class GetAutoCompleteQueryHandler : IQueryHandler<GetAutoCompleteQuery, E
         {
             case CN.AutoSuggestType.Engineers:
                 var engineers = await context.CoreUsers
-                    .Where(e => !e.Disabled && (!needSearch || e.Post.Contains(searchvalue)))
-                    .Select(e => e.Post)
+                    .Where(e => !e.Disabled && (!needSearch || e.post.Contains(searchvalue)))
+                    .Select(e => e.post)
                     .ToArrayAsync(cancellationToken);
                 return engineers.Select(y => new KeyValuePair<string, string>(y, y)).ToArray();
 
