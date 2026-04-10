@@ -189,7 +189,7 @@ public static class QueriesExtensions
     }
 
 
-    public static IQueryable<T> Filter<T>(this DbContext db,Dictionary<string, string> searchvalues) where T : class
+    public static IQueryable<T> GetFilter<T>(this DbContext db,Dictionary<string, string> searchvalues) where T : class
     {
         var initquery = db.Set<T>().AsQueryable();
         var fieldnv = new NameValueCollection();
@@ -211,7 +211,7 @@ public static class QueriesExtensions
                     noop = false;
                 }
 
-                var prop = typeof(T).GetProperties().FirstOrDefault(e => e.Name.ToLower() == sr.Key.ToLower());
+                var prop = typeof(T).GetProperties().FirstOrDefault(e => e.Name.ToLower() == key.ToLower());
                 if (prop != null)
                 {
                     var isadded = hlist.Add(prop.Name);

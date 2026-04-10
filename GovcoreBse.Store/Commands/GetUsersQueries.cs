@@ -1,12 +1,15 @@
 ﻿
+using AgileObjects.AgileMapper.Extensions;
 using Cortex.Mediator.Queries;
 using GovcoreBse.Shared.Tools;
 using GovcoreBse.Store.Dtos;
+using GovcoreBse.Store.Models;
 using GovcoreBse.Store.Setup;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +58,10 @@ namespace GovcoreBse.Store.Commands
             var query = context.CoreUsers.AsQueryable();
             var size = request.Size == 0 ? CN.Setting.PageSize: request.Size;
             var start = request.Start == 0 ? CN.Setting.PageStart : request.Start;
+            //var nv = new Dictionary<string,string>();
+            //nv["UserId.at"] = "STO4|SEGU|ESD1";
+            //var testquery = QueriesExtensions.GetFilter<CoreUser>(context as DbContext, nv);
+            
             if (request.AskSearch != null)
             {
                 query= query.Where(x => x.UserName.Contains(request.AskSearch) || x.Email.Contains(request.AskSearch));
