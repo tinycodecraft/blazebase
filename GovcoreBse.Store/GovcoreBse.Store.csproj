@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GovcoreBse.Common\GovcoreBse.Common.csproj" />
     <ProjectReference Include="..\GovcoreBse.Shared\GovcoreBse.Shared.csproj" />
   </ItemGroup>
 
