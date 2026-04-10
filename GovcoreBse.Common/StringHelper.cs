@@ -12,6 +12,46 @@ namespace GovcoreBse.Common;
 
 public static class StringHelper
 {
+
+    public static string GetFileType(this string fileNamen)
+    {
+        var fileName = fileNamen?.ToLower();
+        if (fileName.EndsWith(".xlsx") || fileName.EndsWith(".xls"))
+            return "application/vnd.ms-excel";
+        else if (fileName.EndsWith(".pdf"))
+            return "application/pdf";
+        else if (fileName.EndsWith(".doc") || fileName.EndsWith(".docx"))
+            return "application/vnd.ms-word";
+        else if (fileName.EndsWith(".zip"))
+            return "application/zip";
+        else if (fileName.EndsWith(".jpg"))
+            return "image/jpeg";
+        else if (fileName.EndsWith(".png"))
+            return "image/png";
+        else if (fileName.EndsWith(".tif"))
+            return "image/tiff";
+        else if (fileName.EndsWith(".gif"))
+            return "image/gif";
+        else if (fileName.EndsWith(".mp4"))
+            return "video/mp4";
+
+
+
+        return "application/octet-stream";
+    }
+
+    public static string GetBaseName(string file)
+    {
+        var basename = Path.GetFileNameWithoutExtension(file);
+
+        if (basename.LastIndexOf(".") > 0 && (basename.Length - basename.LastIndexOf(".")) > 5)
+        {
+            basename = basename.Substring(0, basename.LastIndexOf("."));
+            return basename;
+        }
+        return basename;
+    }
+
     public static IConfigurationSection RevertPathSlash<T>(this IConfigurationSection config) where T : class
     {
 

@@ -2,6 +2,8 @@
 using GovcoreBse.Store.Dtos;
 using Cortex.Mediator;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace GovcoreBse.Middlewares;
 
@@ -50,5 +52,40 @@ public static class Apis
         }
 
         return TypedResults.Ok(result);
+    }
+
+    internal static HttpResponseMessage GetFile(IHttpContextAccessor accessor,IMediator commander,ILogger<Program> logger, string filename,int thumb=0)
+    {
+        // This is a placeholder implementation. You would replace this with your actual file retrieval logic.
+
+        var basename = HelperS.GetBaseName(filename);
+        var ext = Path.GetExtension(filename);
+        filename = $"{basename}{ext}";
+
+        var contentType = HelperS.GetFileType(filename);
+        var isinline = HelperS.CanInline(filename);
+
+        // Open the file as a stream. Using FileShare.Read allows other processes to read it.
+        // Setting useAsync: true is recommended for high-performance I/O.
+        //TODO: Please using IDocItem to get file path first
+        var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            // StreamContent handles chunking by default (standard 4KB-10KB).
+            Content = new StreamContent(fileStream)
+        };
+
+        // 設置 Content-Type 為 PDF
+        response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
+        // 關鍵：設置 Content-Disposition 為 inline 以在瀏覽器中預覽，而非強制下載
+        response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(isinline ? "inline": "attachment")
+        {
+            FileName = filename
+        };
+        response.Headers.TransferEncodingChunked = true;
+
+        return response;
     }
 }

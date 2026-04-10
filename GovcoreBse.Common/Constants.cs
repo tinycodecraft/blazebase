@@ -20,7 +20,13 @@ public class Constants
         suggests,
         weathers,
         login,
-        upload
+        upload,
+        download,
+        removefile,
+        getrandom,
+        stream,
+        streambyname,
+
 
     }
 

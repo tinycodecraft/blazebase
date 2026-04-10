@@ -80,32 +80,6 @@ public static class TypeHelper
 
     }
 
-    public static string GetFileType(this string fileNamen)
-    {
-        var fileName = fileNamen?.ToLower();
-        if (fileName.EndsWith(".xlsx") || fileName.EndsWith(".xls"))
-            return "application/vnd.ms-excel";
-        else if (fileName.EndsWith(".pdf"))
-            return "application/pdf";
-        else if (fileName.EndsWith(".doc") || fileName.EndsWith(".docx"))
-            return "application/vnd.ms-word";
-        else if (fileName.EndsWith(".zip"))
-            return "application/zip";
-        else if (fileName.EndsWith(".jpg"))
-            return "image/jpeg";
-        else if (fileName.EndsWith(".png"))
-            return "image/png";
-        else if (fileName.EndsWith(".tif"))
-            return "image/tiff";
-        else if (fileName.EndsWith(".gif"))
-            return "image/gif";
-        else if (fileName.EndsWith(".mp4"))
-            return "video/mp4";
-
-
-
-        return "application/octet-stream";
-    }
 
     public static (DateTime, DateTime) GetStartEnd(this DateTime date)
     {

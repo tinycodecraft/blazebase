@@ -37,6 +37,7 @@ public static class UtilHelper
     }
 
 
+
     public static async Task CopyToAsync(this Stream source, Stream destination, IProgress<long> progress, CancellationToken cancellationToken = default(CancellationToken), int bufferSize = 0x1000)
     {
         var buffer = new byte[bufferSize];
