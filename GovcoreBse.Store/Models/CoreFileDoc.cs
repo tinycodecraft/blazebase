@@ -8,19 +8,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GovcoreBse.Store.Models;
 
-[Table("CoreSetting")]
-public partial class CoreSetting
+[Table("CoreFileDoc")]
+public partial class CoreFileDoc
 {
     [Key]
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     [StringLength(50)]
-    public string SettingId { get; set; } = null!;
+    public string LinkTable { get; set; } = null!;
 
-    [StringLength(1000)]
-    public string? SettingValue { get; set; }
+    public int LinkId { get; set; }
 
-    public bool CanEdit { get; set; }
+    [StringLength(50)]
+    public string DocType { get; set; } = null!;
+
+    public string UploadFilePath { get; set; } = null!;
+
+    [StringLength(128)]
+    public string RelativePath { get; set; } = null!;
 
     [Column("updatedAt", TypeName = "datetime")]
     public DateTime? UpdatedAt { get; set; }
@@ -28,4 +33,8 @@ public partial class CoreSetting
     [Column("updatedBy")]
     [StringLength(50)]
     public string? UpdatedBy { get; set; }
+
+    [Column("updatedPost")]
+    [StringLength(50)]
+    public string? UpdatedPost { get; set; }
 }

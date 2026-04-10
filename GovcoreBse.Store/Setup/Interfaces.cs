@@ -14,6 +14,8 @@ namespace GovcoreBse.Store.Setup
 
         DbSet<CoreUser> CoreUsers { get; set; }
 
+        DbSet<CoreFileDoc> CoreFileDocs { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
