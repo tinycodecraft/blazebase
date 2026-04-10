@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -187,7 +188,74 @@ public static class QueriesExtensions
         return mi;
     }
 
-    public static NameValueCollection AddQueryParam<T,V>(this NameValueCollection nv,IQueryable<T> query, Expression<Func<T, V>> GetPropertyLambda,string value,string op=Op.itLikes,string sep="|")
+
+    public static IQueryable<T> Filter<T>(this DbContext db,Dictionary<string, string> searchvalues) where T : class
+    {
+        var initquery = db.Set<T>().AsQueryable();
+        var fieldnv = new NameValueCollection();
+
+        var needSearch = searchvalues.Count > 0;
+        var hlist = new HashSet<string>();
+
+        if (needSearch)
+        {
+            foreach (var sr in searchvalues)
+            {
+                var op = "==";
+                var key = sr.Key;
+                bool noop = true;
+                if (sr.Key.Contains("."))
+                {
+                    op = sr.Key.Split('.').Last();
+                    key = sr.Key.Split('.').First();
+                    noop = false;
+                }
+
+                var prop = typeof(T).GetProperties().FirstOrDefault(e => e.Name.ToLower() == sr.Key.ToLower());
+                if (prop != null)
+                {
+                    var isadded = hlist.Add(prop.Name);
+                    if (isadded)
+                    {
+                        var tolike = prop.PropertyType == typeof(string);
+                        tolike = tolike && noop;
+                        initquery.FillnvData(fieldnv, tolike ? $"%{sr.Value}%" : sr.Value, prop.Name, tolike ? null : op);
+                    }
+
+                }
+
+
+            }
+
+
+        }
+
+        var data = fieldnv.AllKeys.Length == 0 ? db.Set<T>() : GetSearch<T>(db, fieldnv) as IQueryable<T>;
+
+        return data;
+
+    }
+
+    public static IQueryable<T> FillnvData<T>(this IQueryable<T> query,NameValueCollection nv, string value, string name, string op = null)
+    {
+        // 1. Define the parameter (x => ...)
+        var parameter = Expression.Parameter(typeof(T), "x");
+
+        // 2. Access the property by name (x.PropertyName)
+        var property = Expression.Property(parameter, name);
+
+        // 3. Box value types to 'object' if necessary for a generic return type
+        var conversion = Expression.Convert(property, typeof(object));
+        var getpropertylamb = Expression.Lambda<Func<T, object>>(conversion, parameter);
+        nv = AddQueryParam(nv, query, getpropertylamb, value, op ?? "~");
+
+        return query;
+
+    }
+
+
+
+    public static NameValueCollection AddQueryParam<T>(this NameValueCollection nv,IQueryable<T> query, Expression<Func<T, object>> GetPropertyLambda,string value,string op=Op.itLikes,string sep="|")
     {
         if(nv== null)
             nv = new NameValueCollection();
@@ -225,6 +293,7 @@ public static class QueriesExtensions
             case  Op.lessThan:                   
                 nv.Add($"__{nameof(QueryOpType.Less)}__{MemberName}", value);
                 break;
+            case "~":
             case Op.itLikes:
                 nv.Add($"__{nameof(QueryOpType.LikesWith)}__{MemberName}", value);
                 break;
