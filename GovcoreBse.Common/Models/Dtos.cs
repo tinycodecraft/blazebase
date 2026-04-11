@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GovcoreBse.Store.Dtos;
+namespace GovcoreBse.Common.Models;
 
 public class UserDto
 {
-    
+
     public int Id { get; set; }
 
 
@@ -22,7 +20,7 @@ public class UserDto
 
     public string? Person { get; set; }
 
-    
+
     public string EncPassword { get; set; } = null!;
 
     public bool Disabled { get; set; }
@@ -34,16 +32,16 @@ public class UserDto
 
     public DateTime? loginedAt { get; set; }
 
-    
+
     public DateTime updatedAt { get; set; }
 
 
     public string updatedBy { get; set; } = null!;
 
-    
+
     public DateTime? createdAt { get; set; }
 
-    
+
     public int level { get; set; }
 
 
@@ -52,10 +50,21 @@ public class UserDto
 
     public string? tel { get; set; }
 
-   
+
     public string? email { get; set; }
 
     public string? Division { get; set; }
 
     public string? AdminScope { get; set; }
+}
+
+public class WeatherForecastDto
+{
+    public DateTime Date { get; set; }
+
+    public int TemperatureC { get; set; }
+
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+    public string Summary { get; set; } = string.Empty;
 }
