@@ -68,3 +68,11 @@ public class WeatherForecastDto
 
     public string Summary { get; set; } = string.Empty;
 }
+
+public class FileItemDto : IN.IDocItem
+{
+    public long Id { get; set; }
+    public string DocType { get; set; }
+    public string UploadFilePath { get; set; }
+    public string RelativePath { get; set; }
+}

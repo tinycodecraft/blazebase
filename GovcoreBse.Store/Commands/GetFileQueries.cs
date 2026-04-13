@@ -1,7 +1,6 @@
 ﻿using Cortex.Mediator.Queries;
-using GovcoreBse.Store.Dtos;
 using GovcoreBse.Store.Setup;
-using GovcoreBse.Store.Setup.Dtos;
+
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;

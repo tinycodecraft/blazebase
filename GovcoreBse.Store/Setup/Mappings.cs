@@ -35,7 +35,8 @@ public class MappingRegister: IRegister
             .Map(dt => dt.Division, ex => ex.Division)            
             .Map(dt => dt.Level, ex => ex.level)            
             ;
-
+        config.NewConfig<CoreFileDoc, FileItemDto>();
+            
         config.NewConfig<IDocItem, UrlItem>()
             .Map(dt => dt.Url, ex => ex.RelativePath)
             .Map(dt => dt.Type, ex => ex.DocType)

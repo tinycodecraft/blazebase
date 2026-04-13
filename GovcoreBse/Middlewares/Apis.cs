@@ -74,7 +74,7 @@ public static class Apis
         {
             if(!string.IsNullOrEmpty(result.Value.UploadFilePath))
             {
-                tmppath = Path.Combine(result.Value.UploadFilePath.Replace("{0}",string.Join("\\",basepath));
+                tmppath = result.Value.UploadFilePath.Replace("{0}",string.Join("\\",basepath));
 
             }
         }
