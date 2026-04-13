@@ -53,6 +53,8 @@ public class Interfaces
         Task<string> DownloadFilesAsync(Stream fileStream, string type, string filename, bool inupload = false);
         Task<FileUploadSummary> UploadFileAsync(Stream fileStream, string contentType, string type);
     }
+
+  
     public interface IAuthResult
     {
         double exp { get; set; }
@@ -113,4 +115,6 @@ public class Interfaces
 
         IUrlModel ExtractModel(int init, int len);
     }
+
+    
 }

@@ -4,6 +4,7 @@ using Cortex.Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Options;
 
 namespace GovcoreBse.Middlewares;
 
@@ -13,6 +14,9 @@ public static class Apis
     {
         switch (group)
         {
+            case CN.AutocompleteGroup.streambyname:
+                builder.MapGet("/{thumb:long}/{filename}", GetFile).Produces(200, typeof(HttpResponseMessage));
+                break;
             case CN.AutocompleteGroup.suggests:
                 builder.MapGet("/{userid}", GetAllSuggestions).Produces(200, typeof(KeyValuePair<string, string>[]));
                 break;
@@ -54,27 +58,43 @@ public static class Apis
         return TypedResults.Ok(result);
     }
 
-    internal static HttpResponseMessage GetFile(IHttpContextAccessor accessor,IMediator commander,ILogger<Program> logger, string filename,int thumb=0)
+    internal static async Task<HttpResponseMessage> GetFile(IHttpContextAccessor accessor,IMediator commander,ILogger<Program> logger, IOptions<PathSetting> setting, long thumb, string filename)
     {
         // This is a placeholder implementation. You would replace this with your actual file retrieval logic.
 
+
+
+        var contentType = HelperS.GetFileType(filename);
+        var isinline = HelperS.CanInline(filename);
+        var basepath = setting.Value.Share;
+        var tmppath = string.Empty;
+        var result = await commander.SendQueryAsync(new GetFileQuery(thumb));
+
+        if(!result.IsError)
+        {
+            if(!string.IsNullOrEmpty(result.Value.UploadFilePath))
+            {
+                tmppath = Path.Combine(result.Value.UploadFilePath.Replace("{0}",string.Join("\\",basepath));
+
+            }
+        }
         var basename = HelperS.GetBaseName(filename);
         var ext = Path.GetExtension(filename);
         filename = $"{basename}{ext}";
 
-        var contentType = HelperS.GetFileType(filename);
-        var isinline = HelperS.CanInline(filename);
-
         // Open the file as a stream. Using FileShare.Read allows other processes to read it.
         // Setting useAsync: true is recommended for high-performance I/O.
         //TODO: Please using IDocItem to get file path first
-        var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        var fileStream = new FileStream(tmppath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
 
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             // StreamContent handles chunking by default (standard 4KB-10KB).
             Content = new StreamContent(fileStream)
         };
+        
+
+
 
         // 設置 Content-Type 為 PDF
         response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);

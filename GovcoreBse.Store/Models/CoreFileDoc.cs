@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GovcoreBse.Store.Models;
 
+
 [Table("CoreFileDoc")]
-public partial class CoreFileDoc
+public partial class CoreFileDoc 
 {
     [Key]
     public long Id { get; set; }

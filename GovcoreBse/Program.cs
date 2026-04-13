@@ -158,6 +158,10 @@ app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.suggests))
     .MapApiFor(CN.AutocompleteGroup.suggests)
     .WithTags(nameof(CN.AutocompleteGroup.suggests));
 
+app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.streambyname))
+    .MapApiFor(CN.AutocompleteGroup.streambyname)
+    .WithTags(nameof(CN.AutocompleteGroup.streambyname));
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
