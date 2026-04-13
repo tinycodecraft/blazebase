@@ -1,6 +1,5 @@
 ﻿
 using GovcoreBse.Store.Setup;
-using GovcoreBse.Store.Dtos;
 
 using System;
 using System.Collections.Generic;
