@@ -1,19 +1,20 @@
-using Havit.Blazor.Components.Web;
 using GovcoreBse.Components;
 using GovcoreBse.Control;
+using GovcoreBse.Manner;
 using GovcoreBse.Middlewares;
 using GovcoreBse.Models;
 using GovcoreBse.Resources;
 using GovcoreBse.Store.Setup;
+using Havit.Blazor.Components.Web;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Serilog;
+using Soenneker.Blazor.FilePond.Registrars;
 using System.Text.Json.Serialization;
-using GovcoreBse.Manner;
-using Microsoft.AspNetCore.Components.Authorization;
 
 
 /*
@@ -79,6 +80,8 @@ builder.Services.AddScoped<LayoutStateModel>();
 builder.Services.AddScoped<ExampleJsInterop>();
 
 builder.Services.AddScoped<StringEncrypService>();
+
+builder.Services.AddFilePondInteropAsScoped();
 
 /*UseSerilog configuration
  */
