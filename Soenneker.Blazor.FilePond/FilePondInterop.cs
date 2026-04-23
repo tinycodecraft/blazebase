@@ -79,11 +79,12 @@ public sealed class FilePondInterop : IFilePondInterop
 
     private async ValueTask InitializeInteropStyle(CancellationToken token)
     {
+        //resourceloader has the importutil, which is using filepondinterop.js to do loading
         await _resourceLoader.LoadStyle("_content/Soenneker.Blazor.FilePond/css/filepondinterop.css", cancellationToken: token);
     }
     private async ValueTask InitializeMiscStyle(CancellationToken token)
     {
-        await _resourceLoader.LoadStyle("_content/Soenneker.Blazor.FilePond/css/filepond.misc.css", cancellationToken: token);
+        await _resourceLoader.LoadStyle("_content/Soenneker.Blazor.FilePond/css/filepond.misc.css" + $"?v={DateTime.UtcNow.Ticks}", cancellationToken: token);
     }
 
 

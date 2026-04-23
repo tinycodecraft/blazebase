@@ -22,18 +22,22 @@
 @implements IFilePond
 
 <div id="@_observerId" ></div>
-<div id="@_wrapperId" class="@GetWrapperCssClass()">
-    <input type="file" @attributes="Attributes" id="@_elementId" />
+<fieldset id="@_elementId" class="@GetWrapperCssClass()">
+    <legend>Files</legend>
+    <ul>
+
+    </ul>
+    <input type="file" class="filepond" name="filepond" multiple data-max-file-size="300MB" data-file-metadata-sub="100000"  />
     @if (ValidationErrorMessage.HasContent())
     {
         <div class="filepond-validation-error">@ValidationErrorMessage</div>
     }
-</div>
+</fieldset>
 
 @code {
     private readonly string _elementId;
     private readonly string _observerId;
-    private readonly string _wrapperId;
+    //private readonly string _wrapperId;
 
     [Parameter]
     public FilePondOptions? Options { get; set; }
@@ -139,7 +143,7 @@
         string root = BlazorIdGenerator.New("filepond");
         _elementId = BlazorIdGenerator.Child(root, "input");
         _observerId = BlazorIdGenerator.Child(root, "observer");
-        _wrapperId = BlazorIdGenerator.Child(root, "wrapper");
+        //_wrapperId = BlazorIdGenerator.Child(root, "wrapper");
         Files = [];
         _silentAddFiles = [];
         _afterInitializationOperations = [];

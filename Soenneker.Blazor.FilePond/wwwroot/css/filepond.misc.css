@@ -74,3 +74,6 @@
         background-position: top 40px center;
         background-size: 60%;
     }
+.filepond--file-info .filepond--file-info-main {
+    padding-left: 10px;
+}

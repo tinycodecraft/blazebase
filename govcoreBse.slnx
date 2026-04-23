@@ -56,7 +56,6 @@
   <Project Path="Soenneker.Queues.Intrusive.Abstractions/Soenneker.Queues.Intrusive.Abstractions.csproj" />
   <Project Path="Soenneker.Queues.Intrusive.ValueMpsc/Soenneker.Queues.Intrusive.ValueMpsc.csproj" />
   <Project Path="Soenneker.Utils.AsyncSingleton/Soenneker.Utils.AsyncSingleton.csproj" />
-  <Project Path="Soenneker.Utils.Cancellation/Soenneker.Utils.Cancellation.csproj" />
   <Project Path="Soenneker.Utils.CancellationScopes/Soenneker.Utils.CancellationScopes.csproj" />
   <Project Path="Soenneker.Utils.ExecutionContexts/Soenneker.Utils.ExecutionContexts.csproj" />
   <Project Path="Soenneker.Utils.File/Soenneker.Utils.File.csproj" />
