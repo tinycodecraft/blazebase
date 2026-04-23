@@ -1,11 +1,11 @@
 <Solution>
-  <Project Path="GovcoreBse/GovcoreBse.csproj" />
-  <Project Path="OpenXmlPowerTools/OpenXmlPowerTools.csproj" />
+  <Project Path="GovcoreBse.Common/GovcoreBse.Common.csproj" />
+  <Project Path="GovcoreBse.Control/GovcoreBse.Control.csproj" />
+  <Project Path="GovcoreBse.Service/GovcoreBse.Service.csproj" />
   <Project Path="GovcoreBse.Shared/GovcoreBse.Shared.csproj" />
   <Project Path="GovcoreBse.Store/GovcoreBse.Store.csproj" />
-  <Project Path="GovcoreBse.Service/GovcoreBse.Service.csproj" />
-  <Project Path="GovcoreBse.Control/GovcoreBse.Control.csproj" />
-  <Project Path="GovcoreBse.Common/GovcoreBse.Common.csproj" />
+  <Project Path="GovcoreBse/GovcoreBse.csproj" />
+  <Project Path="OpenXmlPowerTools/OpenXmlPowerTools.csproj" />
   <Project Path="Soenneker.Asyncs.Initializers/Soenneker.Asyncs.Initializers.csproj" />
   <Project Path="Soenneker.Asyncs.Locks/Soenneker.Asyncs.Locks.csproj" />
   <Project Path="Soenneker.Atomics.Resources/Soenneker.Atomics.Resources.csproj" />
@@ -29,10 +29,12 @@
   <Project Path="Soenneker.Enums.ContentKinds/Soenneker.Enums.ContentKinds.csproj" />
   <Project Path="Soenneker.Enums.InitializationModes/Soenneker.Enums.InitializationModes.csproj" />
   <Project Path="Soenneker.Enums.JsonLibrary/Soenneker.Enums.JsonLibrary.csproj" />
+  <Project Path="Soenneker.Enums.JsonOptions/Soenneker.Enums.JsonOptions.csproj" />
   <Project Path="Soenneker.Extensions.Arrays.Bytes/Soenneker.Extensions.Arrays.Bytes.csproj" />
   <Project Path="Soenneker.Extensions.CancellationTokens/Soenneker.Extensions.CancellationTokens.csproj" />
   <Project Path="Soenneker.Extensions.Char/Soenneker.Extensions.Char.csproj" />
   <Project Path="Soenneker.Extensions.Enumerable.String/Soenneker.Extensions.Enumerable.String.csproj" />
+  <Project Path="Soenneker.Extensions.Enumerable/Soenneker.Extensions.Enumerable.csproj" />
   <Project Path="Soenneker.Extensions.List/Soenneker.Extensions.List.csproj" />
   <Project Path="Soenneker.Extensions.Long/Soenneker.Extensions.Long.csproj" />
   <Project Path="Soenneker.Extensions.Object/Soenneker.Extensions.Object.csproj" />
@@ -49,9 +51,9 @@
   <Project Path="Soenneker.Invocations.Actions/Soenneker.Invocations.Actions.csproj" />
   <Project Path="Soenneker.Invocations.Funcs/Soenneker.Invocations.Funcs.csproj" />
   <Project Path="Soenneker.Json.OptionsCollection/Soenneker.Json.OptionsCollection.csproj" />
-  <Project Path="Soenneker.Quark.Components.Core/Soenneker.Quark.Components.Core.csproj" />
   <Project Path="Soenneker.Quark.Components.Core.Cancellable/Soenneker.Quark.Components.Core.Cancellable.csproj" />
-    <Project Path="Soenneker.Queues.Intrusive.Abstractions/Soenneker.Queues.Intrusive.Abstractions.csproj" />
+  <Project Path="Soenneker.Quark.Components.Core/Soenneker.Quark.Components.Core.csproj" />
+  <Project Path="Soenneker.Queues.Intrusive.Abstractions/Soenneker.Queues.Intrusive.Abstractions.csproj" />
   <Project Path="Soenneker.Queues.Intrusive.ValueMpsc/Soenneker.Queues.Intrusive.ValueMpsc.csproj" />
   <Project Path="Soenneker.Utils.AsyncSingleton/Soenneker.Utils.AsyncSingleton.csproj" />
   <Project Path="Soenneker.Utils.Cancellation/Soenneker.Utils.Cancellation.csproj" />
