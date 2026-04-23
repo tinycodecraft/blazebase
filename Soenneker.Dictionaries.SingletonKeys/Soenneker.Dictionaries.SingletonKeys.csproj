@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>An externally initializing singleton dictionary that uses double-check asynchronous locking, with optional async and sync disposal</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Dictionaries.SingletonKeys</AssemblyName>
+        <PackageId>Soenneker.Dictionaries.SingletonKeys</PackageId>
+        <PackageTags>dictionaries singletonkeys dictionary singleton singletonkey keyed struct key singletonkeydictionary util csharp dotnet c# .net singletondictionary</PackageTags>
+        <Copyright>Copyright © 2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.dictionaries.singletonkeys</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.dictionaries.singletonkeys</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Asyncs.Locks\Soenneker.Asyncs.Locks.csproj" />
+      <ProjectReference Include="..\Soenneker.Atomics.ValueBools\Soenneker.Atomics.ValueBools.csproj" />
+      <ProjectReference Include="..\Soenneker.Enums.InitializationModes\Soenneker.Enums.InitializationModes.csproj" />
+      <ProjectReference Include="..\Soenneker.Extensions.Enumerable\Soenneker.Extensions.Enumerable.csproj" />
+    </ItemGroup>
+</Project>

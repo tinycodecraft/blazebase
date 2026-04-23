@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A utility library handling (de)serialization and other useful JSON functionalities</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Utils.Json</AssemblyName>
+        <PackageId>Soenneker.Utils.Json</PackageId>
+        <PackageTags>json util c# .net dotnet jsonutil ijsonutil</PackageTags>
+        <Copyright>Copyright © 2023-2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.utils.json</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.utils.json</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Enums.JsonLibrary\Soenneker.Enums.JsonLibrary.csproj" />
+      <ProjectReference Include="..\Soenneker.Json.OptionsCollection\Soenneker.Json.OptionsCollection.csproj" />
+      <ProjectReference Include="..\Soenneker.Utils.File\Soenneker.Utils.File.csproj" />
+      <ProjectReference Include="..\Soenneker.Utils.Runtime\Soenneker.Utils.Runtime.csproj" />
+    </ItemGroup>
+</Project>

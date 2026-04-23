@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A collection of helpful runtime-based operations</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Utils.Runtime</AssemblyName>
+        <PackageId>Soenneker.Utils.Runtime</PackageId>
+        <PackageTags>utils runtime environment blazor runtimeutil util csharp dotnet c# .net</PackageTags>
+        <Copyright>Copyright © 2024-2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.utils.runtime</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.utils.runtime</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Atomics.ValueNullableBools\Soenneker.Atomics.ValueNullableBools.csproj" />
+      <ProjectReference Include="..\Soenneker.Extensions.String\Soenneker.Extensions.String.csproj" />
+      <ProjectReference Include="..\Soenneker.Utils.AsyncSingleton\Soenneker.Utils.AsyncSingleton.csproj" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,76 @@
+.filepond--root {
+    font-size: 1.5rem;
+}
+
+.filepond--drop-label {
+    color: #4c4e53;
+}
+
+.filepond--label-action {
+    text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+    border-radius: 2em;
+    background-color: #edf0f4;
+    height: 1em;
+}
+
+.filepond--item-panel {
+    background-color: #595e68;
+}
+
+.filepond--drip-blob {
+    background-color: #7f8a9a;
+}
+
+@media (min-width: 30em) {
+    .filepond--item {
+        width: calc(50% - 0.5em);
+    }
+}
+
+@media (min-width: 50em) {
+    .filepond--item {
+        width: calc(33.33% - 0.5em);
+    }
+}
+
+.filepond--file {
+    height: 256px !important;
+}
+
+    .filepond--file:has(.filepond--file-info .filepond--file-info-main[file-extension="pdf"]) {
+        background: url('../pdf.png');
+        background-repeat: no-repeat;
+        background-position: top 40px center;
+        background-size: 60%;
+    }
+
+    .filepond--file:has(.filepond--file-info .filepond--file-info-main[file-extension="doc"]) {
+        background: url('../word.png');
+        background-repeat: no-repeat;
+        background-position: top 40px center;
+        background-size: 60%;
+    }
+
+    .filepond--file:has(.filepond--file-info .filepond--file-info-main[file-extension="docx"]) {
+        background: url('../word.png');
+        background-repeat: no-repeat;
+        background-position: top 40px center;
+        background-size: 60%;
+    }
+
+    .filepond--file:has(.filepond--file-info .filepond--file-info-main[file-extension="xls"]) {
+        background: url('../ms-excel.png');
+        background-repeat: no-repeat;
+        background-position: top 40px center;
+        background-size: 60%;
+    }
+
+    .filepond--file:has(.filepond--file-info .filepond--file-info-main[file-extension="xlsx"]) {
+        background: url('../ms-excel.png');
+        background-repeat: no-repeat;
+        background-position: top 40px center;
+        background-size: 60%;
+    }

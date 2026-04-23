@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A Blazor interop library for the file upload library FilePond</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Blazor.FilePond</AssemblyName>
+        <PackageId>Soenneker.Blazor.FilePond</PackageId>
+        <PackageTags>blazor filepond file upload filepondinterop interop csharp dotnet c# .net</PackageTags>
+        <Copyright>Copyright © 2024-2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.blazor.filepond</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.blazor.filepond</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Asyncs.Initializers\Soenneker.Asyncs.Initializers.csproj" />
+      <ProjectReference Include="..\Soenneker.Blazor.Utils.InteropEventListener\Soenneker.Blazor.Utils.InteropEventListener.csproj" />
+      <ProjectReference Include="..\Soenneker.Blazor.Utils.ResourceLoader\Soenneker.Blazor.Utils.ResourceLoader.csproj" />
+      <ProjectReference Include="..\Soenneker.Extensions.List\Soenneker.Extensions.List.csproj" />
+      <ProjectReference Include="..\Soenneker.Quark.Components.Core.Cancellable\Soenneker.Quark.Components.Core.Cancellable.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\css\filepond.misc.css">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+</Project>
+

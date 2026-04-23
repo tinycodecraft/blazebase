@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <RootNamespace>Soenneker.Quark</RootNamespace>
+        <GenerateDefaultNamespace>false</GenerateDefaultNamespace>
+        <NoWarn>$(NoWarn);1591;IDE0130</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A Blazor core class for the cancellable Quark component.</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Quark.Components.Core.Cancellable</AssemblyName>
+        <PackageId>Soenneker.Quark.Components.Core.Cancellable</PackageId>
+        <PackageTags>quark components core cancellable blazor html element component cancellationtoken cancellation corecancellablecomponent blazorlibrary csharp dotnet c# .net</PackageTags>
+        <Copyright>Copyright © 2025-2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.quark.components.core.cancellable</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.quark.components.core.cancellable</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Atomics.Resources\Soenneker.Atomics.Resources.csproj" />
+      <ProjectReference Include="..\Soenneker.Quark.Components.Core\Soenneker.Quark.Components.Core.csproj" />
+    </ItemGroup>
+</Project>

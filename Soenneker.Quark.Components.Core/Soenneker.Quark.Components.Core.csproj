@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <RootNamespace>Soenneker.Quark</RootNamespace>
+        <GenerateDefaultNamespace>false</GenerateDefaultNamespace>
+        <NoWarn>$(NoWarn);1591;IDE0130</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A Blazor core class for the Quark component.</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Quark.Components.Core</AssemblyName>
+        <PackageId>Soenneker.Quark.Components.Core</PackageId>
+        <PackageTags>quark components core blazor html element component corecomponent blazorlibrary csharp dotnet c# .net</PackageTags>
+        <Copyright>Copyright © 2025-2026 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>true</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.quark.components.core</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.quark.components.core</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
+            $(PACKAGE_RELEASE_NOTES)
+        </PackageReleaseNotes>
+        <RootNamespace>Soenneker.Quark</RootNamespace>
+        <GenerateDefaultNamespace>false</GenerateDefaultNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.26" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Soenneker.Atomics.ValueBools\Soenneker.Atomics.ValueBools.csproj" />
+      <ProjectReference Include="..\Soenneker.Extensions.ValueTask\Soenneker.Extensions.ValueTask.csproj" />
+    </ItemGroup>
+</Project>
