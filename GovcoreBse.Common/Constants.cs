@@ -9,6 +9,7 @@ namespace GovcoreBse.Common;
 public class Constants
 {
 
+
     public enum AutoSuggestType
     {
         Engineers,
@@ -113,7 +114,12 @@ public class Constants
         public const string NOTIFY_TO = "NOTIFY.TO";
 
 
-        public const string SETT_ATTCHTYPE = "DocType";
+        public const string SETT_DOCTYPE = "DocType";
+        public const string SETT_DOCMAXCNT = "DocMaxCnt";
+
+        public const string DOCTYPE_GENERAL = "G";
+
+        
 
     }
 
