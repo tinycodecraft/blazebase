@@ -25,7 +25,12 @@
 <fieldset id="@_elementId" class="@GetWrapperCssClass()">
     <legend>Files</legend>
     <ul>
-
+        <li>
+            <label>
+                <input data-type="local" checked type="checkbox" value="road.jpg" data-file-metadata-size="70427" data-file-metadata-url="/api/streambyname/1/road.jpg" data-file-metadata-thumb="1" data-file-metadata-type=".jpg" />
+                <span>road.jpg</span>
+            </label>
+        </li>
     </ul>
     <input type="file" class="filepond" name="filepond" multiple data-max-file-size="300MB" data-file-metadata-sub="100000"  />
     @if (ValidationErrorMessage.HasContent())

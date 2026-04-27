@@ -10,7 +10,7 @@ using static GovcoreBse.Common.Interfaces;
 namespace GovcoreBse.Common.Models;
 
 
-public class UrlModel : IUrlModel
+public class UrlModel : FN.IUrlModel
 {
     public string UrlTitle { get; set; }
 
@@ -19,11 +19,11 @@ public class UrlModel : IUrlModel
     public string BaseUrl { get; set; }
 
     public string BaseUrlByName { get; set; }
-    public IUrl[] Urls { get; set; }
+    public FN.IUrl[] Urls { get; set; }
 
     public int InitStart { get; set; }
 
-    public IUrlModel ExtractModel(int init, int len)
+    public FN.IUrlModel ExtractModel(int init, int len)
     {
 
         return new UrlModel
@@ -35,10 +35,20 @@ public class UrlModel : IUrlModel
             UrlTitle = this.UrlTitle
         };
     }
-
+    public static UrlModel GetEmptyModel()
+    {
+        return new UrlModel
+        {
+            Urls = Array.Empty<FN.IUrl>(),
+            BaseUrl = string.Empty,
+            InitStart = 0,
+            MaxCount = 1,
+            UrlTitle = string.Empty
+        };
+    }
 }
 
-public class UrlItem : IUrl
+public class UrlItem : FN.IUrl
 {
     public long Size { get; set; }
     public bool CanLoad { get; set; }

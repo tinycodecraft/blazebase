@@ -45,6 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GovcoreBse.Common.Adapt\GovcoreBse.Common.Adapt.csproj" />
       <ProjectReference Include="..\Soenneker.Asyncs.Initializers\Soenneker.Asyncs.Initializers.csproj" />
       <ProjectReference Include="..\Soenneker.Blazor.Utils.InteropEventListener\Soenneker.Blazor.Utils.InteropEventListener.csproj" />
       <ProjectReference Include="..\Soenneker.Blazor.Utils.ResourceLoader\Soenneker.Blazor.Utils.ResourceLoader.csproj" />

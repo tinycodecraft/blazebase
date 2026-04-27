@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="GovcoreBse.Common.Adapt/GovcoreBse.Common.Adapt.csproj" Id="35f27e1f-19e9-415e-b15c-8cec0735250c" />
   <Project Path="GovcoreBse.Common/GovcoreBse.Common.csproj" />
   <Project Path="GovcoreBse.Control/GovcoreBse.Control.csproj" />
   <Project Path="GovcoreBse.Service/GovcoreBse.Service.csproj" />

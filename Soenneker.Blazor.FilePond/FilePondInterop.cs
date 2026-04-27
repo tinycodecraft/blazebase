@@ -42,7 +42,7 @@ public sealed class FilePondInterop : IFilePondInterop
     private readonly AsyncInitializer _interopStyleInitializer;
     private readonly AsyncInitializer _miscStyleInitializer;
 
-    private const string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js";
+    private readonly string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js" + $"?v=2";
 
     private readonly CancellationScope _cancellationScope = new();
     private DotNetObjectReference<FilePondInterop>? _dotNetReference;
@@ -62,7 +62,7 @@ public sealed class FilePondInterop : IFilePondInterop
 
     private async ValueTask InitializeInterop(CancellationToken token)
     {
-        _ = await _moduleImportUtil.GetContentModuleReference(_wrapperModulePath, token);
+        _ = await _moduleImportUtil.GetContentModuleReference(_wrapperModulePath , token);
     }
 
     private async ValueTask InitializeStyle(bool useCdn, CancellationToken token)

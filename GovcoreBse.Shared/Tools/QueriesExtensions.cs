@@ -198,6 +198,7 @@ public static class QueriesExtensions
         
         var model = new KeyValuePair<UrlModel, string[]>(new UrlModel(), new string[types.Length * docmaxcnt]);
         model.Key.UrlTitle = string.Join(ST.CONTENT_SEPARATOR, doctypes.Values);
+        
         model.Key.BaseUrl = setting.Stream;
         model.Key.BaseUrlByName = setting.StreamByName;
 
@@ -240,7 +241,7 @@ public static class QueriesExtensions
                 urlmodel.Thumb = urlid;
 
             }
-            model.Key.Urls = model.Key.Urls.Union(new[] { (IUrl)urlmodel }).ToArray();
+            model.Key.Urls = model.Key.Urls.Union(new[] { (FN.IUrl)urlmodel }).ToArray();
 
         }
         ;

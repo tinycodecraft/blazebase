@@ -16,10 +16,12 @@ export async function create(elementId, options, dotNetCallback, useBlazorServer
                 opt.server = opt.server || {};
                 opt.server.process = createBlazorServerProcessHandler(elementId, dotNetCallback);
             }
+            opt.allowDownloadByUrl = true;
             pond = FilePond.create(element, opt);
             fpOptions[elementId] = opt;
         } else {
             const opt = useBlazorServerProcess ? { server: { process: createBlazorServerProcessHandler(elementId, dotNetCallback) } } : undefined;
+            opt.allowDownloadByUrl = true;
             pond = FilePond.create(element, opt);
             if (opt) {
                 fpOptions[elementId] = opt;

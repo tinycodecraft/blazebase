@@ -45,9 +45,9 @@ namespace GovcoreBse.Store.Commands
 
             Dictionary<string, string> typedict = new();
             foreach(var pair in doctypes.Where(e => types.Any(y => e.SettingId.StartsWith(CN.DataKey.SETT_DOCTYPE + "." + y))).ToList()
-                .OrderBy(e => string.Join("", e.SettingId.Replace(CN.DataKey.SETT_DOCTYPE + ".", "").Reverse())).ToArray().Select((e,i) => new { key = e.SettingValue, value =i.ToString() +e.SettingId.Replace(CN.DataKey.SETT_DOCTYPE, "").Substring(0, 1) }))
+                .OrderBy(e => int.Parse(string.Join("", e.SettingId.Replace(CN.DataKey.SETT_DOCTYPE + ".", "").Substring(1)))).ToArray().Select((e,i) => new { key = e.SettingValue, value =e.SettingId.Replace(CN.DataKey.SETT_DOCTYPE+".", "").Substring(0, 1) }))
             {
-                typedict[pair.key!] = pair.value;
+                typedict[pair.value] = pair.key!;
             }
 
             var urlmodelpair =  HelperQ.GetUrlModel<CoreFileDoc>(setting, typedict, files, docmaxcnt, types);

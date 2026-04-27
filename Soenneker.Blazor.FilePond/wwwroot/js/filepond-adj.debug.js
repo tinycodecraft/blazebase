@@ -1575,7 +1575,7 @@
         restore: 'GET',
         load: 'GET',
     };
-
+    //TODO: try to create action regarding  createFetchFunction arguments
     var createServerAPI = function createServerAPI(outline) {
         var api = {};
 
@@ -1598,7 +1598,7 @@
 
         return api;
     };
-
+    //TODO: try to create load action
     var createAction = function createAction(name, outline, method, timeout, headers) {
         // is explicitely set to null so disable
         if (outline === null) {
@@ -1731,7 +1731,7 @@
     var convertTo = function convertTo(value, type) {
         return conversionTable[type](value);
     };
-
+    //TODO: check getType can return required value for arguments[0] in createFetchFunction
     var getValueByType = function getValueByType(newValue, defaultValue, valueType) {
         // can always assign default value
         if (newValue === defaultValue) {
@@ -4750,7 +4750,6 @@
         if (typeof action === 'function') {
             return action;
         }
-
         // no action supplied
         if (!action || !isString(action.url)) {
             return null;
@@ -7502,7 +7501,7 @@
                         })
                     )
                 );
-
+                //TODO: check options
                 // dispatch set event for each option
                 orderedOptionKeys.forEach(function (key) {
                     dispatch('SET_' + fromCamels(key, '_').toUpperCase(), {
