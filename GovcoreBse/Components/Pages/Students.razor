@@ -8,6 +8,7 @@
 
 @inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
+@inject IMediator Commander
 @rendermode InteractiveServer
 
 
@@ -33,7 +34,7 @@
             <a href="#" @onclick="OnCallInterJs">Click Me (Example to inject JavaScript to invoke)</a>
             <div class="row g-3">
                 <div class="col-12">
-                    <FilePond @ref="FilePondObj" Options="_options" OnInit="OnInit" ></FilePond>
+                    <FilePond @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model" Urls="_urls" ></FilePond>
                 </div>
                 <div class="col-6">
                     <HxButton Text="Add Files"
@@ -81,7 +82,8 @@
     GridSort<Student> sortByName = GridSort<Student>
     .ByAscending(_ => _.FirstName).ThenAscending(_ => _.LastName);
 
-
+    private FN.IUrlModel? _model;
+    private string[] _urls = [];
 
 
     private async Task OnCallInterJs() => await InterJs.Prompt("Please Give Student Name?");
@@ -91,6 +93,21 @@
         Itlog.LogInformation("OnInit fired");
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Itlog.LogInformation("OnAfterRenderAsync firstRender fired");
+            var result  = await Commander.QueryAsync(new GetFilesAsUrlQuery(0, "G"));
+            if(!result.IsError)
+            {
+                _model = result.Value.Key;
+                _urls = result.Value.Value;
+                StateHasChanged();
+            }
+            
+        }
+    }
 
     private static string GetRandomImageUri()
     {

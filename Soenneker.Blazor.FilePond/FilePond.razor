@@ -13,6 +13,7 @@
 @using Soenneker.Utils.Json
 @using Soenneker.Extensions.List
 @using Soenneker.Blazor.Utils.Ids
+@using FN= GovcoreBse.Common.Adapt.Interfaces
 
 @inject IFilePondInterop FilePondInterop
 @inject IInteropEventListener InteropEventListener
@@ -24,14 +25,37 @@
 <div id="@_observerId" ></div>
 <fieldset id="@_elementId" class="@GetWrapperCssClass()">
     <legend>Files</legend>
-    <ul>
-        <li>
-            <label>
-                <input data-type="local" checked type="checkbox" value="road.jpg" data-file-metadata-size="70427" data-file-metadata-url="/api/streambyname/1/road.jpg" data-file-metadata-thumb="1" data-file-metadata-type=".jpg" />
-                <span>road.jpg</span>
-            </label>
-        </li>
-    </ul>
+    @if (UrlModel == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <ul>
+            @for(int i=0; i<UrlModel.MaxCount;i++)
+            {
+                if(i < UrlModel.Urls.Length && !string.IsNullOrEmpty(UrlModel.Urls[i].Url))
+                {
+                    var thisurl = UrlModel.BaseUrlByName + "/" + UrlModel.Urls[i].Thumb + "/" + Uri.EscapeDataString(UrlModel.Urls[i].Url);
+                    var caption = UrlModel.Urls[i].Caption ?? UrlModel.Urls[i].Url;
+                    var ext = Path.GetExtension(UrlModel.Urls[i].Url).ToLowerInvariant();
+                    if (caption != null && !Path.GetExtension(caption).StartsWith("."))
+                    {
+                        caption = caption + ext;
+                    }
+                    <li>
+                        <label>
+                            <input data-type="local" checked type="checkbox" value="@caption" data-file-metadata-size="@(UrlModel.Urls[i].Size)" data-file-metadata-url="@thisurl" data-file-metadata-thumb="@(UrlModel.Urls[i].Thumb)" data-file-metadata-type="@ext" />
+                            <span>@caption</span>
+                        </label>
+                    </li>
+                }
+
+            }
+
+        </ul>
+    }
+
     <input type="file" class="filepond" name="filepond" multiple data-max-file-size="300MB" data-file-metadata-sub="100000"  />
     @if (ValidationErrorMessage.HasContent())
     {
@@ -42,7 +66,12 @@
 @code {
     private readonly string _elementId;
     private readonly string _observerId;
+    private bool _shouldInitJS = false;
     //private readonly string _wrapperId;
+    [Parameter]
+    public FN.IUrlModel? UrlModel { get; set; } = null;
+    [Parameter]
+    public string[] Urls { get; set; } = [];
 
     [Parameter]
     public FilePondOptions? Options { get; set; }
@@ -153,17 +182,27 @@
         _silentAddFiles = [];
         _afterInitializationOperations = [];
     }
+    protected override void OnParametersSet()
+    {
+        if(UrlModel !=null)
+        {
+            _shouldInitJS = true;
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if(firstRender)
+        {
+            await FilePondInterop.Initialize(CancellationToken);
+        }
+
+        if (_shouldInitJS)
         {
             if (Options is {ManualCreate: true})
             {
                 return;
             }
-
-            await FilePondInterop.Initialize(CancellationToken);
 
             if (Options != null)
             {
