@@ -66,7 +66,7 @@
 @code {
     private readonly string _elementId;
     private readonly string _observerId;
-    
+
     //private readonly string _wrapperId;
     [Parameter]
     public FN.IUrlModel? UrlModel { get; set; } = null;
@@ -144,6 +144,12 @@
 
     [Parameter]
     public EventCallback<FilePondFileItem> OnServerData { get; set; }
+
+    [Parameter]
+    public Func<FN.IFilePondLoadRequest?,CancellationToken,ValueTask<FN.IFilePondLoadRequest?>>? OnServerFileRemove { get; set; }
+    
+    [Parameter]
+    public Func<FN.IFilePondLoadRequest?,CancellationToken,ValueTask<FN.IFilePondLoadRequest?>>? OnServerFileLoad { get; set; }
 
     [Parameter]
     public Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>>? OnServerProcess { get; set; }

@@ -118,12 +118,35 @@
 
         }
     }
+
+    public override async ValueTask<FN.IFilePondLoadRequest?> OnFilePondRemoveFile(FN.IFilePondLoadRequest? request = null, CancellationToken cancellationToken = default)
+    {
+        CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
+
+        using (cts)
+        {
+            request.InUrls = ResultUrls.ToArray();
+            request.OutUrls = ResultUrls.ToArray();
+            var result = await base.OnFilePondRemoveFile(request, cancellationToken);
+            if (result != null)
+            {
+                ResultUrls = result.OutUrls.ToList();
+            }
+
+            
+            return result;
+        }
+    }
+
     public override async ValueTask<FN.IFilePondLoadRequest?> OnFilePondLoadFile(FN.IFilePondLoadRequest? request=null, CancellationToken cancellationToken = default)
     {
         CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
 
         using(cts)
         {
+            request.InUrls = ResultUrls.ToArray();
+            request.OutUrls = ResultUrls.ToArray();
+            
             var result = await base.OnFilePondLoadFile(request, cancellationToken);
             if(result!=null)
             {

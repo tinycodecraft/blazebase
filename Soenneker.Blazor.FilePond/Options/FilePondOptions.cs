@@ -10,6 +10,10 @@ namespace Soenneker.Blazor.FilePond.Options;
 /// </summary>
 public sealed class FilePondOptions
 {
+    [JsonPropertyName("typeTagValue")]
+    public string TypeTagValue { get; set; } = string.Empty;
+    [JsonPropertyName("typeTag")]
+    public string TypeTag { get; set; } = string.Empty;
 
     [JsonPropertyName("uploadUrl")]
     public string UploadUrl { get; set; } = string.Empty;

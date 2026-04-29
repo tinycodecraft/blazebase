@@ -189,6 +189,135 @@ export function destroy(elementId) {
             .filter(processId => serverProcesses[processId]?.elementId === elementId)
             .forEach(processId => delete serverProcesses[processId]);
 }
+
+export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeTagValue, dotNetCallback) {
+    if (uploadUrl && removeUrl) {
+        return {
+            process: {
+                url: uploadUrl,
+                onload: data => {
+                    const processId = createProcessId();
+                    console.log('uploading file callback invoked with ', data);
+                    var source = data ? JSON.parse(data).id: "";
+                    if (source) {
+                        dotNetCallback.invokeMethodAsync('ProcessLoadJs', elementId, processId, source).then((serverId) => {
+
+                            console.log('process load blazor func return value: ', serverId); 
+                        });
+                        
+                    }
+                    return source;
+                },
+                ondata: formData => {
+                    console.log('uploading file preparing', formData);
+                    formData.append(typeTag, typeTagValue);
+                    return formData;
+                }
+                
+            },
+            remove: (source, load, error) => {
+                if (!source) {
+                    load();
+                    error('no good in removal!');
+                    return;
+                }
+                if (source && source.includes('|')) {
+                    const processId = createProcessId();
+                    serverProcesses[processId] = {
+                        source,
+                        load,
+                        error
+                    };
+                    dotNetCallback.invokeMethodAsync('ProcessRemoveJs', elementId, processId, source).then((serverId) => {
+                        const serverProcess = serverProcesses[processId];
+                        if (!serverProcess) {
+                            return;
+                        }
+                        serverProcess.load(serverId ?? '');
+                        delete serverProcesses[processId];
+
+                    })
+                        .catch((processError) => {
+                            const serverProcess = serverProcesses[processId];
+                            if (!serverProcess) {
+                                return;
+                            }
+
+                            serverProcess.error(getErrorMessage(processError));
+                            delete serverProcesses[processId];
+                        });
+                }
+                else if (source.length) {
+                    var sourcepart = source.split('|');
+                    $.ajax({
+                        url: removeUrl,
+                        type: 'POST',
+                        data: {
+                            uniqueFileId: sourcepart[sourcepart.length - 1]
+                        },
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        success: function (r) {
+                            if (r) {
+                                load();
+                                return;
+                            }
+                            error('no good in removal');
+                        }
+                    })
+
+                }
+
+
+            },
+            revert: (uniqueFileId, load, error) => {
+
+                $.ajax({
+                    url: removeUrl,
+                    type: 'POST',
+                    data: {
+                        uniqueFileId: uniqueFileId
+                    },
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (r) {
+                        if (r) {
+                            load();
+                            return;
+                        }
+                        error('no good in revert');
+                    }
+                });
+
+                if (uniqueFileId && !uniqueFileId.includes('|')) {
+                    const processId = createProcessId();
+                    serverProcesses[processId] = {
+                        uniqueFileId,
+                        load,
+                        error
+                    };
+                    dotNetCallback.invokeMethodAsync('ProcessRemoveJs', elementId, processId, uniqueFileId).then((serverId) => {
+                        const serverProcess = serverProcesses[processId];
+                        if (!serverProcess) {
+                            return;
+                        }
+                        serverProcess.load(serverId ?? '');
+                        delete serverProcesses[processId];
+
+                    })
+                        .catch((processError) => {
+                            const serverProcess = serverProcesses[processId];
+                            if (!serverProcess) {
+                                return;
+                            }
+
+                            serverProcess.error(getErrorMessage(processError));
+                            delete serverProcesses[processId];
+                        });
+                }
+            }
+        }
+    }
+    return null;
+}
 export function createBlazorServerProcessHandler(elementId, dotNetCallback) {
         return (fieldName, file, metadata, load, error, progress, abort) => {
             const processId = createProcessId();

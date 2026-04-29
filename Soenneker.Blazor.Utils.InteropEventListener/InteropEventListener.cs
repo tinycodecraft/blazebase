@@ -15,6 +15,7 @@ using Soenneker.Extensions.String;
 namespace Soenneker.Blazor.Utils.InteropEventListener;
 
 ///<inheritdoc cref="IInteropEventListener"/>
+///this event listener just a wrapper of FilepondInterop, using BlazorInvoker and BlazorOutputInvoker give generic invoking of callback through interopJs corresponding to the eventname on Filepond Object.
 internal sealed class InteropEventListener : IInteropEventListener
 {
     // Avoid string key allocations by using a structured key.
@@ -24,7 +25,7 @@ internal sealed class InteropEventListener : IInteropEventListener
 
     private IEventListeningInterop? _interop;
     private readonly ILogger<InteropEventListener> _logger;
-
+    
     public InteropEventListener(ILogger<InteropEventListener> logger)
     {
         _logger = logger;

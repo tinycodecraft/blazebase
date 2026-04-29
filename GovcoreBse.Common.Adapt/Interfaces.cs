@@ -14,11 +14,6 @@ namespace GovcoreBse.Common.Adapt
             string Source { get; set; }
         }
 
-        public interface IFilePondPreLoadRequest
-        {
-            string PondAttachTypeName { get; set; }
-            string PondAttachType { get; set; }
-        }
 
         public interface IUrl
         {
