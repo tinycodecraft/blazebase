@@ -27,7 +27,8 @@ public class Constants
         getrandom,
         stream,
         streambyname,
-
+        fileremove,
+        fileupload,
 
     }
 

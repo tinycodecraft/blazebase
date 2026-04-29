@@ -81,6 +81,8 @@ builder.Services.AddScoped<ExampleJsInterop>();
 
 builder.Services.AddScoped<StringEncrypService>();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddFilePondInteropAsScoped();
 
 /*UseSerilog configuration

@@ -5,4 +5,4 @@ using Soenneker.Blazor.FilePond.Dtos;
 
 namespace Soenneker.Blazor.FilePond;
 
-internal sealed record ServerProcessRegistration(Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>> Handler, CancellationToken CancellationToken);
+internal sealed record ServerProcessRegistration<T>(Func<T, CancellationToken, ValueTask<string>> Handler, CancellationToken CancellationToken) where T : class;

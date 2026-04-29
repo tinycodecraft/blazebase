@@ -10,6 +10,12 @@ namespace Soenneker.Blazor.FilePond.Options;
 /// </summary>
 public sealed class FilePondOptions
 {
+
+    [JsonPropertyName("uploadUrl")]
+    public string UploadUrl { get; set; } = string.Empty;
+    [JsonPropertyName("removeUrl")]
+    public string RemoveUrl { get; set; } = string.Empty;
+
     /// <summary>
     /// Gets or sets an additional CSS class to add to the root element.
     /// </summary>
@@ -45,6 +51,17 @@ public sealed class FilePondOptions
     /// </summary>
     [JsonPropertyName("disabled")]
     public bool Disabled { get; set; } = false;
+
+    [JsonPropertyName("allowDownloadByUrl")]
+    public bool AllowDownloadByUrl { get; set; } = true;
+
+    /// <summary>
+    /// Array of accepted file types. Can be mime types or wild cards.
+    /// For instance ['image/*'] will accept all images. ['image/png', 'image/jpeg']
+    /// will only accept PNGs and JPEGs.
+    /// </summary>
+    [JsonPropertyName("acceptedFileTypes")]
+    public string[] AcceptedFileTypes { get; set; } = new[] { "application/pdf", "image/*", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/html" };
 
     /// <summary>
     /// Gets or sets the value to set to the capture attribute.
@@ -645,13 +662,6 @@ public sealed class FilePondOptions
     [JsonPropertyName("allowFileTypeValidation")]
     public bool AllowFileTypeValidation { get; set; } = true;
 
-    /// <summary>
-    /// Array of accepted file types. Can be mime types or wild cards.
-    /// For instance ['image/*'] will accept all images. ['image/png', 'image/jpeg']
-    /// will only accept PNGs and JPEGs.
-    /// </summary>
-    [JsonPropertyName("acceptedFileTypes")]
-    public List<string> AcceptedFileTypes { get; set; } = [];
 
     /// <summary>
     /// Message shown when an invalid file is added.

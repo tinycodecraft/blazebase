@@ -22,6 +22,7 @@ using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Extensions.String;
 using Soenneker.Utils.CancellationScopes;
 using System.Text.Json;
+using FN = GovcoreBse.Common.Adapt.Interfaces;
 
 namespace Soenneker.Blazor.FilePond;
 
@@ -31,10 +32,14 @@ public sealed class FilePondInterop : IFilePondInterop
     private readonly ILogger<FilePondInterop> _logger;
     private readonly List<FilePondPluginType> _enabledPlugins = [];
     private readonly List<string> _enabledOtherPlugins = [];
+    private readonly List<string> _resultUrls = [];
     private readonly IResourceLoader _resourceLoader;
     private readonly IModuleImportUtil _moduleImportUtil;
-    private readonly ConcurrentDictionary<string, ServerProcessRegistration> _serverProcessRegistrations = new();
+    //this is needed to track the server process handlers registered for each FilePond instance (elementId) so that they can be invoked when a process request comes in from JS
+    private readonly ConcurrentDictionary<string, ServerProcessRegistration<FilePondServerProcessRequest>> _serverProcessRegistrations = new();
+    //this is needed to track active server processes so that they can be cancelled if the component is disposed while a process is still running
     private readonly ConcurrentDictionary<string, ServerProcessContext> _activeServerProcesses = new();
+    
 
     private readonly AsyncInitializer _interopInitializer;
     private readonly AsyncInitializer<bool> _styleInitializer;
@@ -602,7 +607,7 @@ public sealed class FilePondInterop : IFilePondInterop
     public void RegisterServerProcessHandler(string elementId, Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>> handler,
         CancellationToken cancellationToken = default)
     {
-        _serverProcessRegistrations[elementId] = new ServerProcessRegistration(handler, cancellationToken);
+        _serverProcessRegistrations[elementId] = new ServerProcessRegistration<FilePondServerProcessRequest>(handler, cancellationToken);
     }
 
     public void UnregisterServerProcessHandler(string elementId)
@@ -619,10 +624,13 @@ public sealed class FilePondInterop : IFilePondInterop
         }
     }
 
+
+    
+
     [JSInvokable("ProcessFileJs")]
     public async Task<string> ProcessFileJs(string elementId, string processId, string fieldName, string fileJson, string? metadataJson)
     {
-        if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration? registration))
+        if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FilePondServerProcessRequest>? registration))
             throw new InvalidOperationException($"No Blazor server.process handler registered for FilePond element '{elementId}'.");
 
         FilePondFileItem? file = JsonUtil.Deserialize<FilePondFileItem>(fileJson);

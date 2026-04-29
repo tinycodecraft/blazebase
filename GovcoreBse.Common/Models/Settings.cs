@@ -34,9 +34,11 @@ public class PathSetting
     public string StreamByName { get; set; }
     //the template path for keeping the template files
     public string Template { get; set; }
-    //the root of web path
+    //the api path for removing the file
+    public string FileRemove { get; set; }
 
-
+    //the api path for uploading the file
+    public string FileUpload { get; set; }
 }
 
 public class DBRCUSetting:IN.IDBSetting

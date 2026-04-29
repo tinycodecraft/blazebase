@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace GovcoreBse.Middlewares;
@@ -115,3 +116,4 @@ public static class ServiceCollectionExtensions
         return services;
     }
 }
+

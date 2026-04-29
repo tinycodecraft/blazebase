@@ -66,7 +66,7 @@
 @code {
     private readonly string _elementId;
     private readonly string _observerId;
-    private bool _shouldInitJS = false;
+    
     //private readonly string _wrapperId;
     [Parameter]
     public FN.IUrlModel? UrlModel { get; set; } = null;
@@ -167,6 +167,7 @@
     private bool _initializing;
     private bool _initialized;
     private bool _hasBeenValidated;
+    private bool _shouldInitJS;
 
     private readonly List<Func<ValueTask>> _afterInitializationOperations;
 
@@ -196,8 +197,8 @@
         {
             await FilePondInterop.Initialize(CancellationToken);
         }
-
-        if (_shouldInitJS)
+        // please note that firstRender is false after _shouldInitJS is set to true.  So, _initialized is checked to avoid multiple initialization
+        if (_shouldInitJS && !_initialized)
         {
             if (Options is {ManualCreate: true})
             {

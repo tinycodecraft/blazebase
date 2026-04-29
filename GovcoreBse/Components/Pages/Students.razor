@@ -1,14 +1,19 @@
 @page "/students"
+@inherits BasePage
+@using GovcoreBse.Middlewares;
 @using GovcoreBse.Components.Layout
+@using Microsoft.Extensions.Options
 @using Soenneker.Blazor.FilePond
 @using Soenneker.Blazor.FilePond.Dtos
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
 
+
 @inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
 @inject IMediator Commander
+@inject IOptions<PathSetting> Settings
 @rendermode InteractiveServer
 
 
@@ -31,7 +36,7 @@
 
             <Paginator State="@pagination" />
 
-            <a href="#" @onclick="OnCallInterJs">Click Me (Example to inject JavaScript to invoke)</a>
+            <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
             <div class="row g-3">
                 <div class="col-12">
                     <FilePond @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model" Urls="_urls" ></FilePond>
@@ -65,15 +70,17 @@
 
 
 @code {
-
+    protected List<string> ResultUrls { get; set; }
     private FilePond? FilePondObj { get; set; }
-    private readonly FilePondOptions _options = new()
+    private  FilePondOptions _options = new()
         {
             EnabledPlugins = [FilePondPluginType.ImagePreview, FilePondPluginType.MediaPreview, FilePondPluginType.PdfPreview, FilePondPluginType.GetFile],
             MaxFileSize = 100_000_000,
             UseCdn = false,
             AllowPdfPreview = true,
             PdfPreviewHeight = 200,
+
+
         };
 
     IQueryable<Student> students = Student.GetStudents();
@@ -103,12 +110,32 @@
             {
                 _model = result.Value.Key;
                 _urls = result.Value.Value;
+                ResultUrls = _urls.ToList();
+                _options.UploadUrl = Settings.Value.FileUpload;
+                _options.RemoveUrl = Settings.Value.FileRemove;
                 StateHasChanged();
             }
-            
+
         }
     }
+    public override async ValueTask<FN.IFilePondLoadRequest?> OnFilePondLoadFile(FN.IFilePondLoadRequest? request=null, CancellationToken cancellationToken = default)
+    {
+        CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
 
+        using(cts)
+        {
+            var result = await base.OnFilePondLoadFile(request, cancellationToken);
+            if(result!=null)
+            {
+                ResultUrls = result.OutUrls.ToList();
+            }
+            
+
+            return result;
+        }
+
+
+    }
     private static string GetRandomImageUri()
     {
         int fileHeight = RandomUtil.Next(200, 500);

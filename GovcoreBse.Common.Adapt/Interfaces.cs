@@ -2,8 +2,23 @@
 
 namespace GovcoreBse.Common.Adapt
 {
+
+
     public static class Interfaces
     {
+        public interface IFilePondLoadRequest
+        {
+            string[] InUrls { get; set; }
+            string[] OutUrls { get; set; }
+
+            string Source { get; set; }
+        }
+
+        public interface IFilePondPreLoadRequest
+        {
+            string PondAttachTypeName { get; set; }
+            string PondAttachType { get; set; }
+        }
 
         public interface IUrl
         {

@@ -11,6 +11,98 @@ namespace GovcoreBse.Common;
 public class Interfaces
 {
 
+
+    /// <summary>
+    /// Contract for components that expose a cancellable, resettable async work scope.
+    /// </summary>
+    public interface ICoreCancellableComponent : ICoreComponent
+    {
+        /// <summary>
+        /// Gets the current token for in-flight work.
+        /// </summary>
+        /// <remarks>
+        /// Should return <see cref="CancellationToken.None"/> after disposal.
+        /// </remarks>
+        CancellationToken CancellationToken { get; }
+
+        /// <summary>
+        /// Cancels any in-flight work. No-op if nothing has started.
+        /// </summary>
+        Task Cancel();
+
+        /// <summary>
+        /// Cancels current work and swaps in a fresh token/source for new work.
+        /// </summary>
+        ValueTask ResetCancellation();
+    }
+
+
+    /// <summary>
+    /// A Blazor core class for the Quark component.
+    /// </summary>
+    public interface ICoreComponent : IDisposable, IAsyncDisposable
+    {
+        /// <summary>
+        /// Gets or sets the HTML attributes to apply to the element.
+        /// </summary>
+        IReadOnlyDictionary<string, object>? Attributes { get; set; }
+
+        string? Id { get; set; }
+
+        /// <summary>
+        /// Disposes managed resources for the component. Implementations should be idempotent.
+        /// </summary>
+        new void Dispose();
+
+        /// <summary>
+        /// Asynchronously disposes managed resources for the component. Implementations should be idempotent.
+        /// </summary>
+        /// <returns>A task that completes when asynchronous disposal is finished.</returns>
+        new ValueTask DisposeAsync();
+    }
+
+
+    /// <summary>
+    /// Thread-safe holder for a single resource that can be lazily created,
+    /// atomically reset (swap), and asynchronously torn down.
+    /// </summary>
+    /// <typeparam name="T">The resource type being managed.</typeparam>
+    public interface IAtomicResource<out T> : IAsyncDisposable, IDisposable where T : class
+    {
+        /// <summary>
+        /// Gets the current instance, creating it if necessary.
+        /// </summary>
+        /// <remarks>
+        /// Implementations should be safe for concurrent callers and avoid
+        /// duplicate allocations (i.e., publish-at-most-once semantics per reset).
+        /// If the resource has been disposed, this should return <c>null</c>.
+        /// </remarks>
+        /// <returns>The current instance, or <c>null</c> if disposed.</returns>
+        T? GetOrCreate();
+
+        /// <summary>
+        /// Returns the current instance if present, without creating a new one.
+        /// </summary>
+        /// <returns>The existing instance, or <c>null</c> if none has been created or the resource is disposed.</returns>
+        T? TryGet();
+
+        /// <summary>
+        /// Atomically replaces the current instance with a freshly created one,
+        /// and asynchronously tears down the previous instance (if any).
+        /// </summary>
+        /// <remarks>
+        /// After this completes, subsequent <see cref="GetOrCreate"/> calls should return the new instance.
+        /// </remarks>
+        ValueTask Reset();
+
+        /// <summary>
+        /// Indicates whether the resource has been disposed and will no longer create or return instances.
+        /// </summary>
+        bool IsDisposed { get; }
+    }
+
+
+
     public interface ITokenService
     {
         string CreateToken(IAuthResult user);
