@@ -8,8 +8,8 @@ namespace GovcoreBse.Common.Adapt
     {
         public interface IFilePondLoadRequest
         {
-            string[] InUrls { get; set; }
-            string[] OutUrls { get; set; }
+
+            string[] Urls { get; set; }
 
             string Source { get; set; }
         }

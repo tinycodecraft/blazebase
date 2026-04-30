@@ -167,6 +167,10 @@ app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.streambyname))
     .MapApiFor(CN.AutocompleteGroup.streambyname)
     .WithTags(nameof(CN.AutocompleteGroup.streambyname));
 
+app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.fileupload))
+    .MapApiFor(CN.AutocompleteGroup.fileupload)
+    .WithTags(nameof(CN.AutocompleteGroup.fileupload));
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

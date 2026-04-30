@@ -8,6 +8,7 @@ using Soenneker.Blazor.Utils.EventListeningInterop.Abstract;
 using System;
 using Soenneker.Blazor.FilePond.Enums;
 using Soenneker.Blazor.FilePond.Constants;
+using FN = GovcoreBse.Common.Adapt.Interfaces;
 
 namespace Soenneker.Blazor.FilePond.Abstract;
 
@@ -287,9 +288,11 @@ public interface IFilePondInterop : IEventListeningInterop, IAsyncDisposable
     /// Registers a Blazor-driven <c>server.process</c> handler for the specified FilePond element.
     /// </summary>
     /// <param name="elementId">The ID of the FilePond element.</param>
-    /// <param name="handler">The handler that should process uploads for this FilePond instance.</param>
+    /// <param name="loadHandler">The callback function to handle file loading on client side. It receives a <see cref="FN.IFilePondLoadRequest"/> object containing details about the file to be loaded and should return a modified <see cref="FN.IFilePondLoadRequest"/> with the necessary information for FilePond to proceed.</param>
+    /// <param name="removeHandler">The callback function to handle file removal on client side. It receives a <see cref="FN.IFilePondLoadRequest"/> object containing details about the file to be removed and should return a modified <see cref="FN.IFilePondLoadRequest"/> with the necessary information for FilePond to proceed.</param>
     /// <param name="cancellationToken">A token associated with the owning component lifecycle.</param>
-    void RegisterServerProcessHandler(string elementId, Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>> handler,
+    void RegisterServerProcessHandler(string elementId, Func<FN.IFilePondLoadRequest, CancellationToken, ValueTask<FN.IFilePondLoadRequest>> loadHandler,
+        Func<FN.IFilePondLoadRequest, CancellationToken, ValueTask<FN.IFilePondLoadRequest>> removeHandler,
         CancellationToken cancellationToken = default);
 
     /// <summary>

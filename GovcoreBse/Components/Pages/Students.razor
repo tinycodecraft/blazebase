@@ -1,4 +1,5 @@
 @page "/students"
+@page "/students/{AttachType}"
 @inherits BasePage
 @using GovcoreBse.Middlewares;
 @using GovcoreBse.Components.Layout
@@ -39,7 +40,9 @@
             <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
             <div class="row g-3">
                 <div class="col-12">
-                    <FilePond @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model" Urls="_urls" ></FilePond>
+                    <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
+                        OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"
+                        ></FilePond>
                 </div>
                 <div class="col-6">
                     <HxButton Text="Add Files"
@@ -70,7 +73,12 @@
 
 
 @code {
-    protected List<string> ResultUrls { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "attachType")]
+    public string AttachType { get; set; }
+
+    protected List<string> ResultUrls { get; set; } = new List<string>();
     private FilePond? FilePondObj { get; set; }
     private  FilePondOptions _options = new()
         {
@@ -99,62 +107,67 @@
     {
         Itlog.LogInformation("OnInit fired");
     }
-
+    protected override void OnInitialized()
+    {
+        AttachType ??= "G";
+        base.OnInitialized();
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             Itlog.LogInformation("OnAfterRenderAsync firstRender fired");
-            var result  = await Commander.QueryAsync(new GetFilesAsUrlQuery(0, "G"));
+            var result  = await Commander.QueryAsync(new GetFilesAsUrlQuery(0, AttachType));
             if(!result.IsError)
             {
-                _model = result.Value.Key;
-                _urls = result.Value.Value;
-                ResultUrls = _urls.ToList();
+                _model = result.Value.Key;                
+                ResultUrls = result.Value.Value.ToList();
                 _options.UploadUrl = Settings.Value.FileUpload;
                 _options.RemoveUrl = Settings.Value.FileRemove;
+                _options.TypeTag = "AttachType";
+                _options.TypeTagValue = AttachType;
                 StateHasChanged();
             }
 
         }
     }
 
-    public override async ValueTask<FN.IFilePondLoadRequest?> OnFilePondRemoveFile(FN.IFilePondLoadRequest? request = null, CancellationToken cancellationToken = default)
+    public override async ValueTask<FN.IFilePondLoadRequest> OnFilePondRemoveFile(FN.IFilePondLoadRequest request , CancellationToken cancellationToken)
     {
         CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
 
         using (cts)
         {
-            request.InUrls = ResultUrls.ToArray();
-            request.OutUrls = ResultUrls.ToArray();
+            request.Urls = ResultUrls.ToArray();
+            
             var result = await base.OnFilePondRemoveFile(request, cancellationToken);
             if (result != null)
             {
-                ResultUrls = result.OutUrls.ToList();
+                ResultUrls = result.Urls.ToList();
             }
 
             
-            return result;
+            return result!;
         }
     }
 
-    public override async ValueTask<FN.IFilePondLoadRequest?> OnFilePondLoadFile(FN.IFilePondLoadRequest? request=null, CancellationToken cancellationToken = default)
+    public override async ValueTask<FN.IFilePondLoadRequest> OnFilePondLoadFile(FN.IFilePondLoadRequest request, CancellationToken cancellationToken)
     {
         CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
 
         using(cts)
         {
-            request.InUrls = ResultUrls.ToArray();
-            request.OutUrls = ResultUrls.ToArray();
+            request.Urls = ResultUrls.ToArray();
+            
             
             var result = await base.OnFilePondLoadFile(request, cancellationToken);
             if(result!=null)
             {
-                ResultUrls = result.OutUrls.ToList();
+                ResultUrls = result.Urls.ToList();
             }
             
 
-            return result;
+            return result!;
         }
 
 

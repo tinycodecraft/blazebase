@@ -34,6 +34,7 @@ public class Constants
 
     public enum PathType
     {
+        Temp,
         Share,
         Upload,
         Docs,

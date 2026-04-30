@@ -26,11 +26,78 @@ public static class Apis
                 builder.MapGet("/all/{userid}", GetAllWeathers).Produces(200, typeof(List<WeatherForecastDto>));
 
                 break;
+            case CN.AutocompleteGroup.fileupload:
+                builder.MapPost("/", UploadFile).Accepts<IFormFile>("multipart/form-data").Produces(200, typeof(object));
+                break;
+            case CN.AutocompleteGroup.fileremove:
+                builder.MapPost("/", RemoveFile).Produces(200, typeof(object));
+                break;
 
 
         }
 
         return builder;
+    }
+
+    internal static async Task<IResult> RemoveFile(IWebHostEnvironment env,ILogger<Program> logger, IOptions<PathSetting> setting,[FromForm] string uniqueFileId)
+    {
+        logger.LogDebug("the file remove api is called with uniqueFileId: {uniqueFileId}", uniqueFileId);
+        if(string.IsNullOrEmpty(uniqueFileId))
+        {
+            logger.LogError("uniqueFileId is null or empty");
+            return TypedResults.Ok(new { success = false });
+        }
+        var revertpath = Path.Combine(env.ContentRootPath, setting.Value.Temp, uniqueFileId);
+        if(Directory.Exists(revertpath))
+        {
+            foreach(var file in Directory.GetFiles(revertpath))
+            {
+                try
+                {
+                    File.Delete(file);
+                    logger.LogDebug("Deleted file: {file}", file);
+                }
+                catch(Exception ex)
+                {
+                    logger.LogError(ex, "Error deleting file: {file}", file);
+                }
+            }
+
+        }
+
+
+        return TypedResults.Ok(true);
+    }
+
+    internal static async Task<IResult> UploadFile(IHttpContextAccessor accessor,IFormFile file,IWebHostEnvironment env,ILogger<Program> logger,IOptions<PathSetting> setting)
+    {
+        logger.LogDebug("the file upload api is called");
+        var id = "".RandomString(8);
+        var upload = setting.Value.Temp;
+        if(accessor== null || accessor.HttpContext == null || file==null)
+        {
+            logger.LogError("HttpContext or file is null");
+            return TypedResults.Ok(new { id = string.Empty });
+        }
+
+        string? type = accessor.HttpContext.Request.Form[CN.Setting.FILEPOND_ATTCHTYPE];
+        if(type==null)
+        {
+            logger.LogError("Attachment type is missing in the form data");
+            return TypedResults.Ok(new { id = string.Empty });
+        }
+
+        var tempuploadpath =Path.Combine(env.ContentRootPath, upload, id);
+        if(!Directory.Exists(tempuploadpath))
+        {
+            Directory.CreateDirectory(tempuploadpath);
+        }
+        using var stream = File.Create(tempuploadpath + "\\" + file.FileName);
+        await file.CopyToAsync(stream);
+
+        id = $"{type}{CN.Setting.CONTENT_SEPARATOR}{id}";
+
+        return TypedResults.Ok(new { id = id });
     }
 
     internal static async Task<IResult> GetAllSuggestions(IHttpContextAccessor accessor,IMediator commander, ILogger<Program> logger, string userid, [FromQuery(Name = "wanted")] string wanted, [FromQuery] string? search = null)
@@ -91,7 +158,7 @@ public static class Apis
 
 
 
-        return Results.File(fileStream, contentType);
+        return Results.File(fileStream, contentType, filename);
 
         
     }

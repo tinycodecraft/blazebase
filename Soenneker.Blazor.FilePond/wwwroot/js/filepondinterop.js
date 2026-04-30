@@ -13,20 +13,23 @@ export async function create(elementId, options, dotNetCallback, useBlazorServer
         if (options) {
             const opt = JSON.parse(options);
             if (useBlazorServerProcess) {
-                opt.server = opt.server || {};
-                opt.server.process = createBlazorServerProcessHandler(elementId, dotNetCallback);
+                //opt.server = opt.server || {};
+                //opt.server.process = createBlazorServerProcessHandler(elementId, dotNetCallback);
+                opt.server = createProcessHandler(elementId, opt.uploadUrl, opt.removeUrl, opt.typeTag, opt.typeTagValue, dotNetCallback) || opt.server || {};
+
             }
             
             pond = FilePond.create(element, opt);
             fpOptions[elementId] = opt;
-        } else {
-            const opt = useBlazorServerProcess ? { server: { process: createBlazorServerProcessHandler(elementId, dotNetCallback) } } : undefined;
-            
-            pond = FilePond.create(element, opt);
-            if (opt) {
-                fpOptions[elementId] = opt;
-            }
         }
+        //else {
+        //    const opt = useBlazorServerProcess ? { server: { process: createBlazorServerProcessHandler(elementId, dotNetCallback) } } : undefined;
+            
+        //    pond = FilePond.create(element, opt);
+        //    if (opt) {
+        //        fpOptions[elementId] = opt;
+        //    }
+        //}
 
         ponds[elementId] = pond;
 }
@@ -34,8 +37,9 @@ export function setOptions(elementId, options, dotNetCallback, useBlazorServerPr
         const pond = ponds[elementId];
         const opt = JSON.parse(options);
         if (useBlazorServerProcess) {
-            opt.server = opt.server || {};
-            opt.server.process = createBlazorServerProcessHandler(elementId, dotNetCallback);
+            // opt.server = opt.server || {};
+            //opt.server.process = createBlazorServerProcessHandler(elementId, dotNetCallback);
+            opt.server = createProcessHandler(elementId, opt.uploadUrl, opt.removeUrl, opt.typeTag, opt.typeTagValue, dotNetCallback) || opt.server || {};
         }
         fpOptions[elementId] = opt;
         pond.setOptions(opt);
@@ -233,7 +237,7 @@ export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeT
                         if (!serverProcess) {
                             return;
                         }
-                        serverProcess.load(serverId ?? '');
+                        serverProcess.load();
                         delete serverProcesses[processId];
 
                     })
@@ -248,12 +252,12 @@ export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeT
                         });
                 }
                 else if (source.length) {
-                    var sourcepart = source.split('|');
+                    
                     $.ajax({
                         url: removeUrl,
                         type: 'POST',
                         data: {
-                            uniqueFileId: sourcepart[sourcepart.length - 1]
+                            uniqueFileId: source
                         },
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         success: function (r) {
@@ -287,7 +291,7 @@ export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeT
                     }
                 });
 
-                if (uniqueFileId && !uniqueFileId.includes('|')) {
+                if (uniqueFileId && uniqueFileId.includes('|')) {
                     const processId = createProcessId();
                     serverProcesses[processId] = {
                         uniqueFileId,
@@ -299,7 +303,7 @@ export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeT
                         if (!serverProcess) {
                             return;
                         }
-                        serverProcess.load(serverId ?? '');
+                        serverProcess.load();
                         delete serverProcesses[processId];
 
                     })

@@ -90,6 +90,7 @@
   <ItemGroup>
     <Folder Include="logs\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
 </Project>

@@ -36,7 +36,7 @@ public sealed class FilePondInterop : IFilePondInterop
     private readonly IResourceLoader _resourceLoader;
     private readonly IModuleImportUtil _moduleImportUtil;
     //this is needed to track the server process handlers registered for each FilePond instance (elementId) so that they can be invoked when a process request comes in from JS
-    private readonly ConcurrentDictionary<string, ServerProcessRegistration<FilePondServerProcessRequest>> _serverProcessRegistrations = new();
+    private readonly ConcurrentDictionary<string,  ServerProcessRegistration<FN.IFilePondLoadRequest>> _serverProcessRegistrations = new();
     //this is needed to track active server processes so that they can be cancelled if the component is disposed while a process is still running
     private readonly ConcurrentDictionary<string, ServerProcessContext> _activeServerProcesses = new();
     
@@ -47,7 +47,7 @@ public sealed class FilePondInterop : IFilePondInterop
     private readonly AsyncInitializer _interopStyleInitializer;
     private readonly AsyncInitializer _miscStyleInitializer;
 
-    private readonly string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js" + $"?v=2";
+    private readonly string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js" + $"?v=3";
 
     private readonly CancellationScope _cancellationScope = new();
     private DotNetObjectReference<FilePondInterop>? _dotNetReference;
@@ -604,10 +604,10 @@ public sealed class FilePondInterop : IFilePondInterop
             await InvokeVoidAsync("reportServerProcessProgress", linked, elementId, processId, isLengthComputable, loaded, total);
     }
 
-    public void RegisterServerProcessHandler(string elementId, Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>> handler,
-        CancellationToken cancellationToken = default)
+    public void RegisterServerProcessHandler(string elementId, Func<FN.IFilePondLoadRequest, CancellationToken, ValueTask<FN.IFilePondLoadRequest>> loadHandler, Func<FN.IFilePondLoadRequest, CancellationToken, ValueTask<FN.IFilePondLoadRequest>> removeHandler,
+        CancellationToken cancellationToken)
     {
-        _serverProcessRegistrations[elementId] = new ServerProcessRegistration<FilePondServerProcessRequest>(handler, cancellationToken);
+        _serverProcessRegistrations[elementId] = new ServerProcessRegistration<FN.IFilePondLoadRequest>(loadHandler,removeHandler, cancellationToken);
     }
 
     public void UnregisterServerProcessHandler(string elementId)
@@ -624,47 +624,88 @@ public sealed class FilePondInterop : IFilePondInterop
         }
     }
 
-
-    
-
-    [JSInvokable("ProcessFileJs")]
-    public async Task<string> ProcessFileJs(string elementId, string processId, string fieldName, string fileJson, string? metadataJson)
+    [JSInvokable("ProcessRemoveJs")]
+    public async Task<string> ProcessRemoveJs(string elementId, string processId, string source)
     {
-        if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FilePondServerProcessRequest>? registration))
+        if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FN.IFilePondLoadRequest>? registration))
             throw new InvalidOperationException($"No Blazor server.process handler registered for FilePond element '{elementId}'.");
-
-        FilePondFileItem? file = JsonUtil.Deserialize<FilePondFileItem>(fileJson);
-
-        if (file == null || !file.Id.HasContent())
-            throw new InvalidOperationException("Unable to resolve the FilePond file item for Blazor-driven server.process");
-
-        FilePondFileItem resolvedFile = file;
-
-        JsonElement? metadata = null;
-
-        if (metadataJson.HasContent())
-        {
-            using JsonDocument metadataDocument = JsonDocument.Parse(metadataJson!);
-            metadata = metadataDocument.RootElement.Clone();
-        }
-
         var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationScope.CancellationToken, registration.CancellationToken);
         _activeServerProcesses[processId] = new ServerProcessContext(elementId, processCancellationTokenSource);
-
         try
         {
-            var request = new FilePondServerProcessRequest(processId, fieldName, resolvedFile, metadata,
-                (maxAllowedSize, cancellationToken) => GetStreamForFile(elementId, resolvedFile.Id, maxAllowedSize ?? FilePondConstants.DefaultMaximumSize, cancellationToken),
-                (isLengthComputable, loaded, total, cancellationToken) => ReportServerProcessProgress(elementId, processId, isLengthComputable, loaded, total, cancellationToken));
-
-            return await registration.Handler(request, processCancellationTokenSource.Token);
+            var request = new FilePondLoadRequest { Source = source };
+            FN.IFilePondLoadRequest response = await registration.RemoveHandler(request, processCancellationTokenSource.Token);
         }
         finally
         {
             if (_activeServerProcesses.TryRemove(processId, out ServerProcessContext? context))
                 context.CancellationTokenSource.Dispose();
         }
+        return "";
+
     }
+
+
+    [JSInvokable("ProcessLoadJs")]
+    public async Task<string> ProcessLoadJs(string elementId,string processId,string source)
+    {
+        if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FN.IFilePondLoadRequest>? registration))
+            throw new InvalidOperationException($"No Blazor server.process handler registered for FilePond element '{elementId}'.");
+        var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationScope.CancellationToken, registration.CancellationToken);
+        _activeServerProcesses[processId] = new ServerProcessContext(elementId, processCancellationTokenSource);
+        try
+        {
+            var request = new FilePondLoadRequest { Source = source };
+            FN.IFilePondLoadRequest response = await registration.LoadHandler(request, processCancellationTokenSource.Token);
+        }
+        finally
+        {
+            if (_activeServerProcesses.TryRemove(processId, out ServerProcessContext? context))
+                context.CancellationTokenSource.Dispose();
+        }
+        return "";
+
+    }
+    
+
+    //[JSInvokable("ProcessFileJs")]
+    //public async Task<string> ProcessFileJs(string elementId, string processId, string fieldName, string fileJson, string? metadataJson)
+    //{
+    //    if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FilePondServerProcessRequest>? registration))
+    //        throw new InvalidOperationException($"No Blazor server.process handler registered for FilePond element '{elementId}'.");
+
+    //    FilePondFileItem? file = JsonUtil.Deserialize<FilePondFileItem>(fileJson);
+
+    //    if (file == null || !file.Id.HasContent())
+    //        throw new InvalidOperationException("Unable to resolve the FilePond file item for Blazor-driven server.process");
+
+    //    FilePondFileItem resolvedFile = file;
+
+    //    JsonElement? metadata = null;
+
+    //    if (metadataJson.HasContent())
+    //    {
+    //        using JsonDocument metadataDocument = JsonDocument.Parse(metadataJson!);
+    //        metadata = metadataDocument.RootElement.Clone();
+    //    }
+
+    //    var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationScope.CancellationToken, registration.CancellationToken);
+    //    _activeServerProcesses[processId] = new ServerProcessContext(elementId, processCancellationTokenSource);
+
+    //    try
+    //    {
+    //        var request = new FilePondServerProcessRequest(processId, fieldName, resolvedFile, metadata,
+    //            (maxAllowedSize, cancellationToken) => GetStreamForFile(elementId, resolvedFile.Id, maxAllowedSize ?? FilePondConstants.DefaultMaximumSize, cancellationToken),
+    //            (isLengthComputable, loaded, total, cancellationToken) => ReportServerProcessProgress(elementId, processId, isLengthComputable, loaded, total, cancellationToken));
+
+    //        return await registration.Handler(request, processCancellationTokenSource.Token);
+    //    }
+    //    finally
+    //    {
+    //        if (_activeServerProcesses.TryRemove(processId, out ServerProcessContext? context))
+    //            context.CancellationTokenSource.Dispose();
+    //    }
+    //}
 
     [JSInvokable("AbortServerProcessJs")]
     public Task AbortServerProcessJs(string elementId, string processId)

@@ -9,7 +9,8 @@ namespace Soenneker.Blazor.FilePond.Dtos;
 
 public class FilePondLoadRequest : FN.IFilePondLoadRequest
 {
-    public string[] InUrls { get; set; } = Array.Empty<string>();
-    public string[] OutUrls { get; set; } = Array.Empty<string>();
+
+    public string[] Urls { get; set; } = Array.Empty<string>();
+
     public string Source { get; set; } = string.Empty;
 }

@@ -22,6 +22,8 @@ public class CorsPolicySetting
 
 public class PathSetting
 {
+    //the temporary path for keeping files before processing
+    public string Temp { get; set; }
     //the share path root for keeping files upload
     public string Share { get; set; }
     //the upload api for keeping the uploaded files

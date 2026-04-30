@@ -70,8 +70,7 @@
     //private readonly string _wrapperId;
     [Parameter]
     public FN.IUrlModel? UrlModel { get; set; } = null;
-    [Parameter]
-    public string[] Urls { get; set; } = [];
+
 
     [Parameter]
     public FilePondOptions? Options { get; set; }
@@ -146,10 +145,10 @@
     public EventCallback<FilePondFileItem> OnServerData { get; set; }
 
     [Parameter]
-    public Func<FN.IFilePondLoadRequest?,CancellationToken,ValueTask<FN.IFilePondLoadRequest?>>? OnServerFileRemove { get; set; }
-    
+    public Func<FN.IFilePondLoadRequest,CancellationToken,ValueTask<FN.IFilePondLoadRequest>>? OnServerFileRemove { get; set; }
+
     [Parameter]
-    public Func<FN.IFilePondLoadRequest?,CancellationToken,ValueTask<FN.IFilePondLoadRequest?>>? OnServerFileLoad { get; set; }
+    public Func<FN.IFilePondLoadRequest,CancellationToken,ValueTask<FN.IFilePondLoadRequest>>? OnServerFileLoad { get; set; }
 
     [Parameter]
     public Func<FilePondServerProcessRequest, CancellationToken, ValueTask<string>>? OnServerProcess { get; set; }
@@ -238,13 +237,13 @@
         if (options != null)
             Options = options;
 
-        bool useBlazorServerProcess = OnServerProcess != null;
+        bool useBlazorServerProcess = OnServerFileLoad != null && OnServerFileRemove != null; //OnServerProcess != null;
 
         if (useBlazorServerProcess)
         {
             Options ??= new FilePondOptions();
             Options.Server ??= new FilePondServerOptions {Url = string.Empty};
-            FilePondInterop.RegisterServerProcessHandler(_elementId, OnServerProcess!, CancellationToken);
+            FilePondInterop.RegisterServerProcessHandler(_elementId,OnServerFileLoad!, OnServerFileRemove!, CancellationToken);
         }
         else
             FilePondInterop.UnregisterServerProcessHandler(_elementId);
@@ -273,12 +272,12 @@
     public async ValueTask SetOptions(FilePondOptions options, CancellationToken cancellationToken = default)
     {
         CancellationToken linked = CancellationToken.Link(cancellationToken, out CancellationTokenSource? cts);
-        bool useBlazorServerProcess = OnServerProcess != null;
+        bool useBlazorServerProcess = OnServerFileLoad != null && OnServerFileRemove != null; //OnServerProcess != null;
 
         if (useBlazorServerProcess)
         {
             options.Server ??= new FilePondServerOptions {Url = string.Empty};
-            FilePondInterop.RegisterServerProcessHandler(_elementId, OnServerProcess!, CancellationToken);
+            FilePondInterop.RegisterServerProcessHandler(_elementId,OnServerFileLoad!, OnServerFileRemove!, CancellationToken);
         }
         else
             FilePondInterop.UnregisterServerProcessHandler(_elementId);
