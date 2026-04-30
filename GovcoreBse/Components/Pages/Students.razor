@@ -77,7 +77,7 @@
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "attachType")]
-    public string AttachType { get; set; }
+    public string AttachType { get; set; } = string.Empty;
 
     protected List<string> ResultUrls { get; set; } = new List<string>();
     private FilePond? FilePondObj { get; set; }
@@ -125,7 +125,7 @@
                 ResultUrls = result.Value.Value.ToList();
                 _options.UploadUrl = Settings.Value.FileUpload;
                 _options.RemoveUrl = Settings.Value.FileRemove;
-                _options.TypeTag = "AttachType";
+                _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
                 StateHasChanged();
             }
