@@ -31,7 +31,7 @@ export async function create(elementId, options, dotNetCallback, useBlazorServer
         //    }
         //}
     if (ponds[elementId]) {
-        delete ponds[elementId];
+        destroy(elementId);
     }
 
     ponds[elementId] = pond;
@@ -202,6 +202,10 @@ export function createProcessHandler(elementId,uploadUrl,removeUrl,typeTag,typeT
         return {
             process: {
                 url: uploadUrl,
+                headers: {
+                    
+                   [_antiforgeryHeaderName]: document.getElementById(_antiforgeryHeaderName).value
+                },
                 onload: data => {
                     const processId = createProcessId();
                     console.log('uploading file callback invoked with ', data);

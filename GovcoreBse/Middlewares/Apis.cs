@@ -27,7 +27,7 @@ public static class Apis
 
                 break;
             case CN.AutocompleteGroup.fileupload:
-                builder.MapPost("/", UploadFile).Accepts<IFormFile>("multipart/form-data").Produces(200, typeof(object));
+                builder.MapPost("/", UploadFile).Produces(200, typeof(object));
                 break;
             case CN.AutocompleteGroup.fileremove:
                 builder.MapPost("/", RemoveFile).Produces(200, typeof(object));
@@ -69,12 +69,12 @@ public static class Apis
         return TypedResults.Ok(true);
     }
 
-    internal static async Task<IResult> UploadFile(IHttpContextAccessor accessor,IFormFile file,IWebHostEnvironment env,ILogger<Program> logger,IOptions<PathSetting> setting)
+    internal static async Task<IResult> UploadFile(IHttpContextAccessor accessor,IFormFileCollection files,IWebHostEnvironment env,ILogger<Program> logger,IOptions<PathSetting> setting)
     {
         logger.LogDebug("the file upload api is called");
         var id = "".RandomString(8);
         var upload = setting.Value.Temp;
-        if(accessor== null || accessor.HttpContext == null || file==null)
+        if(accessor== null || accessor.HttpContext == null || files==null || files.Count == 0)
         {
             logger.LogError("HttpContext or file is null");
             return TypedResults.Ok(new { id = string.Empty });
@@ -92,6 +92,7 @@ public static class Apis
         {
             Directory.CreateDirectory(tempuploadpath);
         }
+        var file = files[0];
         using var stream = File.Create(tempuploadpath + "\\" + file.FileName);
         await file.CopyToAsync(stream);
 

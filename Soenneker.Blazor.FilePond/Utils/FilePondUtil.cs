@@ -73,7 +73,7 @@ internal static class FilePondUtil
         {
             return useCdn
                 ? ("https://cdn.jsdelivr.net/npm/filepond@4.32.8/dist/filepond.min.js", "sha256-79w3nNtc2CIEF9m4/IxZeF660M0kGLHnJ3v/V9UDLxY=")
-                : ($"{localBasePath}filepond-adj.debug.js", null);
+                : ($"{localBasePath}filepond-adj.debug.js?v=1", null);
         }
 
         var cdnLinks = new Dictionary<string, (string uri, string integrity)>

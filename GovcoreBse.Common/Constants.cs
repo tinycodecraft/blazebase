@@ -91,7 +91,9 @@ public class Constants
         public static int PageStart = 1;
         public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
-        
+        public static string AntiForgeryId = "X-CSRF-TOKEN";
+
+
         public const string SecretKey = "HYD.abcqwe123";
         public const string Issuer = "HYD";
         public const string Audience = "";

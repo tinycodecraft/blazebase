@@ -331,6 +331,8 @@ public sealed class FilePondInterop : IFilePondInterop
 
         using (source)
             await InvokeVoidAsync("destroy", linked, elementId);
+
+
     }
 
     public async ValueTask CreateObserver(string elementId, CancellationToken cancellationToken = default)

@@ -136,6 +136,12 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = $"{typeof(Program).Assembly.GetName().Name}.Session";
 });
 
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+
+});
+
 builder.Services.AddHxServices();
 builder.Services.AddHxMessenger();
 builder.Services.AddHxMessageBoxHost();

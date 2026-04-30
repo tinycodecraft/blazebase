@@ -12461,7 +12461,7 @@
                 var esize = input.getAttribute('data-file-metadata-size');
                 if( esize)
                 {
-                    info['options']['size'] = esize;
+                    info['options']['size'] = parseInt( esize);
 
                 }
                 var eurl = input.getAttribute('data-file-metadata-url');

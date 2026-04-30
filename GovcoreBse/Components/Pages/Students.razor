@@ -10,11 +10,9 @@
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
 
-
 @inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
-@inject IMediator Commander
-@inject IOptions<PathSetting> Settings
+
 @rendermode InteractiveServer
 
 
@@ -39,6 +37,9 @@
 
             <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
             <div class="row g-3">
+                <div class="col-12">
+                    <input type="hidden" id="@CN.Setting.AntiForgeryId" value="@GetToken()" />
+                </div>
                 <div class="col-12">
                     <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
                         OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"
