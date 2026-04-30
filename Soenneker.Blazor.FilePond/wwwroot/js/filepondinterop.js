@@ -30,8 +30,11 @@ export async function create(elementId, options, dotNetCallback, useBlazorServer
         //        fpOptions[elementId] = opt;
         //    }
         //}
+    if (ponds[elementId]) {
+        delete ponds[elementId];
+    }
 
-        ponds[elementId] = pond;
+    ponds[elementId] = pond;
 }
 export function setOptions(elementId, options, dotNetCallback, useBlazorServerProcess = false) {
         const pond = ponds[elementId];

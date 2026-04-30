@@ -21,11 +21,13 @@ public class BasePage: CoreCancellableComponent
                     foundi = i;
                     break;
                 }
-                if(foundi >=0)
-                {
-                    
-                    request.Urls= request.Urls.Where((url, index) => index != foundi).ToArray().Union(new[] { replace }).ToArray();
-                }
+
+            }
+
+            if (foundi >= 0)
+            {
+
+                request.Urls = request.Urls.Where((url, index) => index != foundi).ToArray().Union(new[] { replace }).ToArray();
             }
 
         }
