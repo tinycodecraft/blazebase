@@ -18,6 +18,10 @@
 </head>
 <body>    
     <Routes @rendermode="InteractiveServer" />
+    <!--
+        there is autostart attribute for blazor.web.js to disable the automatic start of the Blazor application, 
+        and using Blazor.start() to start the application manually instead
+    -->
     <script src="_framework/blazor.web.js"></script>
     <script>
         var _antiforgeryHeaderName = "@(CN.Setting.AntiForgeryId)";
