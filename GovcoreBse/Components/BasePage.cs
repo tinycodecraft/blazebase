@@ -9,6 +9,8 @@ namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
 {
+    [Inject]
+    protected NavigationManager Navmanner { get; set; }= default!;
 
     [Inject]
     protected IMediator Commander { get; set; } = default!;
