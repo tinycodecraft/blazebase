@@ -131,7 +131,7 @@ public static class Apis
     {
         // This is a placeholder implementation. You would replace this with your actual file retrieval logic.
 
-
+        var context = accessor.HttpContext;
 
         var contentType = HelperS.GetFileType(filename);
         var isinline = HelperS.CanInline(filename);
@@ -157,10 +157,12 @@ public static class Apis
         var fileStream = new FileStream(tmppath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
 
 
+        context!.Response.Headers.ContentDisposition = new ContentDispositionHeaderValue(isinline ? "inline" : "attachment")
+        {
+            FileNameStar = filename
+        }.ToString();
+        return Results.File(fileStream, contentType);
 
 
-        return Results.File(fileStream, contentType, filename);
-
-        
     }
 }
