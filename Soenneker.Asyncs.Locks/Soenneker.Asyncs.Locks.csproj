@@ -48,7 +48,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Soenneker.Atomics.ValueInts\Soenneker.Atomics.ValueInts.csproj" />
-      <ProjectReference Include="..\Soenneker.Extensions.Task\Soenneker.Extensions.Task.csproj" />
       <ProjectReference Include="..\Soenneker.Queues.Intrusive.ValueMpsc\Soenneker.Queues.Intrusive.ValueMpsc.csproj" />
     </ItemGroup>
 </Project>

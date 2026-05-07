@@ -789,7 +789,7 @@
                 if (!propsHaveChanged(currentProps, viewProps)) {
                     return;
                 }
-
+                //TODO: check translate3d operation
                 // moves element to correct position on screen
                 applyStyles(view.element, viewProps);
 
@@ -925,7 +925,7 @@
         animations: animations,
         apis: apis,
     };
-
+    //TODO: check translate3d operation
     var updateRect = function updateRect() {
         var rect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -996,6 +996,7 @@
             ) {
                 var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
                 // root element should not be changed
+                //TODO: check translate3d operation
                 var element = createElement(tag, 'filepond--' + name, attributes);
 
                 // style reference should also not be changed
@@ -1070,12 +1071,12 @@
                     childViews.forEach(function (child) {
                         return child._read();
                     });
-
+                    //TODO: check translate3d operation
                     var shouldUpdate = !(ignoreRectUpdate && rect.width && rect.height);
                     if (shouldUpdate) {
                         updateRect(rect, element, style);
                     }
-
+                    //TODO: check translate3d operation
                     // readers
                     var api = { root: internalAPI, props: props, rect: rect };
                     readers.forEach(function (reader) {
@@ -1108,6 +1109,7 @@
 
                     // run mixins
                     activeMixins.forEach(function (mixin) {
+                        //TODO: check translate3d operation
                         // if one of the mixins is still busy after write operation, we are not resting
                         var mixinResting = mixin.write(ts);
                         if (mixinResting === false) {
@@ -1141,7 +1143,7 @@
                             if (child.element.parentNode) {
                                 return;
                             }
-
+                            //TODO: check translate3d operation
                             // append to DOM
                             internalAPI.appendChild(child.element, index);
 
@@ -1184,7 +1186,7 @@
                         return child._destroy();
                     });
                 };
-
+                //TODO: check translate3d operation
                 // sharedAPI
                 var sharedAPIDefinition = {
                     element: {
@@ -1293,10 +1295,12 @@
                         return 0;
                     })
                     .forEach(function (key) {
+                        //TODO: check translate3d operation
                         var mixinAPI = Mixins[key]({
                             mixinConfig: mixins[key],
                             viewProps: props,
                             viewState: state,
+                            //TODO: check translate3d operation
                             viewInternalAPI: internalAPIDefinition,
                             viewExternalAPI: externalAPIDefinition,
                             view: createObject(mixinAPIDefinition),
@@ -1309,7 +1313,7 @@
 
                 // construct private api
                 var internalAPI = createObject(internalAPIDefinition);
-
+                //TODO: check translate3d operation
                 // create the view
                 create({
                     root: internalAPI,
@@ -1432,6 +1436,7 @@
                     return routes[action.type];
                 })
                 .forEach(function (action) {
+                    //TODO: check translate3d operation //DID_ADD_ITEM
                     return routes[action.type]({
                         root: root,
                         props: props,
@@ -6630,6 +6635,7 @@
              * @param interactionMethod
              */
             ADD_ITEM: function ADD_ITEM(_ref7) {
+                //TODO: check translate3d operation //DID_ADD_ITEM
                 var source = _ref7.source,
                     _ref7$index = _ref7.index,
                     index = _ref7$index === void 0 ? -1 : _ref7$index,
@@ -6986,7 +6992,7 @@
                     dispatch('DID_REVERT_ITEM_PROCESSING', { id: id });
                     dispatch('DID_DEFINE_VALUE', { id: id, value: null });
                 });
-
+                //TODO: check translate3d operation //DID_ADD_ITEM
                 // let view know the item has been inserted
                 dispatch('DID_ADD_ITEM', {
                     id: id,
@@ -8639,7 +8645,7 @@
         root.ref.handleClick = function (e) {
             return root.dispatch('DID_ACTIVATE_ITEM', { id: props.id });
         };
-
+        //TODO: check translate3d operation //DID_ADD_ITEM
         // set id
         root.element.id = 'filepond--item-' + props.id;
         root.element.addEventListener('click', root.ref.handleClick);
@@ -8988,7 +8994,7 @@
         }
 
         root.ref.lastItemSpanwDate = spawnDate;
-
+        //TODO: check translate3d operation
         root.appendChildView(
             root.createChildView(
                 // view type
@@ -9315,7 +9321,7 @@
                 if (!child.markedForRemoval) {
                     moveItem(child, 0, offsetY + dragOffset);
                 }
-
+                //TODO: check translate3d operation
                 var itemHeight = child.rect.element.height + itemVerticalMargin;
 
                 var visualHeight = itemHeight * (child.markedForRemoval ? child.opacity : 1);

@@ -51,6 +51,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Soenneker.Extensions.String\Soenneker.Extensions.String.csproj" />
+      <ProjectReference Include="..\Soenneker.Extensions.Task\Soenneker.Extensions.Task.csproj" />
       <ProjectReference Include="..\Soenneker.Utils.AsyncSingleton\Soenneker.Utils.AsyncSingleton.csproj" />
     </ItemGroup>
 </Project>
