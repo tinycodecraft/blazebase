@@ -9,7 +9,9 @@ namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
 {
-    [Inject]
+    // usse for redirecting to other page, or get current url
+    // i.e. Navmanner.NavigateTo("login", forceLoad: true);
+    [Inject]    
     protected NavigationManager Navmanner { get; set; }= default!;
 
     [Inject]
