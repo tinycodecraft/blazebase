@@ -4745,12 +4745,13 @@
         });
         return url;
     };
-
+    //TODO: check blob and file item creation
     //TODO: try to intercept the url for action load
     var createFetchFunction = function createFetchFunction() {
         var apiUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
         var action = arguments.length > 1 ? arguments[1] : undefined;
         var options = arguments.length >2 ? arguments[2] : undefined;
+
         // custom handler (should also handle file, load, error, progress and abort)
         if (typeof action === 'function') {
             return action;
@@ -4771,12 +4772,12 @@
             function (res) {
                 return null;
             };
-
+        //TODO: check blob and file item creation
         // internal handler
         return function (url, load, error, progress, abort, headers,options) {
             // do local or remote request based on if the url is external
             var loadurl = buildURL(apiUrl, action.url);
-            if(options && options.ext && /[.](jpg|png|tiff|gif)/gi.test(options.ext) && options.url)
+            if(options && options.ext && /[.](jpg|png|tiff|gif|pdf)/gi.test(options.ext) && options.url)
             {
                 url='';
                 loadurl = options.url;
@@ -6422,7 +6423,7 @@
                     item.abortProcessing();
                 });
             },
-
+            //TODO: check blob and file item creation
             /**
              * Sets initial files
              */
@@ -6628,7 +6629,7 @@
                     .then(success)
                     .catch(failure);
             },
-
+            //TODO: check blob and file item creation
             /**
              * @param source
              * @param index
@@ -6925,7 +6926,7 @@
                             loadComplete();
                         });
                     };
-
+                    //TODO: check blob and file item creation
                     // item loaded, allow plugins to
                     // - read data (quickly)
                     // - add metadata
@@ -7002,7 +7003,7 @@
                 });
 
                 listUpdated(dispatch, state);
-
+                //TODO: check blob loading and file item creation
                 // start loading the source
                 var _ref8 = state.options.server || {},
                     url = _ref8.url,

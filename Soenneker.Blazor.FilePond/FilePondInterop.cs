@@ -47,7 +47,7 @@ public sealed class FilePondInterop : IFilePondInterop
     private readonly AsyncInitializer _interopStyleInitializer;
     private readonly AsyncInitializer _miscStyleInitializer;
 
-    private readonly string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js" + $"?v=3";
+    private readonly string _wrapperModulePath = "_content/Soenneker.Blazor.FilePond/js/filepondinterop.js" + $"?v=4";
 
     private readonly CancellationScope _cancellationScope = new();
     private DotNetObjectReference<FilePondInterop>? _dotNetReference;
