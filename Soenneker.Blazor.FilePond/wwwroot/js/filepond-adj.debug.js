@@ -6733,6 +6733,7 @@
                             ? FileOrigin.LIMBO
                             : FileOrigin.INPUT;
 
+                //TODO: check the item how to form from init
                 // create a new blank item
                 var item = createItem(
                     // where did this file come from
@@ -7008,7 +7009,7 @@
                     load = _ref8.load,
                     restore = _ref8.restore,
                     fetch = _ref8.fetch;
-                
+                //TODO: check the blob loading
                 var meta =item && item.getMetadata &&  item.getMetadata();
 
                 item.load(

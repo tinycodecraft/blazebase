@@ -2,7 +2,7 @@
     position:relative !important;
     display: grid;
     width: 100%;
-    grid-template-rows: 8vh;
+    grid-template-rows: 78px;
     grid-template-columns: repeat(3,minmax(23vw,1fr));
     grid-auto-rows: 12vh;
 }

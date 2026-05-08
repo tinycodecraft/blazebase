@@ -174,6 +174,7 @@ internal static class FilePondUtil
         if (cdnLinks.TryGetValue(type.Name, out (string uri, string integrity) cdnData))
         {
             string fileName = cdnData.uri.Split('/').Last(); // Extract filename from CDN URL
+
             return useCdn ? cdnData : ($"{localBasePath}{fileName}", null);
         }
 
