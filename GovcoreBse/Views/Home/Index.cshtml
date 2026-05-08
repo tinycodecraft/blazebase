@@ -1,18 +1,49 @@
-﻿@model List<UserDto>
+﻿@using Microsoft.Extensions.Localization
+@model LoginModel
+@inject IStringLocalizerFactory stringFactory
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Login Page";
+    var Localizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
 
-    var datum = Model.FirstOrDefault();
+    
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @if(datum!=null)
-    {
-        <p>First User Name: <span>@datum.UserName</span></p>
-    }
+
+
+</div>
+
+<div class="login-container m-auto">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Sign In</h2>
+            <p>Enter your credentials to access your account</p>
+        </div>
+        <form asp-action="Submit" method="post" class="row">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-userid"><i class="bi bi-person"></i></span>
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="emailinput" placeholder="User Id" asp-for="UserId">
+                    <label for="emailinput">@Localizer[nameof(LoginModel.UserId)]</label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-password"><i class="bi bi-key"></i></span>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="passwordinput" placeholder="Password" asp-for="Password">
+                    <label for="passwordinput">@Localizer[nameof(LoginModel.Password)]</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>    
+
+
+
+    </div>
 </div>
 
 
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" />
+}

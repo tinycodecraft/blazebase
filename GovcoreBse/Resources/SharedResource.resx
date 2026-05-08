@@ -129,4 +129,10 @@
   <data name="HelloFromLoc" xml:space="preserve">
     <value>Hello World</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>PASSWORD</value>
+  </data>
+  <data name="UserId" xml:space="preserve">
+    <value>USER ID</value>
+  </data>
 </root>

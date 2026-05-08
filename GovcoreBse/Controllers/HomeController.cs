@@ -49,33 +49,47 @@ public class HomeController : Controller
         
     }
 
-    public async Task<IActionResult> Index(GetUsersQuery query)
+    public async Task<IActionResult> Index(bool needClear=false)
     {
-        var cn = new CancellationToken();
-        if(session!=null && session.GetString(SK.SESSION_USERID) == null)
+
+        if(needClear)
         {
-            session.SetString(SK.SESSION_USERID, "UXKBS");
+            manner.ClearState();
         }
-        var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
-        var user = await commander.SendQueryAsync( new GetUserQuery(userid));
+
+
+        return View(new LoginModel());
+
+    }
+
+
+    //public async Task<IActionResult> Index(GetUsersQuery query)
+    //{
+    //    var cn = new CancellationToken();
+    //    if(session!=null && session.GetString(SK.SESSION_USERID) == null)
+    //    {
+    //        session.SetString(SK.SESSION_USERID, "UXKBS");
+    //    }
+    //    var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
+    //    var user = await commander.SendQueryAsync( new GetUserQuery(userid));
         
 
-        if ( manner.UserState== null && !user.IsError)
-        {
-            var userv = user.Value.Adapt<UserState>().AsEmptyWhenNull();
-            if(!manner.SaveState(userv))
-            {
-                logger.LogDebug(userid + " state could not be saved to cookie");
-            }
-        }
+    //    if ( manner.UserState== null && !user.IsError)
+    //    {
+    //        var userv = user.Value.Adapt<UserState>().AsEmptyWhenNull();
+    //        if(!manner.SaveState(userv))
+    //        {
+    //            logger.LogDebug(userid + " state could not be saved to cookie");
+    //        }
+    //    }
 
-        //var authuser = user.Value.Adapt<UserState>();
-        //var token = tokener.CreateToken(authuser);
-        //var resultuser = tokener.DecodeTokenToUser(token);
+    //    //var authuser = user.Value.Adapt<UserState>();
+    //    //var token = tokener.CreateToken(authuser);
+    //    //var resultuser = tokener.DecodeTokenToUser(token);
 
-        var listofusers = await commander.SendQueryAsync(query, cn);
-        return View(listofusers);
-    }
+    //    var listofusers = await commander.SendQueryAsync(query, cn);
+    //    return View(listofusers);
+    //}
 
     public IActionResult Weather(int total =5000)
     {
@@ -84,10 +98,10 @@ public class HomeController : Controller
 
     }
 
-    public IResult Login()
-    {
-        return this.RazorView<Login>();
-    }
+    //public IResult Login()
+    //{
+    //    return this.RazorView<Login>();
+    //}
     //The Sample has problem because accessor could not be injected
 
     public IActionResult Privacy()
