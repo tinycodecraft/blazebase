@@ -48,18 +48,52 @@ public class HomeController : Controller
         }
         
     }
-
-    public async Task<IActionResult> Index(bool needClear=false)
+    [HttpGet]
+    public async Task<IActionResult> Index(bool needClear=false,string? returnUrl=null)
     {
 
         if(needClear)
         {
             manner.ClearState();
         }
+        ViewBag.ReturnUrl = returnUrl;
 
 
         return View(new LoginModel());
 
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Index(LoginModel model)
+    {
+        if(!ModelState.IsValid)
+        {
+            logger.LogDebug("ModelState is not valid");                
+            return View(model);
+        }
+        if (session != null && !string.IsNullOrEmpty(model.UserId))
+        {
+            var userid = model.UserId;
+            session.SetString(SK.SESSION_USERID, model.UserId);
+            var result =await commander.SendQueryAsync(new GetUserQuery(model.UserId));
+            
+            if(result.IsError)
+            {
+                logger.LogDebug("User not found for userId : " + model.UserId);
+                return View(model);
+            }
+            
+            var user = result.Value.Adapt<UserState>().AsEmptyWhenNull();
+
+            if(!manner.SaveState(user))
+            {
+                logger.LogDebug(user.UserName + " state could not be saved to cookie");
+
+                return View(model);
+            }
+        }
+
+        return View(model);
     }
 
 
