@@ -28,3 +28,7 @@
         color: #64748b;
         font-size: 0.875rem;
     }
+
+.is-invalid+.invalid-tooltip:empty{
+    display:none !important;
+}
