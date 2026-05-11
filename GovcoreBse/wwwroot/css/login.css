@@ -32,3 +32,33 @@
 .is-invalid+.invalid-tooltip:empty{
     display:none !important;
 }
+
+.form-floating .form-control, .form-floating .form-select {
+    border: none;
+    border-bottom: 2px solid #ced4da;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+}
+
+    .form-floating .form-control:focus, .form-floating .form-select:focus {
+        border-bottom: 2px solid #6200ee; /* Material Primary Color */
+        box-shadow: none;
+    }
+
+    .form-floating .form-control:after, .form-floating .form-select:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #6200ee;
+        transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    .form-floating .form-control:focus:after, .form-floating .form-select:focus:after {
+        width: 100%;
+        left:0;
+    }
