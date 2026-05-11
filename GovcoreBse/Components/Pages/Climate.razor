@@ -38,8 +38,12 @@
 					<HxGridColumn HeaderText="Summary" ItemTextSelector="forecast => forecast.Summary" />
 				</Columns>
 			</HxGrid>
-			<div class="hx-form-group position-relative my-3"><span class="input-group"><i class="hx-icon bi-currency-euro input-group-text " aria-hidden="true"></i><div class="form-floating"><input id="el6e173750d86c482ca8cd87ddd051dea2" type="text" class="form-control" placeholder="placeholder" aria-describedby="elba17795894e045808d6c3ba528533b26" @bind-value="valueString"><!--!--><label for="el6e173750d86c482ca8cd87ddd051dea2" class="">Your name</label></div></span><!--!--><div id="elba17795894e045808d6c3ba528533b26" b-sq8mx7uk7p=""></div></div>
+			<HxInputText LabelType="LabelType.Floating" @bind-Value="valueString">
+				<LabelTemplate>
+					<i class="bi bi-person-badge me-2"></i> Your Name
+				</LabelTemplate>
 
+			</HxInputText>
 
 		</BodyTemplate>
 	</HxCard>

@@ -1,46 +1,46 @@
-﻿/* 1. Remove Bootstrap's default borders and focus rings */
-.hx-form-group .form-control {
+﻿/* 1. 移除 Bootstrap 預設框線與陰影 */
+.hx-form-group.form-floating .form-control {
     border: none;
-    border-bottom: 1px solid #ced4da; /* The static bottom line */
+    border-bottom: 1px solid #ced4da; /* 預設的淺灰色底線 */
     border-radius: 0;
     box-shadow: none !important;
     background-color: transparent;
+    padding-left: 0; /* 讓文字對齊底線起點 */
 }
 
-/* 2. Style the input group icons to match the underline look */
-.hx-form-group .input-group-text {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid #ced4da;
-    border-radius: 0;
+/* 2. 調整標籤 (Label) 位置，使其對齊底線 */
+.hx-form-group.form-floating > label {
+    padding-left: 0;
+    left: 0;
 }
 
-/* 3. Create the animated underline container */
-.hx-form-group .form-floating {
-    position: relative;
+/* 3. 建立動畫底線 (藍色部分) */
+.hx-form-group.form-floating::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #6200ee; /* Bootstrap Primary 藍色 */
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    z-index: 5;
+    pointer-events: none; /* 避免干擾點擊 */
 }
 
-    /* 4. The "Material" underline (starts at 0 width) */
-    .hx-form-group .form-floating::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #6200ee; /* Bootstrap primary color */
-        transform: scaleX(0);
-        transition: transform 0.25s ease-out;
-        z-index: 5;
-    }
+/* 4. 當 Input 被聚焦時，觸發動畫與標籤變色 */
+.hx-form-group.form-floating:focus-within::after {
+    transform: scaleX(1);
+}
 
-    /* 5. Trigger the animation on focus */
-    .hx-form-group .form-control:focus + label + .underline, /* If using a span */
-    .hx-form-group .form-floating:focus-within::after {
-        transform: scaleX(1);
-    }
+.hx-form-group.form-floating:focus-within > label {
+    color: #6200ee !important; /* 標籤同步變藍 */
+}
 
-    /* Optional: Adjust label padding to align with the new borderless look */
-    .hx-form-group .form-floating > label {
-        padding-left: 0;
-    }
+/* 5. 處理浮動標籤縮小時的修正 (Bootstrap 5 特性) */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    transform: scale(0.85) translateY(-0.5rem) translateX(0);
+    opacity: 1;
+}
