@@ -1,3 +1,8 @@
+@{
+    var loginState = (bool?)ViewBag.LoginState ?? false;
+    var userName = (string?)ViewBag.UserName ?? "";
+    var userPost = (string?)ViewBag.UserPost ?? "";
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +39,24 @@
                                asp-action="Index">Go to Login</a>
                         </li>
 
+                            
                     </ul>
+                    @if (loginState)
+                    {
+
+                        <div class="btn-group dropstart">
+                            <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">@($"{userName}({userPost})")</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Account Setting</a></li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                            <button type="button" class="btn btn-sm btn-outline-success">
+                                @($"{userName}({userPost})".ToLowerInvariant())
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>

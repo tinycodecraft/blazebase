@@ -26,18 +26,18 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> logger;
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IN.ITokenService tokener;
-    
+    private readonly LayoutStateModel globalState;
     private readonly ISession? session;
     private readonly AppManager manner;
 
-    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper, IHttpContextAccessor accessor,AppManager appManager)
+    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper, IHttpContextAccessor accessor,AppManager appManager,LayoutStateModel layoutstate)
     {
         logger = mlogger;
         //using Factory instead of Dummy type GovcoreBse.SharedResource as generic type of IStringLocalizer<>
         _stringLocalizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
         commander = mediator;
         tokener = tokenHelper;
-        
+        globalState = layoutstate;
         manner = appManager;
         logger.LogDebug("HomeController created");
         var sessionId = accessor.HttpContext?.Session.Id;
@@ -91,11 +91,26 @@ public class HomeController : Controller
 
                 return View(model);
             }
+            globalState.UserName= user.UserName;
+            globalState.IsAdmin = user.IsAdmin;
+            globalState.Post = user.Post;
+           
         }
 
-        return View(model);
+        return RedirectToAction("Welcome");
     }
+    public IActionResult Welcome()
+    {
+        if (manner.UserState != null && manner.UserState.UserName != null)
+        {
+            ViewBag.LoginState = true;
+            ViewBag.UserName = manner.UserState.UserName;
+            ViewBag.UserPost = manner.UserState.Post;
+        }
+            
 
+        return View(globalState);
+    }
 
     //public async Task<IActionResult> Index(GetUsersQuery query)
     //{

@@ -75,7 +75,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthStateProvider>
 builder.Services.AddScoped<IN.ITokenService,TokenService>();
 
 //Add razor view global state
-builder.Services.AddScoped<LayoutStateModel>();
+builder.Services.AddSingleton<LayoutStateModel>();
 //Add razor Js module 
 builder.Services.AddScoped<ExampleJsInterop>();
 

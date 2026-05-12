@@ -1,0 +1,14 @@
+﻿@using Microsoft.Extensions.Localization
+@model LayoutStateModel
+
+@inject IStringLocalizerFactory stringFactory
+@{
+    ViewData["Title"] = "Welcome Page";
+    var Localizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
+
+    
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to @Model.UserName</h1>
+</div>
