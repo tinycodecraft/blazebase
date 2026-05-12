@@ -13,6 +13,8 @@ public partial class BlazeLogDbContext : DbContext
     {
     }
 
+    public virtual DbSet<CoreActivityLog> CoreActivityLogs { get; set; }
+
     public virtual DbSet<CoreFileDoc> CoreFileDocs { get; set; }
 
     public virtual DbSet<CoreSetting> CoreSettings { get; set; }
@@ -21,6 +23,13 @@ public partial class BlazeLogDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CoreActivityLog>(entity =>
+        {
+            entity.Property(e => e.updatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreActivityLog_updatedAt");
+        });
+
         modelBuilder.Entity<CoreFileDoc>(entity =>
         {
             entity.Property(e => e.updatedAt)

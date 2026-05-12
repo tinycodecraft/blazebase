@@ -10,6 +10,8 @@ namespace GovcoreBse.Store.Setup
 {
     public interface IBlazeLogDbContext 
     {
+
+        DbSet<CoreActivityLog> CoreActivityLogs { get; set; }
         DbSet<CoreSetting> CoreSettings { get; set; }
 
         DbSet<CoreUser> CoreUsers { get; set; }

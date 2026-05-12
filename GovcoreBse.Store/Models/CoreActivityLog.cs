@@ -8,31 +8,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GovcoreBse.Store.Models;
 
-[Table("CoreFileDoc")]
-public partial class CoreFileDoc
+[Table("CoreActivityLog")]
+public partial class CoreActivityLog
 {
     [Key]
     public long Id { get; set; }
 
+    public int UserKey { get; set; }
+
+    [StringLength(100)]
+    public string UserId { get; set; } = null!;
+
     [StringLength(50)]
-    public string LinkTable { get; set; } = null!;
+    public string? ActivityType { get; set; }
 
-    public int LinkId { get; set; }
+    [StringLength(255)]
+    public string? ActivityMessage { get; set; }
 
-    [StringLength(50)]
-    public string DocType { get; set; } = null!;
-
-    public string UploadFilePath { get; set; } = null!;
-
-    [StringLength(128)]
-    public string RelativePath { get; set; } = null!;
+    public string? ActivityEncData { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? updatedAt { get; set; }
 
     [StringLength(50)]
     public string? updatedBy { get; set; }
-
-    [StringLength(50)]
-    public string? updatedPost { get; set; }
 }

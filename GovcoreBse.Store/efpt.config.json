@@ -5,7 +5,7 @@
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "IrregularWords": null,
-   "MinimumProductVersion": "2.6.1244",
+   "MinimumProductVersion": "2.6.1382",
    "ModelNamespace": "Models",
    "OutputContextPath": "Models",
    "OutputPath": "Models",
@@ -18,6 +18,10 @@
    "SingularRules": null,
    "T4TemplatePath": null,
    "Tables": [
+      {
+         "Name": "[dbo].[CoreActivityLog]",
+         "ObjectType": 0
+      },
       {
          "Name": "[dbo].[CoreFileDoc]",
          "ObjectType": 0
@@ -47,7 +51,7 @@
    "UseInternalAccessModifiersForSprocsAndFunctions": false,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": true,
-   "UseNoDefaultConstructor": false,
+   "UseNoDefaultConstructor": true,
    "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
@@ -57,5 +61,6 @@
    "UseSchemaNamespaces": false,
    "UseSpatial": false,
    "UseT4": false,
-   "UseT4Split": false
+   "UseT4Split": false,
+   "UseTypedTvpParameters": true
 }

@@ -67,7 +67,7 @@ public class TokenService : IN.ITokenService
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-
+            
             // Logging Purpose
             Console.WriteLine("Cookie was issued at " + jwtToken.IssuedAt);
             Console.WriteLine("Cookie was valid to " + jwtToken.ValidTo);
