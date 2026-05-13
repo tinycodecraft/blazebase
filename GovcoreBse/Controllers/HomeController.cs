@@ -112,6 +112,14 @@ public class HomeController : Controller
         return View(globalState);
     }
 
+
+
+    public IActionResult Weather(int total =5000)
+    {
+
+        return View(new GetWeatherForecastsQuery(total,0, 19));
+
+    }
     //public async Task<IActionResult> Index(GetUsersQuery query)
     //{
     //    var cn = new CancellationToken();
@@ -121,7 +129,7 @@ public class HomeController : Controller
     //    }
     //    var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
     //    var user = await commander.SendQueryAsync( new GetUserQuery(userid));
-        
+
 
     //    if ( manner.UserState== null && !user.IsError)
     //    {
@@ -139,13 +147,6 @@ public class HomeController : Controller
     //    var listofusers = await commander.SendQueryAsync(query, cn);
     //    return View(listofusers);
     //}
-
-    public IActionResult Weather(int total =5000)
-    {
-
-        return View(new GetWeatherForecastsQuery(total,0, 19));
-
-    }
 
     //public IResult Login()
     //{
