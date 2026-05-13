@@ -47,7 +47,7 @@ public static class ControllerExtensions
 
 public static class HelperExtensions
 {
-    public static void SetLangCookie(this HttpContext ctx,string? lang="en-US",int year=0,int month=0,int day=1)
+    public static void SetLangCookie(this HttpContext ctx,string? lang=DK.LANG_ENG,int year=0,int month=0,int day=1)
     {
         var cookieOptions = new CookieOptions
         {
@@ -57,7 +57,7 @@ public static class HelperExtensions
 
         ctx.Response.Cookies.Append(
             CookieRequestCultureProvider.DefaultCookieName,
-            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(lang ?? "en-US")),
+            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(lang ?? DK.LANG_ENG)),
             cookieOptions
         );
         

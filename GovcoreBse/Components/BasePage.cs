@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using GovcoreBse.Control;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace GovcoreBse.Components;
@@ -20,19 +21,15 @@ public class BasePage: CoreCancellableComponent
     protected IOptions<PathSetting> Settings { get;set; } = default!;
 
     [Inject]
-    protected Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery { get; set; }= default!;
+    protected AntiforgeryStateProvider Antiforgery { get; set; }= default!;
     [Inject]
     protected HttpClient MyClient { get; set; } = default!;
     [Inject]
     protected IHttpContextAccessor Accessor { get; set; }= default!;
     protected string? GetToken()
     {
-        var context = Accessor?.HttpContext;
-        if (context != null)
-        {
-            return Antiforgery.GetAndStoreTokens(context).RequestToken;
-        }
-        return null;
+        return Antiforgery.GetAntiforgeryToken()?.Value;
+
     }
 
     public virtual async ValueTask<FN.IFilePondLoadRequest> OnFilePondRemoveFile(FN.IFilePondLoadRequest request, CancellationToken cancellationToken )

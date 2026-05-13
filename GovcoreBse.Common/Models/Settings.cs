@@ -41,6 +41,8 @@ public class PathSetting
 
     //the api path for uploading the file
     public string FileUpload { get; set; }
+
+    public string CultureSet {get;set; }
 }
 
 public class DBRCUSetting:IN.IDBSetting

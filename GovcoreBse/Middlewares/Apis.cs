@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Soenneker.Culture.English.US;
 
 namespace GovcoreBse.Middlewares;
 
@@ -32,11 +33,23 @@ public static class Apis
             case CN.AutocompleteGroup.fileremove:
                 builder.MapPost("/", RemoveFile).Produces(200, typeof(object));
                 break;
-
+            case CN.AutocompleteGroup.culture:
+                builder.MapPost("/", CultureSet).Produces(200, typeof(Boolean));
+                break;
 
         }
 
         return builder;
+    }
+
+    internal static async Task<IResult> CultureSet(IHttpContextAccessor accessor,[FromForm] string culture)
+    {
+        if (accessor.HttpContext == null || culture == null)
+            return TypedResults.Ok(false);
+
+        accessor.HttpContext.SetLangCookie(culture);
+
+        return TypedResults.Ok(true);
     }
 
     internal static async Task<IResult> RemoveFile(IWebHostEnvironment env,ILogger<Program> logger, IOptions<PathSetting> setting,[FromForm] string uniqueFileId)

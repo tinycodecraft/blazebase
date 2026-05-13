@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Localization;
 using Serilog;
 using Soenneker.Blazor.FilePond.Registrars;
 using System.Text.Json.Serialization;
@@ -75,6 +76,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthStateProvider>
 builder.Services.AddScoped<IN.ITokenService,TokenService>();
 
 //Add razor view global state
+//it seems that the controller set value does not effective in blazor
 builder.Services.AddSingleton<LayoutStateModel>();
 //Add razor Js module 
 builder.Services.AddScoped<ExampleJsInterop>();
@@ -84,6 +86,14 @@ builder.Services.AddScoped<StringEncrypService>();
 builder.Services.AddHttpClient();
 
 builder.Services.AddFilePondInteropAsScoped();
+
+builder.Services.AddScoped<IStringLocalizer>(provider =>
+{
+    var stringFactory = provider.GetRequiredService<IStringLocalizerFactory>();
+    return stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
+
+    
+});
 
 /*UseSerilog configuration
  */
@@ -106,7 +116,7 @@ builder.Services.AddStore<DBRCUSetting>();
 
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
-builder.Services.AddCustomLocalization("en-US", "zh-HK");
+builder.Services.AddCustomLocalization(DK.LANG_ENG, DK.LANG_CHI);
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles)
     .AddViewLocalization( LanguageViewLocationExpanderFormat.Suffix)
@@ -138,7 +148,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAntiforgery(options =>
 {
-    options.HeaderName = "X-CSRF-TOKEN";
+    options.HeaderName = CN.Setting.AntiForgeryId;
 
 });
 

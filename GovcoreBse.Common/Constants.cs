@@ -29,6 +29,7 @@ public class Constants
         streambyname,
         fileremove,
         fileupload,
+        culture,
 
     }
 
@@ -92,6 +93,7 @@ public class Constants
         public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
         public static string AntiForgeryId = "X-CSRF-TOKEN";
+        public static string AntiForgeryFormField = "__RequestVerificationToken";
 
 
         public const string SecretKey = "HYD.abcqwe123";
@@ -123,7 +125,8 @@ public class Constants
 
         public const string DOCTYPE_GENERAL = "G";
 
-        
+        public const string LANG_ENG = "en-US";
+        public const string LANG_CHI = "zh-HK";
 
     }
 

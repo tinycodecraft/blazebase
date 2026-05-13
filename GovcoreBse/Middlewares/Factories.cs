@@ -19,8 +19,8 @@ public  class ViewModelFactory
         var model =  new ChangeLangModel();
         model.ListOfLanguages = new List<SelectListItem>
         {
-            new SelectListItem("English", "en-US"),
-            new SelectListItem("中文", "zh-HK")
+            new SelectListItem("English", DK.LANG_ENG),
+            new SelectListItem("中文", DK.LANG_CHI)
         };
         return model;
     }

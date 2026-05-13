@@ -18,7 +18,7 @@
 
 <AuthorizeView Context="authContext">
     <Authorized>
-        <LayoutView Layout="typeof(HxHLayout)">
+        <LayoutView Layout="typeof(BaseLayout)">
             <PageTitle>Students</PageTitle>
             <h1>Students</h1>
             <QuickGrid Items="@students" Pagination="@pagination">

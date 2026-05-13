@@ -30,11 +30,11 @@ public class HomeController : Controller
     private readonly ISession? session;
     private readonly AppManager manner;
 
-    public HomeController(ILogger<HomeController> mlogger,IStringLocalizerFactory stringFactory,IMediator mediator,IN.ITokenService tokenHelper, IHttpContextAccessor accessor,AppManager appManager,LayoutStateModel layoutstate)
+    public HomeController(ILogger<HomeController> mlogger,IStringLocalizer localizer ,IMediator mediator,IN.ITokenService tokenHelper, IHttpContextAccessor accessor,AppManager appManager,LayoutStateModel layoutstate)
     {
         logger = mlogger;
         //using Factory instead of Dummy type GovcoreBse.SharedResource as generic type of IStringLocalizer<>
-        _stringLocalizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
+        _stringLocalizer = localizer;
         commander = mediator;
         tokener = tokenHelper;
         globalState = layoutstate;
@@ -87,10 +87,12 @@ public class HomeController : Controller
 
             if(!manner.SaveState(user))
             {
+
                 logger.LogDebug(user.UserName + " state could not be saved to cookie");
 
                 return View(model);
             }
+            globalState.CurrentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
             globalState.UserName= user.UserName;
             globalState.IsAdmin = user.IsAdmin;
             globalState.Post = user.Post;
