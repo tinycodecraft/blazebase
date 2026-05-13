@@ -120,39 +120,7 @@ public class HomeController : Controller
         return View(new GetWeatherForecastsQuery(total,0, 19));
 
     }
-    //public async Task<IActionResult> Index(GetUsersQuery query)
-    //{
-    //    var cn = new CancellationToken();
-    //    if(session!=null && session.GetString(SK.SESSION_USERID) == null)
-    //    {
-    //        session.SetString(SK.SESSION_USERID, "UXKBS");
-    //    }
-    //    var userid = session?.GetString(SK.SESSION_USERID) ?? "UXKBS";
-    //    var user = await commander.SendQueryAsync( new GetUserQuery(userid));
 
-
-    //    if ( manner.UserState== null && !user.IsError)
-    //    {
-    //        var userv = user.Value.Adapt<UserState>().AsEmptyWhenNull();
-    //        if(!manner.SaveState(userv))
-    //        {
-    //            logger.LogDebug(userid + " state could not be saved to cookie");
-    //        }
-    //    }
-
-    //    //var authuser = user.Value.Adapt<UserState>();
-    //    //var token = tokener.CreateToken(authuser);
-    //    //var resultuser = tokener.DecodeTokenToUser(token);
-
-    //    var listofusers = await commander.SendQueryAsync(query, cn);
-    //    return View(listofusers);
-    //}
-
-    //public IResult Login()
-    //{
-    //    return this.RazorView<Login>();
-    //}
-    //The Sample has problem because accessor could not be injected
 
     public IActionResult Privacy()
     {
@@ -191,3 +159,13 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
+#region Other examples
+
+
+//public IResult Login()
+//{
+//    return this.RazorView<Login>();
+//}
+//The Sample has problem because accessor could not be injected
+#endregion
