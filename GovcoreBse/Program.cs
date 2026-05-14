@@ -6,6 +6,7 @@ using GovcoreBse.Models;
 using GovcoreBse.Resources;
 using GovcoreBse.Store.Setup;
 using Havit.Blazor.Components.Web;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -72,11 +73,27 @@ builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 builder.Services.AddSingleton<AppManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthStateProvider>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => {
+        options.Cookie.Name = CN.Setting.AuthorizeCookieKey;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Events.OnRedirectToLogin = context =>
+        {
+            // Crucial: Stops Minimal APIs from returning 302 Redirect to a login HTML page.
+            // Instead, it returns a clean 413 or 401 Unauthorized API error status.
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+    });
+builder.Services.AddAuthorization();
 //add common service
 builder.Services.AddScoped<IN.ITokenService,TokenService>();
 
 //Add razor view global state
-//it seems that the controller set value does not effective in blazor
+//add the state as signleton is wrong because it should depends user session instead
 builder.Services.AddSingleton<LayoutStateModel>();
 //Add razor Js module 
 builder.Services.AddScoped<ExampleJsInterop>();
@@ -114,9 +131,7 @@ builder.Services.AddCommandMapper();
 builder.Services.AddStore<DBRCUSetting>();
 
 
-// Add services to the container.
-//builder.Services.AddControllersWithViews();
-builder.Services.AddCustomLocalization(DK.LANG_ENG, DK.LANG_CHI);
+
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles)
     .AddViewLocalization( LanguageViewLocationExpanderFormat.Suffix)
@@ -145,6 +160,12 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.Cookie.Name = $"{typeof(Program).Assembly.GetName().Name}.Session";
 });
+// Add services to the container.
+//builder.Services.AddControllersWithViews();
+// 2. Register your custom provider class as a SCOPED service
+builder.Services.AddScoped<SessionCultureProvider>();
+
+builder.Services.AddCustomLocalization(DK.LANG_ENG, DK.LANG_CHI);
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -160,9 +181,7 @@ builder.Services.AddHxMessageBoxHost();
 var app = builder.Build();
 
 
-//Please don't apply to "ApplyCurrentCultureToResponseHeaders"
-//otherwise, the cookie localization not work
-app.UseRequestLocalization();
+
 
 
 app.UseApiExceptionHandling();
@@ -211,11 +230,17 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
+//Please don't apply to "ApplyCurrentCultureToResponseHeaders"
+//otherwise, the cookie localization not work
+app.UseRequestLocalization();
+
 //**this is for razor components
 //**not just element for mvc
 app.UseAntiforgery();
+app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

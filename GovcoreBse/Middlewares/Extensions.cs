@@ -1,4 +1,5 @@
-﻿using GovcoreBse.Models;
+﻿using GovcoreBse.Manner;
+using GovcoreBse.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -110,6 +111,15 @@ public static class ServiceCollectionExtensions
             options.SetDefaultCulture(langs[0])
             .AddSupportedCultures(langs)
                 .AddSupportedUICultures(langs);
+
+            // Use an inline delegate to pull the Scoped provider out of the active HttpContext
+            options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async httpContext =>
+            {
+                // Resolves the provider dynamically within the active request context,
+                // ensuring the Session middleware has already completed execution.
+                var scopedProvider = httpContext.RequestServices.GetRequiredService<SessionCultureProvider>();
+                return await scopedProvider.DetermineProviderCultureResult(httpContext);
+            }));
 
         });
 

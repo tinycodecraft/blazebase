@@ -92,6 +92,7 @@ public class Constants
         public static int PageStart = 1;
         public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
+        public static string AuthenticationCookieName = "HYD.CookieAuth";
         public static string AntiForgeryId = "X-CSRF-TOKEN";
         public static string AntiForgeryFormField = "__RequestVerificationToken";
 
@@ -133,6 +134,7 @@ public class Constants
     public static class SessionKey
     {
         public const string SESSION_USERID = "HYDbz.Session.UserId";
+        public const string SESSION_CULTURE = "HYDbz.Session.Culture";
 
 
     }

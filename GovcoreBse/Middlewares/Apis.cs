@@ -47,10 +47,15 @@ public static class Apis
         if (accessor.HttpContext == null || culture == null)
             return TypedResults.Ok(false);
 
+        accessor.HttpContext.Session.SetString(SK.SESSION_CULTURE, culture);
         accessor.HttpContext.SetLangCookie(culture);
+        
 
         return TypedResults.Ok(true);
     }
+
+    
+    
 
     internal static async Task<IResult> RemoveFile(IWebHostEnvironment env,ILogger<Program> logger, IOptions<PathSetting> setting,[FromForm] string uniqueFileId)
     {

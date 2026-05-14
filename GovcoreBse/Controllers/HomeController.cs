@@ -130,7 +130,7 @@ public class HomeController : Controller
         this.HttpContext.Request.Cookies.TryGetValue(
             CookieRequestCultureProvider.DefaultCookieName, out cultureCookieValue);
 
-
+        //please note the currentthread.currentthread.currentuiculture is automatically using underlining culture provider if available
         var model = ViewModelFactory.CreateViewModelWithResource<PrivacyViewModel>(_stringLocalizer);
         string text = "Thread CurrentUICulture is [" + @Thread.CurrentThread.CurrentUICulture.ToString() + "] ; ";
         text += "Thread CurrentCulture is [" + @Thread.CurrentThread.CurrentCulture.ToString() + "]";

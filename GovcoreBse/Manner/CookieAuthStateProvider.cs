@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 namespace GovcoreBse.Manner;
@@ -19,7 +20,7 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
         var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
         try
         {
-
+            
             var userState = appManager.UserState;
 
             if (userState != null)
@@ -33,7 +34,7 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
                     new Claim("Post", userState.Post),
                     new Claim("IsAdmin", userState.IsAdmin.ToString()),
                     new Claim("Division", userState.Division ),
-                }, "CookieAuth");
+                }, CN.Setting.AuthenticationCookieName);
                 var user = new ClaimsPrincipal(identity);
                 return Task.FromResult(new AuthenticationState(user));
             }
