@@ -9,7 +9,7 @@
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
-
+@inject NavigationManager NavigationManager
 @inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
 
@@ -75,6 +75,9 @@
 
 @code {
 
+    [CascadingParameter(Name = "CurrentLocation")]
+    public string PageUrl { get; set; }
+
     [Parameter]
     [SupplyParameterFromQuery(Name = "attachType")]
     public string AttachType { get; set; } = string.Empty;
@@ -127,6 +130,7 @@
                 _options.RemoveUrl = Settings.Value.FileRemove;
                 _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
+                PageUrl = NavigationManager.Uri;
                 StateHasChanged();
             }
 

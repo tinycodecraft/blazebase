@@ -586,7 +586,7 @@ public static class TypeHelper
         }
         return null;
     }
-
+    //Padding the value from left again after increment by value "inc" on the value string "value"
     public static string IncPadding(this string value, char pad = '0', int len = 4, int inc = 1)
     {
         var bricks = numAlpha.Match(value);

@@ -92,11 +92,14 @@ public class Constants
         public static int PageStart = 1;
         public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
+        public static string SessionCookieKey = $"HYD.SessionCookie_Key";
         public static string AuthenticationCookieName = "HYD.CookieAuth";
         public static string AntiForgeryId = "X-CSRF-TOKEN";
+        //this field name cannot be changed.  Agree by microsoft web
         public static string AntiForgeryFormField = "__RequestVerificationToken";
+        public static string AntiForgeryCookieKey = $"HYD.AntiforgeryCookie_Key";
 
-
+        public const string AutoApiClientName = "AutoApi";
         public const string SecretKey = "HYD.abcqwe123";
         public const string Issuer = "HYD";
         public const string Audience = "";

@@ -99,8 +99,8 @@ builder.Services.AddScoped<LayoutStateModel>();
 builder.Services.AddScoped<ExampleJsInterop>();
 
 builder.Services.AddScoped<StringEncrypService>();
-
-builder.Services.AddHttpClient();
+builder.Services.AddTransient<CookieForwardHandler>();
+builder.Services.AddHttpClient(CN.Setting.AutoApiClientName).AddHttpMessageHandler<CookieForwardHandler>();
 
 builder.Services.AddFilePondInteropAsScoped();
 
@@ -158,7 +158,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromDays(1);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.Name = $"{typeof(Program).Assembly.GetName().Name}.Session";
+    options.Cookie.Name = CN.Setting.SessionCookieKey;
 });
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
@@ -169,6 +169,11 @@ builder.Services.AddCustomLocalization(DK.LANG_ENG, DK.LANG_CHI);
 
 builder.Services.AddAntiforgery(options =>
 {
+    options.Cookie.Name = CN.Setting.AntiForgeryCookieKey; // 自訂 Cookie 名稱
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 僅限 HTTPS
+    options.Cookie.SameSite = SameSiteMode.Strict; // 強安全模式
+    options.Cookie.HttpOnly = true; // 防止 JS 讀取
+    options.Cookie.IsEssential = true; // 視為必要 Cookie
     options.HeaderName = CN.Setting.AntiForgeryId;
 
 });
@@ -205,6 +210,11 @@ app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.streambyname))
 app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.fileupload))
     .MapApiFor(CN.AutocompleteGroup.fileupload)
     .WithTags(nameof(CN.AutocompleteGroup.fileupload));
+
+app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.culture))
+    .MapApiFor(CN.AutocompleteGroup.culture)
+    .WithTags(nameof(CN.AutocompleteGroup.culture));
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,6 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿
+@inherits LayoutComponentBase
 @inject AppManager manner
-@inject HttpClient Http
+@inject IHttpClientFactory HttpFac
 @inject NavigationManager NavigationManager
 @inject AntiforgeryStateProvider Antiforgery
 @inject IOptions<PathSetting> Setting
@@ -45,8 +46,8 @@
                                 🌐
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btnGroupDropLang">
-                                <li><a class="dropdown-item active" href="#" @onclick="async ()=> await ChangeLanguage(DK.LANG_ENG)">English</a></li>
-                                <li><a class="dropdown-item" href="#" @onclick="async () => await ChangeLanguage(DK.LANG_CHI)">中文</a></li>
+                                <li><a class="dropdown-item active" href="#" @onclick:preventDefault="true" @onclick="async ()=> await ChangeLanguage(DK.LANG_ENG)">English</a></li>
+                                <li><a class="dropdown-item" href="#" @onclick:preventDefault="true" @onclick="async () => await ChangeLanguage(DK.LANG_CHI)">中文</a></li>
                             </ul>
                         </div>
                     </div>
@@ -58,15 +59,29 @@
 </header>
 <div class="container">
     <main role="main" class="pb-3">
-        @Body
+        <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
+            @Body
+        </CascadingValue>
+        
     </main>
 </div>
 
 
 @code {
+    private string CurrentPageUrl { get; set; } = string.Empty;
 
     private string userDisplay = string.Empty;
     private bool IsLogin = false;
+
+    protected override void OnInitialized()
+    {
+        // 1. 頁面第一次載入時，先抓取初始網址
+        CurrentPageUrl = NavigationManager.Uri;
+
+        // 2. 💡 關鍵：訂閱網址變更事件，當使用者跳轉到其他特定頁面時會觸發
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender)
@@ -77,11 +92,28 @@
                 userDisplay = $"{userState.UserName}({userState.Post})".ToLowerInvariant();
                 IsLogin = true;
             }
-            
+            CurrentPageUrl = NavigationManager.Uri;
+
+            StateHasChanged();
         }
 
         return base.OnAfterRenderAsync(firstRender);
     }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // e.Location 也包含最新跳轉的完整絕對網址
+        CurrentPageUrl = e.Location;
+
+        // 強制 Layout 重新渲染，讓畫面上的網址即時更新
+        StateHasChanged();
+    }
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+
 
     private async Task ChangeLanguage(string culture)
     {
@@ -95,12 +127,11 @@
         var payload = new Dictionary<string,string>
         {
             {"culture",culture },
-            {CN.Setting.AntiForgeryFormField,ftoken}
+            { CN.Setting.AntiForgeryFormField, ftoken}
         };
-
-        using var request = new HttpRequestMessage(HttpMethod.Post, Setting.Value.CultureSet);
+        var Http = HttpFac.CreateClient(CN.Setting.AutoApiClientName);
+        using var request = new HttpRequestMessage(HttpMethod.Post,new Uri( NavigationManager.BaseUri.ConcatUriPath(Setting.Value.CultureSet)));
         request.Content = new FormUrlEncodedContent(payload);
-        
 
         var response = await Http.SendAsync(request);
         if(response.IsSuccessStatusCode)
@@ -108,7 +139,7 @@
             bool result = await response.Content.ReadFromJsonAsync<bool>();
             if(result)
             {
-                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+                NavigationManager.NavigateTo(CurrentPageUrl, forceLoad: true);
             }
         }
     }

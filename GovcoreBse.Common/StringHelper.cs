@@ -69,7 +69,8 @@ public static class StringHelper
     {
         return Regex.Replace(Regex.Replace(str, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
     }
-
+    
+    //convert dynamic object to dictionary
     public static Dictionary<String, Object> Dyn2Dict(dynamic dynObj)
     {
         var dictionary = new Dictionary<string, object>();
@@ -260,6 +261,30 @@ public static class StringHelper
         return tmpinput;
     }
 
+    public static string ConcatUriPath(this string input,params string[] paths)
+    {
+        var sb = new StringBuilder();
+        if(!string.IsNullOrEmpty(input))
+        {
+            sb.Append(input.TrimEnd('/'));
+        }
+        foreach (var path in paths) {
+            if (!string.IsNullOrEmpty(path))
+            {
+
+                if (path.StartsWith("/"))
+                    sb.Append(path);
+                else
+                {
+                    sb.Append($"/{path}");
+                }
+            }
+                
+        }
+        return sb.ToString();
+        
+    }
+
     public static bool Contains(this string input, string find, StringComparison comparisonType)
     {
         return String.IsNullOrWhiteSpace(input) ? false : input.IndexOf(find, comparisonType) > -1;
@@ -270,6 +295,7 @@ public static class StringHelper
         foreach (var i in input.Where(e => !string.IsNullOrEmpty(e)))
             yield return i;
     }
+
 
     public static IEnumerable<string> ItSplit(this string str, string sep = ",")
     {
