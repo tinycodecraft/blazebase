@@ -97,7 +97,7 @@ public class Constants
         public static string AntiForgeryId = "X-CSRF-TOKEN";
         //this field name cannot be changed.  Agree by microsoft web
         public static string AntiForgeryFormField = "__RequestVerificationToken";
-        public static string AntiForgeryCookieKey = $"HYD.AntiforgeryCookie_Key";
+        public static string AntiForgeryCookieKey = $"HYD.AntiforgeryCookie_Key."+"".RandomString();
 
         public const string AutoApiClientName = "AutoApi";
         public const string SecretKey = "HYD.abcqwe123";
