@@ -330,7 +330,16 @@ public sealed class FilePondInterop : IFilePondInterop
         CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
 
         using (source)
-            await InvokeVoidAsync("destroy", linked, elementId);
+        {
+            try
+            {
+                await InvokeVoidAsync("destroy", linked, elementId);
+            }
+            catch (Exception ex) { 
+                //the js runtime interop is disposed before destroy can be called.
+            }
+        }
+            
 
 
     }
