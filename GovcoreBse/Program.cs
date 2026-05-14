@@ -181,7 +181,7 @@ builder.Services.AddHxMessageBoxHost();
 var app = builder.Build();
 
 
-
+app.UseClaimsIdentityResolver();
 
 
 app.UseApiExceptionHandling();

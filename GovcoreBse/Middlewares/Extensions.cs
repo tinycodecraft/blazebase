@@ -1,5 +1,6 @@
 ﻿using GovcoreBse.Manner;
 using GovcoreBse.Models;
+using GovcoreBse.Store.Setup;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace GovcoreBse.Middlewares;
@@ -94,6 +96,44 @@ public static class ExceptionHandlerExtensions
     public static IApplicationBuilder UseApiExceptionHandling(this IApplicationBuilder app)
         => app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 }
+
+public static class ClaimsIdentityHandlerExtensions
+{
+    //this resolver must be placed in the first line after builder build statement.
+    public static IApplicationBuilder  UseClaimsIdentityResolver(this IApplicationBuilder app)
+    {
+        app.Use(async (context, next) => {
+
+            var appman = context.RequestServices.GetRequiredService<AppManager>();
+            if(appman!=null && appman.UserState!=null)
+            {
+                var userState = appman.UserState;
+                var db = context.RequestServices.GetRequiredService<IBlazeLogDbContext>();
+                if (db != null)
+                {
+                    var identity = new ClaimsIdentity(new[]
+                    {
+                    new Claim(ClaimTypes.Name, userState.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, userState.UserID),
+                    new Claim(ClaimTypes.Email, userState.Email),
+                    new Claim("Level", userState.Level.ToString()),
+                    new Claim("Post", userState.Post),
+                    new Claim("IsAdmin", userState.IsAdmin.ToString()),
+                    new Claim("Division", userState.Division ),
+                    }, CN.Setting.AuthenticationCookieName);
+                    context.User = new ClaimsPrincipal(identity);
+                }
+
+
+            }
+
+            await next(context);
+        });
+
+        return app;
+    }
+}
+
 public static class ServiceCollectionExtensions
 {
 
