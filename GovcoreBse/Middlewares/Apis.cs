@@ -49,7 +49,9 @@ public static class Apis
 
         accessor.HttpContext.Session.SetString(SK.SESSION_CULTURE, culture);
         accessor.HttpContext.SetLangCookie(culture);
-        
+        var cultureinfo = new System.Globalization.CultureInfo(culture);
+        System.Globalization.CultureInfo.CurrentCulture= cultureinfo;
+        System.Globalization.CultureInfo.CurrentUICulture= cultureinfo;
 
         return TypedResults.Ok(true);
     }

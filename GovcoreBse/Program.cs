@@ -94,7 +94,7 @@ builder.Services.AddScoped<IN.ITokenService,TokenService>();
 
 //Add razor view global state
 //add the state as signleton is wrong because it should depends user session instead
-builder.Services.AddSingleton<LayoutStateModel>();
+builder.Services.AddScoped<LayoutStateModel>();
 //Add razor Js module 
 builder.Services.AddScoped<ExampleJsInterop>();
 

@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @inject AppManager manner
-@inject LayoutStateModel globalState
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject AntiforgeryStateProvider Antiforgery
@@ -26,9 +25,9 @@
 
                             
                 </ul>
-                @if (globalState.IsLogin)
+                @if (IsLogin)
                 {
-                    <form class="d-flex">
+                    <div class="d-flex gap-2 ms-auto">
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">@(userDisplay)</span>
@@ -41,16 +40,16 @@
                                 @userDisplay
                             </button>
                         </div>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group">
                             <button id="btnGroupDropLang" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                🌐 Language
+                                🌐
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="btnGroupDropLang">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btnGroupDropLang">
                                 <li><a class="dropdown-item active" href="#" @onclick="async ()=> await ChangeLanguage(DK.LANG_ENG)">English</a></li>
                                 <li><a class="dropdown-item" href="#" @onclick="async () => await ChangeLanguage(DK.LANG_CHI)">中文</a></li>
                             </ul>
                         </div>
-                    </form>
+                    </div>
 
                 }
             </div>
@@ -67,11 +66,18 @@
 @code {
 
     private string userDisplay = string.Empty;
+    private bool IsLogin = false;
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender)
         {
-            userDisplay = $"{globalState.UserName}({globalState.Post})".ToLowerInvariant();
+            var userState = manner.UserState;
+            if(userState!=null)
+            {
+                userDisplay = $"{userState.UserName}({userState.Post})".ToLowerInvariant();
+                IsLogin = true;
+            }
+            
         }
 
         return base.OnAfterRenderAsync(firstRender);

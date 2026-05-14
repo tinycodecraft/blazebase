@@ -1,14 +1,16 @@
 ﻿@using Microsoft.Extensions.Localization
-@model LayoutStateModel
 
 @inject IStringLocalizerFactory stringFactory
+@inject AppManager manner
 @{
     ViewData["Title"] = "Welcome Page";
     var Localizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
+    var model = manner.UserState;
+    var username = model!=null ? model.UserName: string.Empty;
 
-    
+
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to @Model.UserName</h1>
+    <h1 class="display-4">Welcome to @username</h1>
 </div>

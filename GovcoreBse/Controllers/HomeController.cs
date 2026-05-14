@@ -92,10 +92,7 @@ public class HomeController : Controller
 
                 return View(model);
             }
-            globalState.CurrentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
-            globalState.UserName= user.UserName;
-            globalState.IsAdmin = user.IsAdmin;
-            globalState.Post = user.Post;
+
            
         }
 
