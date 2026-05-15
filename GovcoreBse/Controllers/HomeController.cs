@@ -53,6 +53,10 @@ public class HomeController : Controller
         {
             manner.ClearState();
         }
+        else if(manner.UserState!=null )
+        {
+            return RedirectToAction("Welcome");
+        }
         ViewBag.ReturnUrl = returnUrl;
 
 
