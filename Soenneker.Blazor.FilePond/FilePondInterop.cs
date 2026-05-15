@@ -640,6 +640,8 @@ public sealed class FilePondInterop : IFilePondInterop
     }
 
     [JSInvokable("ProcessRemoveJs")]
+    //this method is called from javascript counterpart through event attached to filepond object in javascript domain
+    //Please note that the processregistrations is dictionary having callback passed from parent blazor through Create method invoked through filepond after render event
     public async Task<string> ProcessRemoveJs(string elementId, string processId, string source)
     {
         if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FN.IFilePondLoadRequest>? registration))
@@ -662,6 +664,8 @@ public sealed class FilePondInterop : IFilePondInterop
 
 
     [JSInvokable("ProcessLoadJs")]
+    //this method is called from javascript counterpart through event attached to filepond object in javascript domain
+    //Please note that the processregistrations is dictionary having callback passed from parent blazor through Create method invoked through filepond after render event
     public async Task<string> ProcessLoadJs(string elementId,string processId,string source)
     {
         if (!_serverProcessRegistrations.TryGetValue(elementId, out ServerProcessRegistration<FN.IFilePondLoadRequest>? registration))
