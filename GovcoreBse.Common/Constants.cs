@@ -90,7 +90,7 @@ public class Constants
         
         public static int PageSize = 20;
         public static int PageStart = 1;
-        public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Shared", "");
+        public static string AppName = typeof(Setting).Assembly.GetName().Name!.Replace(".Common", "");
         public static string AuthorizeCookieKey = $"HYD.AuthorizeCookie_Key";
         public static string SessionCookieKey = $"HYD.SessionCookie_Key";
         public static string AuthenticationCookieName = "HYD.CookieAuth";
