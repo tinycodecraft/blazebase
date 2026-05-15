@@ -33,28 +33,31 @@ public static class Apis
             case CN.AutocompleteGroup.fileremove:
                 builder.MapPost("/", RemoveFile).Produces(200, typeof(object));
                 break;
-            case CN.AutocompleteGroup.culture:
-                builder.MapPost("/", CultureSet).Produces(200, typeof(Boolean));
-                break;
+            //case CN.AutocompleteGroup.culture:
+            //    builder.MapPost("/", CultureSet).Produces(200, typeof(Boolean));
+            //    break;
 
         }
 
         return builder;
     }
 
-    internal static async Task<IResult> CultureSet(IHttpContextAccessor accessor,[FromForm] string culture)
-    {
-        if (accessor.HttpContext == null || culture == null)
-            return TypedResults.Ok(false);
+    //DID NOT WORK FOR BLAZOR PAGE
+    //BECAUSE WEBSOCKET only can update cookie or response through invoking javascript function 
+    //internal static async Task<IResult> CultureSet(HttpContext context,[FromForm] string culture)
+    //{
+    //    if (context == null || culture == null)
+    //        return TypedResults.Ok(false);
 
-        accessor.HttpContext.Session.SetString(SK.SESSION_CULTURE, culture);
-        accessor.HttpContext.SetLangCookie(culture);
-        var cultureinfo = new System.Globalization.CultureInfo(culture);
-        System.Globalization.CultureInfo.CurrentCulture= cultureinfo;
-        System.Globalization.CultureInfo.CurrentUICulture= cultureinfo;
+    //    context.Session.SetString(SK.SESSION_CULTURE, culture);
+    //    await context.Session.CommitAsync();
+    //    context.SetLangCookie(culture);
+    //    var cultureinfo = new System.Globalization.CultureInfo(culture);
+    //    System.Globalization.CultureInfo.CurrentCulture= cultureinfo;
+    //    System.Globalization.CultureInfo.CurrentUICulture= cultureinfo;
 
-        return TypedResults.Ok(true);
-    }
+    //    return TypedResults.Ok(true);
+    //}
 
     
     
@@ -89,18 +92,18 @@ public static class Apis
         return TypedResults.Ok(true);
     }
 
-    internal static async Task<IResult> UploadFile(IHttpContextAccessor accessor,IFormFileCollection files,IWebHostEnvironment env,ILogger<Program> logger,IOptions<PathSetting> setting)
+    internal static async Task<IResult> UploadFile(HttpContext context,IFormFileCollection files,IWebHostEnvironment env,ILogger<Program> logger,IOptions<PathSetting> setting)
     {
         logger.LogDebug("the file upload api is called");
         var id = "".RandomString(8);
         var upload = setting.Value.Temp;
-        if(accessor== null || accessor.HttpContext == null || files==null || files.Count == 0)
+        if( context == null || files==null || files.Count == 0)
         {
             logger.LogError("HttpContext or file is null");
             return TypedResults.Ok(new { id = string.Empty });
         }
 
-        string? type = accessor.HttpContext.Request.Form[CN.Setting.FILEPOND_ATTCHTYPE];
+        string? type = context.Request.Form[CN.Setting.FILEPOND_ATTCHTYPE];
         if(type==null)
         {
             logger.LogError("Attachment type is missing in the form data");
@@ -121,7 +124,7 @@ public static class Apis
         return TypedResults.Ok(new { id = id });
     }
 
-    internal static async Task<IResult> GetAllSuggestions(IHttpContextAccessor accessor,IMediator commander, ILogger<Program> logger, string userid, [FromQuery(Name = "wanted")] string wanted, [FromQuery] string? search = null)
+    internal static async Task<IResult> GetAllSuggestions(IMediator commander, ILogger<Program> logger, string userid, [FromQuery(Name = "wanted")] string wanted, [FromQuery] string? search = null)
     {
         var wantedtype = HelperS.GetEnum<CN.AutoSuggestType>(wanted);
         var result = await commander.SendQueryAsync(new GetAutoCompleteQuery(wantedtype, userid, search));
@@ -135,7 +138,7 @@ public static class Apis
         return TypedResults.Ok(result.Value);
     }
 
-    internal static async Task<IResult> GetAllWeathers(IHttpContextAccessor accessor, IMediator commander, ILogger<Program> logger, string userid, [FromQuery(Name = "start")] int? start = 1, [FromQuery(Name = "size")] int? size = 10, [FromQuery(Name = "total")] int? total = 100)
+    internal static async Task<IResult> GetAllWeathers( IMediator commander, ILogger<Program> logger, string userid, [FromQuery(Name = "start")] int? start = 1, [FromQuery(Name = "size")] int? size = 10, [FromQuery(Name = "total")] int? total = 100)
     {
         var result = await commander.SendQueryAsync(new GetWeatherForecastsQuery(total ?? 100, start ?? 1, total ?? 100));
         if(result == null || result.Count == 0)
@@ -147,11 +150,11 @@ public static class Apis
         return TypedResults.Ok(result);
     }
 
-    internal static async Task<IResult> GetFile(IHttpContextAccessor accessor,IMediator commander,ILogger<Program> logger, IOptions<PathSetting> setting, long thumb, string filename)
+    internal static async Task<IResult> GetFile(HttpContext context,IMediator commander,ILogger<Program> logger, IOptions<PathSetting> setting, long thumb, string filename)
     {
         // This is a placeholder implementation. You would replace this with your actual file retrieval logic.
 
-        var context = accessor.HttpContext;
+        
 
         var contentType = HelperS.GetFileType(filename);
         var isinline = HelperS.CanInline(filename);

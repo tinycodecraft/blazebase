@@ -1,21 +1,18 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using GovcoreBse.Models;
-using GovcoreBse.Middlewares;
-using GovcoreBse.Resources;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Localization;
-
-using GovcoreBse.Store.Commands;
-
-
-using GovcoreBse.Components.Pages;
-using GovcoreBse.Shared.Tools;
-
-using GovcoreBse.Manner;
 using Cortex.Mediator;
-using Mapster;
+using DocumentFormat.OpenXml.InkML;
+using GovcoreBse.Components.Pages;
+using GovcoreBse.Manner;
+using GovcoreBse.Middlewares;
+using GovcoreBse.Models;
+using GovcoreBse.Resources;
+using GovcoreBse.Shared.Tools;
+using GovcoreBse.Store.Commands;
 using GovcoreBse.Store.Setup;
+using Mapster;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Diagnostics;
 
 
 namespace GovcoreBse.Controllers;
@@ -64,6 +61,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Index(LoginModel model)
     {
         if(!ModelState.IsValid)
@@ -113,6 +111,25 @@ public class HomeController : Controller
 
 
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetLanguage([FromForm] string culture, [FromForm] string redirecturl)
+    {
+
+        HttpContext.Session.SetString(SK.SESSION_CULTURE, culture);
+        await HttpContext.Session.CommitAsync();
+        HttpContext.SetLangCookie(culture);
+        var cultureinfo = new System.Globalization.CultureInfo(culture);
+        System.Globalization.CultureInfo.CurrentCulture = cultureinfo;
+        System.Globalization.CultureInfo.CurrentUICulture = cultureinfo;
+        if(!redirecturl.StartsWith("/"))
+            redirecturl = "/" + redirecturl;
+        return LocalRedirect(redirecturl);
+    }
+
+
+
+
     public IActionResult Weather(int total =5000)
     {
 
@@ -123,9 +140,15 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        string? cultureCookieValue = null;
-        this.HttpContext.Request.Cookies.TryGetValue(
-            CookieRequestCultureProvider.DefaultCookieName, out cultureCookieValue);
+        string? cultureCookieValue = this.HttpContext.Session.GetString(SK.SESSION_CULTURE);
+
+        
+        if(string.IsNullOrEmpty(cultureCookieValue))
+        {
+            this.HttpContext.Request.Cookies.TryGetValue(
+                CookieRequestCultureProvider.DefaultCookieName, out cultureCookieValue);
+        }
+
 
         //please note the currentthread.currentthread.currentuiculture is automatically using underlining culture provider if available
         var model = ViewModelFactory.CreateViewModelWithResource<PrivacyViewModel>(_stringLocalizer);

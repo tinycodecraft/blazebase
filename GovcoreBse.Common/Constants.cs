@@ -111,6 +111,8 @@ public class Constants
         public const string GROUP_SEPARATOR = "--";
         public const string FILEPOND_ATTCHTYPE = "AttachType";
 
+        public const string MiniApiPathPrefix = "/api/";
+
     }
 
     public static class DataKey

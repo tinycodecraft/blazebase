@@ -11,6 +11,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Builder;
 
 namespace GovcoreBse.Middlewares;
 
@@ -64,6 +65,20 @@ public static class HelperExtensions
             cookieOptions
         );
         
+    }
+}
+
+public static class MiniApisExtensions
+{
+    public static IEndpointRouteBuilder UseApisMapping(this IEndpointRouteBuilder app,params CN.AutocompleteGroup[] groups)
+    {
+        foreach(var g in groups)
+        {
+            app.MapGroup(CN.Setting.MiniApiPathPrefix + HelperT.ToNameString(g))
+                .MapApiFor(g)
+                .WithTags(HelperT.ToNameString(g));
+        }
+        return app;
     }
 }
 
@@ -136,6 +151,7 @@ public static class ClaimsIdentityHandlerExtensions
 
 public static class ServiceCollectionExtensions
 {
+
 
 
 

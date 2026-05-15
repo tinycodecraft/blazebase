@@ -195,25 +195,8 @@ app.MapGet("/api/hello", () => "Hello, World!");
 //test successful
 //app.MapGet("/api/throw", () => { throw new Exception("This is a test exception"); return Results.Ok("Not Ok"); });
 
-app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.weathers))
-    .MapApiFor(CN.AutocompleteGroup.weathers)
-    .WithTags(nameof(CN.AutocompleteGroup.weathers));
+app.UseApisMapping(CN.AutocompleteGroup.weathers, CN.AutocompleteGroup.suggests, CN.AutocompleteGroup.streambyname, CN.AutocompleteGroup.fileupload);
 
-app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.suggests))
-    .MapApiFor(CN.AutocompleteGroup.suggests)
-    .WithTags(nameof(CN.AutocompleteGroup.suggests));
-
-app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.streambyname))
-    .MapApiFor(CN.AutocompleteGroup.streambyname)
-    .WithTags(nameof(CN.AutocompleteGroup.streambyname));
-
-app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.fileupload))
-    .MapApiFor(CN.AutocompleteGroup.fileupload)
-    .WithTags(nameof(CN.AutocompleteGroup.fileupload));
-
-app.MapGroup("/api/" + nameof(CN.AutocompleteGroup.culture))
-    .MapApiFor(CN.AutocompleteGroup.culture)
-    .WithTags(nameof(CN.AutocompleteGroup.culture));
 
 
 // Configure the HTTP request pipeline.

@@ -1,6 +1,7 @@
 ﻿
 @inherits LayoutComponentBase
 @inject AppManager manner
+@inject IJSRuntime js
 @inject IHttpClientFactory HttpFac
 @inject NavigationManager NavigationManager
 @inject AntiforgeryStateProvider Antiforgery
@@ -50,9 +51,15 @@
                                 <li><a class="dropdown-item" href="#" @onclick:preventDefault="true" @onclick="async () => await ChangeLanguage(DK.LANG_CHI)">中文</a></li>
                             </ul>
                         </div>
+                        <form id="langform" action="@Setting.Value.CultureSet" method="post" style="display:none" >
+                            <AntiforgeryToken />
+                            <input type="hidden" name="culture" value="@SelectedCulture" />
+                            <input type="hidden" name="redirecturl" value="@RelativeCurrentPageUrl" />
+                        </form>
                     </div>
 
                 }
+              
             </div>
         </div>
     </nav>
@@ -69,9 +76,11 @@
 
 @code {
     private string CurrentPageUrl { get; set; } = string.Empty;
+    private string RelativeCurrentPageUrl => NavigationManager.ToBaseRelativePath(CurrentPageUrl);
 
     private string userDisplay = string.Empty;
     private bool IsLogin = false;
+    private string SelectedCulture { get; set; } = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -117,30 +126,10 @@
 
     private async Task ChangeLanguage(string culture)
     {
-        if (string.IsNullOrEmpty(culture))
-            return;
-        var ftoken = Antiforgery.GetAntiforgeryToken()?.Value;
-        if(ftoken == null)
-        {
-            return;
-        }
-        var payload = new Dictionary<string,string>
-        {
-            {"culture",culture },
-            { CN.Setting.AntiForgeryFormField, ftoken}
-        };
-        var Http = HttpFac.CreateClient(CN.Setting.AutoApiClientName);
-        using var request = new HttpRequestMessage(HttpMethod.Post,new Uri( NavigationManager.BaseUri.ConcatUriPath(Setting.Value.CultureSet)));
-        request.Content = new FormUrlEncodedContent(payload);
+        SelectedCulture = culture;
+        StateHasChanged();
+        await Task.Yield();
+        await js.InvokeVoidAsync("eval", "document.getElementById('langform').submit();");
 
-        var response = await Http.SendAsync(request);
-        if(response.IsSuccessStatusCode)
-        {
-            bool result = await response.Content.ReadFromJsonAsync<bool>();
-            if(result)
-            {
-                NavigationManager.NavigateTo(CurrentPageUrl, forceLoad: true);
-            }
-        }
     }
 }
