@@ -335,8 +335,12 @@ public sealed class FilePondInterop : IFilePondInterop
             {
                 await InvokeVoidAsync("destroy", linked, elementId);
             }
-            catch (Exception ex) { 
-                //the js runtime interop is disposed before destroy can be called.
+            catch (Exception ex) when (ex is JSDisconnectedException ||
+                                          ex is InvalidOperationException)
+            {
+                // 故意不做任何事 (Swallow exception)。
+                // 理由：既然 Circuit 都斷開了，代表瀏覽器端可能已經關閉或分頁重刷，
+                // 瀏覽器會自動把該分頁的 JS 記憶體全部清空，我們不再需要手動去 removeEventListener。
             }
         }
             
