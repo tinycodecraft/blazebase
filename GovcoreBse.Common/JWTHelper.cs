@@ -87,7 +87,7 @@ public class JWTHelper
         }
     }
 
-    public static T DElize<T>(string json)
+    public static T DElize<T>(string json,bool msmode=true)
     {
 
         IJsonSerializer serializer = new JsonNetSerializer(_defaultlizer);
@@ -98,6 +98,19 @@ public class JWTHelper
     {
         IJsonSerializer serializer = new JsonNetSerializer(_defaultlizer);
         return serializer.Serialize(obj);
+    }
+    //demonstrate how to use System.Text.Json to adapt json from the Newtonsoft.Json
+    public static T? DELizeByTextJson<T>(string json)
+    {
+        var options = new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString,
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve,
+            ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip,
+            AllowTrailingCommas = true,
+        };
+        return System.Text.Json.JsonSerializer.Deserialize<T>(json, options);
     }
 
 }
