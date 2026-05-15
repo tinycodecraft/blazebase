@@ -83,6 +83,7 @@
     public string AttachType { get; set; } = string.Empty;
 
     protected List<string> ResultUrls { get; set; } = new List<string>();
+    //Please note that this reference do not need disposable to release this reference
     private FilePond? FilePondObj { get; set; }
     private  FilePondOptions _options = new()
         {

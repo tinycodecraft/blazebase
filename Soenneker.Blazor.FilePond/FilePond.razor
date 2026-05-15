@@ -958,12 +958,14 @@
 
     private ValueTask AddEventListener<T>(string eventName, Func<T, ValueTask> callback, CancellationToken cancellationToken)
     {
+        //the following is through create BlazorInvoker as DotNetReference pair up with event callback passed from parent
         // Don't need to link the cancellationToken because it's already been linked
         return InteropEventListener.Add($"{nameof(FilePondInterop)}.addEventListener", _elementId, eventName, callback, cancellationToken);
     }
 
     private ValueTask AddEventListener<TInput, TOutput>(string eventName, Func<TInput, ValueTask<TOutput>> callback, CancellationToken cancellationToken)
     {
+        //the following is through create BlazorOutputInvoker as DotNetReference pair up with event callback passed from parent
         // Don't need to link the cancellationToken because it's already been linked
         return InteropEventListener.Add($"{nameof(FilePondInterop)}.addOutputEventListener", _elementId, eventName, callback, cancellationToken);
     }
