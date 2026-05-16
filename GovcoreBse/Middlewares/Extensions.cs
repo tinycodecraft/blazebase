@@ -130,11 +130,11 @@ public static class ClaimsIdentityHandlerExtensions
                     {
                     new Claim(ClaimTypes.Name, userState.UserName),
                     new Claim(ClaimTypes.NameIdentifier, userState.UserID),
-                    new Claim(ClaimTypes.Email, userState.Email),
+                    new Claim(ClaimTypes.Email, userState.Email ?? ""),
                     new Claim("Level", userState.Level.ToString()),
                     new Claim("Post", userState.Post),
                     new Claim("IsAdmin", userState.IsAdmin.ToString()),
-                    new Claim("Division", userState.Division ),
+                    new Claim("Division", userState.Division ?? ""),
                     }, CN.Setting.AuthenticationCookieName);
                     context.User = new ClaimsPrincipal(identity);
                 }

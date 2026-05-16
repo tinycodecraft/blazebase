@@ -16,7 +16,7 @@ public class NullMappingConfiguration: MapperConfiguration
 {
     protected override void Configure()
     {
-        WhenMapping.NullStringToEmpty<UserState>(x => x.Division);
+        WhenMapping.NullStringToEmpty<UserState>(x => x.Division,x=> x.Email);
     }
 }
 
