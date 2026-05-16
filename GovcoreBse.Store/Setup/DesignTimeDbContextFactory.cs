@@ -20,7 +20,8 @@ public class DesignTimeDbContextFactory:IDesignTimeDbContextFactory<BlazeLogDbCo
     public BlazeLogDbContext CreateDbContext(string[] args)
     {
         //i.e. dotnet ef migrations add InitialCreate --project ./GovcoreBse.Store/GovcoreBse.Store.csproj --startup-project ./GovcoreBse/GovcoreBse.csproj -- HomeDevelop
-        //
+        //i.e. dotnet ef database update --project ./GovcoreBse.Store/GovcoreBse.Store.csproj --startup-project ./GovcoreBse/GovcoreBse.csproj -- HomeDevelop
+        // Please note that efcore design and efcore tool need to be installed in startup and store projects
         // 預設為 Development，如果命令列有傳入參數則覆蓋
         string environment = "HomeDevelop";
 
@@ -32,7 +33,7 @@ public class DesignTimeDbContextFactory:IDesignTimeDbContextFactory<BlazeLogDbCo
         IConfigurationRoot configuration = new ConfigurationBuilder()
             // AppContext.BaseDirectory 會指向 dotnet ef 執行時的暫存或啟動目錄  assume the appsettings.json in the project specified by --startup-project
             .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json", optional: false)
+            .AddJsonFile($"appsettings.{environment}.json", optional: false)
             //.SetBasePath(Directory.GetCurrentDirectory())
             //.AddJsonFile(@Directory.GetCurrentDirectory() + $"/../{CN.Setting.AppName}/appsettings.json")
             .Build();
@@ -51,7 +52,7 @@ public class DesignTimeDbContextFactory:IDesignTimeDbContextFactory<BlazeLogDbCo
         sqlbuilder.Password = encrypsvc.DecryptString(dbSetting.DBpwd);
         var connc = sqlbuilder.ToString();
         
-        builder.UseSqlServer(connc, opt => opt.MigrationsAssembly($"{CN.Setting.AppName}.Store"));
+        builder.UseSqlServer(connc, providerOptions => providerOptions.EnableRetryOnFailure()).EnableDetailedErrors();
         return new BlazeLogDbContext(builder.Options);
 
     }

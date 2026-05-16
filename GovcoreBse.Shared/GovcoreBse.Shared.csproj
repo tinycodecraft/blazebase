@@ -28,6 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
     <PackageReference Include="NPOI" Version="2.7.6" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
