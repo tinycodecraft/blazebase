@@ -1,15 +1,10 @@
 @page "/students"
 @page "/students/{AttachType}"
 @inherits BasePage
-@using GovcoreBse.Middlewares;
-@using GovcoreBse.Components.Layout
-@using Microsoft.Extensions.Options
 @using Soenneker.Blazor.FilePond
-@using Soenneker.Blazor.FilePond.Dtos
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
-@inject NavigationManager NavigationManager
 @inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
 
@@ -131,7 +126,7 @@
                 _options.RemoveUrl = Settings.Value.FileRemove;
                 _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
-                PageUrl = NavigationManager.Uri;
+                PageUrl = Navmanner.Uri;
                 StateHasChanged();
             }
 

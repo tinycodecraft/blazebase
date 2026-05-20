@@ -1,0 +1,23 @@
+﻿<div class="@ComputedClasses">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public int DesktopSpan { get; set; } = 6;
+
+    [Parameter]
+    public int TabletSpan { get; set; } = 8;
+
+    [Parameter]
+    public int PhoneSpan { get; set; } = 12;
+
+    [Parameter]
+    public string CustomClasses { get; set; } = string.Empty;
+
+    private string ComputedClasses =>
+        $"col-xl-{DesktopSpan} col-md-{TabletSpan} col-{PhoneSpan} {CustomClasses}".Trim();
+}

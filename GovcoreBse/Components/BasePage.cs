@@ -1,11 +1,8 @@
 ﻿using Cortex.Mediator;
-using DocumentFormat.OpenXml.Wordprocessing;
 using GovcoreBse.Control;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
@@ -22,10 +19,7 @@ public class BasePage: CoreCancellableComponent
 
     [Inject]
     protected AntiforgeryStateProvider Antiforgery { get; set; }= default!;
-    [Inject]
-    protected HttpClient MyClient { get; set; } = default!;
-    [Inject]
-    protected IHttpContextAccessor Accessor { get; set; }= default!;
+
     protected string? GetToken()
     {
         return Antiforgery.GetAntiforgeryToken()?.Value;

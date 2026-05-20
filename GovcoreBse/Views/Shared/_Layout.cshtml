@@ -51,7 +51,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#">Account Setting</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-needClear="true" >Logout</a></li>
                             </ul>
                             <button type="button" class="btn btn-sm btn-outline-dark">
                                  @($"{userName} ( {userPost} )".ToLowerInvariant())

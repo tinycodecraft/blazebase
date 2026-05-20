@@ -78,10 +78,14 @@ public class AppManager
             }
             UserState userState = JWTHelper.DElize<UserState>(encodeTokenInfo);
 
-            if (userState != null && NowSeconds > userState.exp)
+            if (userState != null )
             {
-                // token expired
-                return null;
+                if(NowSeconds > userState.exp)
+                {
+                    ClearState();
+                    // token expired
+                    return null;
+                }
             }
 
             return userState;

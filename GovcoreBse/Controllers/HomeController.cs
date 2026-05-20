@@ -57,7 +57,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Welcome");
         }
-        ViewBag.ReturnUrl = returnUrl;
+        ViewBag.ReturnUrl = returnUrl ?? "/Home/Welcome";
 
 
         return View(new LoginModel());
