@@ -38,7 +38,7 @@
 					<HxGridColumn HeaderText="Summary" ItemTextSelector="forecast => forecast.Summary" SortString="@nameof(WeatherForecastDto.Summary)" />
 				</Columns>
 			</HxGrid>
-			<HxInputText LabelType="LabelType.Floating" @bind-Value="valueString">
+			<HxInputText LabelType="LabelType.Floating" @bind-Value="valueString" ValidationMessageMode="ValidationMessageMode.Floating">
 				<LabelTemplate>
 					<i class="bi bi-person-badge me-2"></i> Your Name
 				</LabelTemplate>

@@ -1,4 +1,4 @@
-﻿<div class="@ComputedClasses">
+﻿<div class="@CustomClasses">
     @ChildContent
 </div>
 
@@ -7,17 +7,19 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public int DesktopSpan { get; set; } = 6;
+    public Constants.WrapperSize Wrap { get; set; } =  Constants.WrapperSize.One;
 
-    [Parameter]
-    public int TabletSpan { get; set; } = 8;
+    private string CustomClasses => Wrap switch
+    {
+        Constants.WrapperSize.One => "col-xl-3 col-md-3 col-sm-6 col-12",
+        Constants.WrapperSize.Two => "col-xl-6 col-md-6 col-sm-12 col-12",
+        Constants.WrapperSize.Three => "col-md-9 col-sm-9 col-12",
+        Constants.WrapperSize.Four => "col-12",
+        _ => "col-xl-3 col-md-3 col-sm-6 col-12"
+        
+    };
 
-    [Parameter]
-    public int PhoneSpan { get; set; } = 12;
+    
 
-    [Parameter]
-    public string CustomClasses { get; set; } = string.Empty;
 
-    private string ComputedClasses =>
-        $"col-xl-{DesktopSpan} col-md-{TabletSpan} col-{PhoneSpan} {CustomClasses}".Trim();
 }

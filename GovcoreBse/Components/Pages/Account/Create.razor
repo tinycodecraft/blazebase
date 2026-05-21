@@ -1,12 +1,105 @@
 ﻿@page "/account/create"
+@inject IHxMessengerService Messenger 
 @inherits BasePage
-<h3>New User</h3>
-<div class="container-fluid">
-    <div class="row">
+<AuthorizeView Context="authContext">
+    <Authorized>
+        <LayoutView Layout="typeof(BaseLayout)">
+            <PageTitle>Account Register</PageTitle>
+            <h1>Account Register</h1>
+            <div class="container-fluid">
+                <HxFilterForm TModel="CreateUserModel" Model="_Model" Context="formContext" >
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserId" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-person-badge me-2"></i><DisplayName For="@(()=> formContext.UserId)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserName" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-person me-2"></i><DisplayName For="@(() => formContext.UserName)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                    </div>
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.One">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Post" ValidationMessageMode="ValidationMessageMode.Floating">
 
-    </div>
-</div>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.One">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Tel" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-telephone me-2"></i><DisplayName For="@(() => formContext.Tel)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Email" @bind-Value="formContext.Email" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-envelope-at me-2"></i><DisplayName For="@(() => formContext.Email)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                    </div>
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Pwd" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Pwd)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Confirmpwd" ValidationMessageMode="ValidationMessageMode.Floating">
+                                <LabelTemplate>
+                                    <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Confirmpwd)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                    </div>
+                </HxFilterForm>
+
+            </div>
+        </LayoutView>
+    </Authorized>
+    <NotAuthorized>
+        <LayoutView Layout="typeof(HxHLayout)">
+            <PageTitle>Not Authorized</PageTitle>
+            <h1>Not Authorized</h1>
+            <p>You are not authorized to view this account create page.</p>
+        </LayoutView>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
+    private CreateUserModel _Model = new();
 
+    // 2. Triggers ONLY if model data annotation validation passes
+    private async Task HandleSave(CreateUserModel updatedModel)
+    {
+        // 'updatedModel' contains the new user inputs.
+        // '_originalEmployee' remains safely untouched until you update it.
+        _Model = updatedModel;
+
+        await Task.Delay(500); // Simulate API call
+        Messenger.AddMessage(new MessengerMessage
+            {
+                Title = "Account Register",
+                Text = "Account Saved！",
+                Icon = BootstrapIcon.CheckCircleFill, // (選填) 加上打勾圖示,
+                AutohideDelay=500
+            });
+    }
+
+    // 3. Triggers if user aborts or hits a cancellation path
+    private void HandleCancel()
+    {
+        Messenger.AddInformation("Changes discarded.");
+    }
 }

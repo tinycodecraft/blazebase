@@ -1,0 +1,30 @@
+﻿@using System.Reflection
+@using System.Linq.Expressions
+@using System.ComponentModel.DataAnnotations
+@inject IStringLocalizerFactory stringFactory
+
+@typeparam T
+
+<span>@GetDisplayName()</span>
+
+@code {
+    private IStringLocalizer localizer;
+    protected override void OnInitialized()
+    {
+        localizer = stringFactory.Create(typeof(GovcoreBse.Resources.SharedResource).Name, typeof(Program).Assembly.GetName().Name!);
+        base.OnInitialized();
+    }
+
+    [EditorRequired]
+    [Parameter] 
+    public Expression<Func<T>> For { get; set; }
+
+    private string GetDisplayName()
+    {
+
+        var expression = (MemberExpression)For.Body;
+        var membername = expression.Member.Name;
+        var attribute = expression.Member.GetCustomAttribute<DisplayAttribute>();
+        return  localizer[membername] ?? attribute?.Name ?? membername;
+    }
+}

@@ -8,7 +8,10 @@ namespace GovcoreBse.Common;
 
 public class Constants
 {
-
+    public enum WrapperSize
+    {
+        One, Two, Three,Four
+    }
 
     public enum AutoSuggestType
     {
