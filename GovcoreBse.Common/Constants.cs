@@ -18,6 +18,7 @@ public class Constants
         Engineers,
         Posts,
         Emails,
+        YesNo,
     }
     public enum AutocompleteGroup
     {

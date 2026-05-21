@@ -29,6 +29,9 @@ public class GetAutoCompleteQueryHandler : IQueryHandler<GetAutoCompleteQuery, E
                     .Select(e => e.post)
                     .ToArrayAsync(cancellationToken);
                 return engineers.Select(y => new KeyValuePair<string, string>(y, y)).ToArray();
+            case CN.AutoSuggestType.YesNo:
+                return new[] { new KeyValuePair<string, string>("Yes", true.ToString()), new KeyValuePair<string, string>("No", false.ToString()) };
+
 
             default:
                 return Error.NotFound("AutoCompleteNotFound", $"AutoComplete not found for type {request.returntype}");

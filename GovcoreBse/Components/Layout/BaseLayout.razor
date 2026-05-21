@@ -7,7 +7,10 @@
 
 <HxMessenger Position="ToastContainerPosition.BottomCenter"  />
 <HxMessageBoxHost  />
+<HeadContent>
+    <link href="css/HxHDefault-modified.css" rel="stylesheet" />
 
+</HeadContent>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
         <div class="container-fluid">
@@ -67,6 +70,7 @@
 </header>
 <div class="container">
     <main role="main" class="pb-3">
+        <div class="ribbon"></div>
         <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
             @Body
         </CascadingValue>

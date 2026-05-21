@@ -18,7 +18,7 @@ public class CreateUserModel
     public string UserId { get; set; }
 
     [Required(ErrorMessage = "Please Enter Username..")]
-    [Display(Name = "UserName")]
+    [Display(Name = "User Name")]
 
     public string UserName { get; set; }
 
@@ -47,5 +47,9 @@ public class CreateUserModel
     [Display(Name = "Post")]
     [Compare(nameof(UserId), ErrorMessage = "User ID must equal to Post. Please input again before register.")]
     public string Post { get; set; }
+
+    [Required(ErrorMessage = "Please Enter Is Admin ...")]
+    [Display(Name = "Admin?")]
+    public bool IsAdmin { get; set; }
 
 }

@@ -25,6 +25,7 @@
         var expression = (MemberExpression)For.Body;
         var membername = expression.Member.Name;
         var attribute = expression.Member.GetCustomAttribute<DisplayAttribute>();
-        return  localizer[membername] ?? attribute?.Name ?? membername;
+        var resourceDisplay = localizer[membername].ResourceNotFound ? null : localizer[membername].Value;
+        return  resourceDisplay ?? attribute?.Name ?? membername;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Cortex.Mediator;
 using GovcoreBse.Control;
+using GovcoreBse.Manner;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
@@ -19,11 +20,18 @@ public class BasePage: CoreCancellableComponent
 
     [Inject]
     protected AntiforgeryStateProvider Antiforgery { get; set; }= default!;
+    [Inject]
+    protected AppManager Manner { get; set; }
 
     protected string? GetToken()
     {
         return Antiforgery.GetAntiforgeryToken()?.Value;
 
+    }
+
+    protected string? GetUserId()
+    {
+        return Manner?.UserState?.UserID;
     }
 
     public virtual async ValueTask<FN.IFilePondLoadRequest> OnFilePondRemoveFile(FN.IFilePondLoadRequest request, CancellationToken cancellationToken )
