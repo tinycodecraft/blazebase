@@ -84,7 +84,7 @@
                             <div class="row">
                                 <BSGridCell Wrap="CN.WrapperSize.Two">
                                     <HxRadioButtonList TValue="bool" TItem="KeyValuePair<string, bool>" Data="@YesNoList" @bind-Value="formContext.IsAdmin" Inline="true" ItemTextSelector="@(i => i.Key)"
-                                                       ItemValueSelector="@(i=> i.Value)">
+                                                       ItemValueSelector="@(i=> i.Value)" LabelCssClass="pe-3">
                                         <LabelTemplate>
                                             <DisplayName For="@(() => formContext.IsAdmin)" />
                                         </LabelTemplate>
