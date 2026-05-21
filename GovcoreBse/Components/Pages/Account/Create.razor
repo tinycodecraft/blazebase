@@ -14,14 +14,18 @@
                             <DataAnnotationsValidator />
                             <div class="row">
                                 <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserId" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserId" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-person-badge me-2"></i><DisplayName For="@(() => formContext.UserId)" />
                                         </LabelTemplate>
                                     </HxInputText>
                                 </BSGridCell>
                                 <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserName" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserName" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-person me-2"></i><DisplayName For="@(() => formContext.UserName)" />
                                         </LabelTemplate>
@@ -30,21 +34,27 @@
                             </div>
                             <div class="row">
                                 <BSGridCell Wrap="Constants.WrapperSize.One">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Post" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Post" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <DisplayName For="@(() => formContext.Post)" />
                                         </LabelTemplate>
                                     </HxInputText>
                                 </BSGridCell>
                                 <BSGridCell Wrap="Constants.WrapperSize.One">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Tel" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Tel" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-telephone me-2"></i><DisplayName For="@(() => formContext.Tel)" />
                                         </LabelTemplate>
                                     </HxInputText>
                                 </BSGridCell>
                                 <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Email" @bind-Value="formContext.Email" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Email" @bind-Value="formContext.Email" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-envelope-at me-2"></i><DisplayName For="@(() => formContext.Email)" />
                                         </LabelTemplate>
@@ -53,14 +63,18 @@
                             </div>
                             <div class="row">
                                 <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Pwd" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Pwd" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Pwd)" />
                                         </LabelTemplate>
                                     </HxInputText>
                                 </BSGridCell>
                                 <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Confirmpwd" ValidationMessageMode="ValidationMessageMode.Floating">
+                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Confirmpwd" ValidationMessageMode="ValidationMessageMode.Floating"
+                                                 LabelCssClass="ps-3"
+                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
                                         <LabelTemplate>
                                             <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Confirmpwd)" />
                                         </LabelTemplate>
