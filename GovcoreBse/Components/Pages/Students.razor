@@ -5,63 +5,58 @@
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
-@inject ExampleJsInterop InterJs
 @inject ILogger<Students> Itlog
+<CascadingValue Name="PageState" Value="PageState">
+    <AuthorizeView Context="authContext">
+        <Authorized>
+            <LayoutView Layout="typeof(BaseLayout)">
+                <PageTitle>Students</PageTitle>
+                <h1>Students</h1>
+                <QuickGrid Items="@students" Pagination="@pagination">
+                    <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
+                    <TemplateColumn Title="Name" SortBy="@sortByName">
+                        <div class="flex items-center">
+                            <nobr>
+                                <strong>@context.FirstName @context.LastName</strong>
+                            </nobr>
+                        </div>
+                    </TemplateColumn>
+                    <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
+                </QuickGrid>
 
-@rendermode InteractiveServer
+                <Paginator State="@pagination" />
 
-
-<AuthorizeView Context="authContext">
-    <Authorized>
-        <LayoutView Layout="typeof(BaseLayout)">
-            <PageTitle>Students</PageTitle>
-            <h1>Students</h1>
-            <QuickGrid Items="@students" Pagination="@pagination">
-                <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
-                <TemplateColumn Title="Name" SortBy="@sortByName">
-                    <div class="flex items-center">
-                        <nobr>
-                            <strong>@context.FirstName @context.LastName</strong>
-                        </nobr>
+                <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <input type="hidden" id="@CN.Setting.AntiForgeryId" value="@GetToken()" />
                     </div>
-                </TemplateColumn>
-                <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
-            </QuickGrid>
+                    <div class="col-12">
+                        <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
+                                  OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"></FilePond>
+                    </div>
+                    <div class="col-6">
+                        <HxButton Text="Add Files"
+                                  Color="ThemeColor.Primary"
+                                  OnClick="AddFiles" />
+                        <HxButton Text="Add Limbo File"
+                                  Color="ThemeColor.Secondary"
+                                  OnClick="AddLimboFile" />
+                    </div>
 
-            <Paginator State="@pagination" />
-
-            <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
-            <div class="row g-3">
-                <div class="col-12">
-                    <input type="hidden" id="@CN.Setting.AntiForgeryId" value="@GetToken()" />
                 </div>
-                <div class="col-12">
-                    <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
-                        OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"
-                        ></FilePond>
-                </div>
-                <div class="col-6">
-                    <HxButton Text="Add Files"
-                              Color="ThemeColor.Primary"
-                              OnClick="AddFiles" />
-                    <HxButton Text="Add Limbo File"
-                              Color="ThemeColor.Secondary"
-                              OnClick="AddLimboFile" />
-                </div>
-                
-            </div>
 
-        </LayoutView>
-    </Authorized>
-    <NotAuthorized>
-        <LayoutView Layout="typeof(BaseLayout)">
-            <PageTitle>Not Authorized</PageTitle>
-            <h1>Not Authorized</h1>
-            <p>You are not authorized to view this Students page.</p>
-        </LayoutView>
-    </NotAuthorized>
-</AuthorizeView>
-
+            </LayoutView>
+        </Authorized>
+        <NotAuthorized>
+            <LayoutView Layout="typeof(BaseLayout)">
+                <PageTitle>Not Authorized</PageTitle>
+                <h1>Not Authorized</h1>
+                <p>You are not authorized to view this Students page.</p>
+            </LayoutView>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingValue>
 
 
 
@@ -69,7 +64,6 @@
 
 
 @code {
-
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "attachType")]
@@ -126,7 +120,10 @@
                 _options.RemoveUrl = Settings.Value.FileRemove;
                 _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
-                
+
+
+
+
                 StateHasChanged();
             }
 

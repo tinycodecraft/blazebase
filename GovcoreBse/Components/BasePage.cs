@@ -1,6 +1,7 @@
 ﻿using Cortex.Mediator;
 using GovcoreBse.Control;
 using GovcoreBse.Manner;
+using GovcoreBse.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
@@ -11,15 +12,14 @@ namespace GovcoreBse.Components;
 public class BasePage: CoreCancellableComponent
 {
 
-    [CascadingParameter(Name ="PreviousLocation")]
-    protected string ReferrerUrl { get; set; }
-    // usse for redirecting to other page, or get current url
-    // i.e. Navmanner.NavigateTo("login", forceLoad: true);
-    [CascadingParameter(Name = "CurrentLocation")]
-    protected string PageUrl { get; set; }
+    [Inject]
+    protected LayoutStateModel PageState { get; set; }
 
     [Inject]
     protected IJSRuntime Js { get; set; } = default!;
+
+    [Inject]
+    protected ExampleJsInterop InterJs { get; set; } = default!;
 
     [Inject]    
     protected NavigationManager Navmanner { get; set; }= default!;
@@ -44,7 +44,10 @@ public class BasePage: CoreCancellableComponent
     {
         return Manner?.UserState?.UserID;
     }
-
+    protected override void OnInitialized()
+    {
+        
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -52,14 +55,15 @@ public class BasePage: CoreCancellableComponent
 
         if(firstRender)
         {
-            PageUrl = Navmanner.Uri;
-            var curresult = await Js.InvokeAsync<string>("eval", "window.location.href");
+
+            var currentPage = Navmanner.Uri;
+            await Task.Delay(500);
+            await InterJs.SaveUrl();
+
             // Invoke the browser's native document.referrer API
-            var result = await Js.InvokeAsync<string>("eval", "history.state?.prevUrl ?? document.referrer");
-            if (!string.IsNullOrEmpty(result))
-            {
-                ReferrerUrl = result;
-            }
+            var prevUrl = await InterJs.GetPreviousUrl();
+
+            PageState?.UpdateState(currentPage, prevUrl);
 
             StateHasChanged();
         }

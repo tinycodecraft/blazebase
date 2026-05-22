@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="/css/HxHDefault.css"  />
     <link rel="stylesheet" href="/css/site.css"  />
     <link rel="stylesheet" href="GovcoreBse.styles.css" />        
-    <HeadOutlet @rendermode="InteractiveServer" />
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)" />
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>    
     <!--if the page route is activated this base page will be called-->
-    <Routes @rendermode="InteractiveServer" />
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender:false)" />
     <!--
         there is autostart attribute for blazor.web.js to disable the automatic start of the Blazor application, 
         and using Blazor.start() to start the application manually instead
@@ -23,6 +23,7 @@
     <script src="_framework/blazor.web.js"></script>
     <script>
         var _antiforgeryHeaderName = "@(CN.Setting.AntiForgeryId)";
+        var _urlHistorysessionKey ="@(CN.Setting.UrlHistoryKey)";
     </script>
 </body>
 </html>

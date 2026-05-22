@@ -103,6 +103,9 @@ public class Constants
         public static string AntiForgeryFormField = "__RequestVerificationToken";
         public static string AntiForgeryCookieKey = $"HYD.AntiforgeryCookie_Key."+"".RandomString();
 
+        public static string UrlHistoryKey = "urlHistory"+"".RandomString();
+
+
         public const string AutoApiClientName = "AutoApi";
         public const string SecretKey = "HYD.abcqwe123";
         public const string Issuer = "HYD";

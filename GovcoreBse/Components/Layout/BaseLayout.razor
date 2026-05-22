@@ -2,8 +2,10 @@
 @inherits LayoutComponentBase
 @inject AppManager manner
 @inject IJSRuntime js
+
 @inject NavigationManager NavigationManager
 @inject IOptions<PathSetting> Setting
+@rendermode @(new InteractiveServerRenderMode(prerender:false))
 
 <HxMessenger Position="ToastContainerPosition.BottomCenter"  />
 <HxMessageBoxHost  />
@@ -58,7 +60,7 @@
                         <form id="langform" action="@Setting.Value.CultureSet" method="post" style="display:none" >
                             <AntiforgeryToken />
                             <input type="hidden" name="culture" value="@SelectedCulture" />
-                            <input type="hidden" name="redirecturl" value="@RelativeCurrentPageUrl" />
+                            <input type="hidden" name="redirecturl" value="@(layoutState?.CurrentUrl)" />
                         </form>
                     </div>
 
@@ -70,24 +72,20 @@
 </header>
 <div class="container">
     <main role="main" class="pb-3">
-        <div class="ribbon"></div>
-        <CascadingValue Name="PreviousLocation" Value="PreviousPageUrl">
-            <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
-                @Body
-            </CascadingValue>
-        </CascadingValue>
+        <div class="ribbon"></div>        
+            @Body        
     </main>
 </div>
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2023 - GovcoreBse - <a href="@PreviousPageUrl">Back Url</a>
+        &copy; 2023 - GovcoreBse - <a href="@(layoutState?.ReferrerUrl)">Back Url</a>
     </div>
 </footer>
 
 @code {
-    private string PreviousPageUrl { get; set; } = string.Empty;
-    private string CurrentPageUrl { get; set; } = string.Empty;
-    private string RelativeCurrentPageUrl => NavigationManager.ToBaseRelativePath(CurrentPageUrl);
+
+    [CascadingParameter(Name ="PageState")]
+    private LayoutStateModel? layoutState { get; set; }
 
     private string userDisplay = string.Empty;
     private bool IsLogin = false;
@@ -95,11 +93,11 @@
 
     protected override void OnInitialized()
     {
-        // 1. 頁面第一次載入時，先抓取初始網址
-        CurrentPageUrl = NavigationManager.Uri;
 
-        // 2. 💡 關鍵：訂閱網址變更事件，當使用者跳轉到其他特定頁面時會觸發
-        NavigationManager.LocationChanged += OnLocationChanged;
+        if(layoutState!=null)
+        {
+            layoutState.OnLayoutChange += OnLayoutChanged;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -114,34 +112,28 @@
                 userDisplay = $"{userState.UserName}({userState.Post})".ToLowerInvariant();
                 IsLogin = true;
             }
-            CurrentPageUrl = NavigationManager.Uri;
 
-            // Invoke the browser's native document.referrer API
-            var result = await js.InvokeAsync<string>("eval", "document.referrer");
-            if(!string.IsNullOrEmpty(result))
-            {
-                PreviousPageUrl = result;
-            }
-            
 
             StateHasChanged();
         }
 
+
+    }
+
+    private void OnLayoutChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        if(layoutState!=null)
+        {
+            layoutState.OnLayoutChange -= OnLayoutChanged;
+        }
         
     }
 
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
-    {
-        // e.Location 也包含最新跳轉的完整絕對網址
-        CurrentPageUrl = e.Location;
-
-        // 強制 Layout 重新渲染，讓畫面上的網址即時更新
-        StateHasChanged();
-    }
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= OnLocationChanged;
-    }
 
 
 

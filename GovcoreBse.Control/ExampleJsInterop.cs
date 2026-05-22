@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
+using CN=GovcoreBse.Common.Constants;
 
 namespace GovcoreBse.Control;
 
@@ -19,7 +21,7 @@ public class ExampleJsInterop : IAsyncDisposable
     public ExampleJsInterop(IJSRuntime jsRuntime,ILogger<ExampleJsInterop> logger)
     {
         moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/GovcoreBse.Control/js/exampleJsInterop.js").AsTask());
+            "import", "./_content/GovcoreBse.Control/js/exampleJsInterop.js?v=1").AsTask());
         mylogger = logger;
     }
 
@@ -27,6 +29,20 @@ public class ExampleJsInterop : IAsyncDisposable
     {
         var module = await moduleTask.Value;
         return await module.InvokeAsync<string>("showPrompt", message);
+    }
+
+    public async ValueTask SaveUrl(string? urlHistoryKey=null)
+    {
+        urlHistoryKey ??= CN.Setting.UrlHistoryKey;
+        var module = await moduleTask.Value;
+        await module.InvokeVoidAsync("saveUrlHistory", urlHistoryKey);
+    }
+
+    public async ValueTask<string> GetPreviousUrl(string? urlHistoryKey=null)
+    {
+        urlHistoryKey ??= CN.Setting.UrlHistoryKey;
+        var module = await moduleTask.Value;
+        return await module.InvokeAsync<string>("getUrlHistory", urlHistoryKey);
     }
 
     public async ValueTask DisposeAsync()
