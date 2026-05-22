@@ -1,114 +1,107 @@
 ﻿@page "/account/create"
 @inject IHxMessengerService Messenger 
 @inherits BasePage
-
-<AuthorizeView Context="authContext">
-    <Authorized>
-        <LayoutView Layout="typeof(BaseLayout)">
-            <PageTitle>Account Register</PageTitle>
-            <div class="card-container">
-                <div class="card squeeze-mw shadow-elevation-2">
-                    <h1>Account Register</h1>
-                    <div class="container-fluid">
-                        <HxFilterForm TModel="CreateUserModel" Model="_Model" Context="formContext">
-                            <DataAnnotationsValidator />
-                            <div class="row">
-                                <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserId" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-person-badge me-2"></i><DisplayName For="@(() => formContext.UserId)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                                <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserName" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-person me-2"></i><DisplayName For="@(() => formContext.UserName)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                            </div>
-                            <div class="row">
-                                <BSGridCell Wrap="Constants.WrapperSize.One">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Post" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <DisplayName For="@(() => formContext.Post)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                                <BSGridCell Wrap="Constants.WrapperSize.One">
-                                    <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Tel" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-telephone me-2"></i><DisplayName For="@(() => formContext.Tel)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                                <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Email" @bind-Value="formContext.Email" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-envelope-at me-2"></i><DisplayName For="@(() => formContext.Email)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                            </div>
-                            <div class="row">
-                                <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Pwd" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Pwd)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                                <BSGridCell Wrap="Constants.WrapperSize.Two">
-                                    <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Confirmpwd" ValidationMessageMode="ValidationMessageMode.Floating"
-                                                 LabelCssClass="ps-3"
-                                                 InputCssClass="bg-body-secondary ps-3 rounded-top-1">
-                                        <LabelTemplate>
-                                            <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Confirmpwd)" />
-                                        </LabelTemplate>
-                                    </HxInputText>
-                                </BSGridCell>
-                            </div>
-                            <div class="row">
-                                <BSGridCell Wrap="CN.WrapperSize.Two">
-                                    <HxRadioButtonList TValue="bool" TItem="KeyValuePair<string, bool>" Data="@YesNoList" @bind-Value="formContext.IsAdmin" Inline="true" ItemTextSelector="@(i => i.Key)"
-                                                       ItemValueSelector="@(i=> i.Value)" LabelCssClass="pe-3">
-                                        <LabelTemplate>
-                                            <DisplayName For="@(() => formContext.IsAdmin)" />
-                                        </LabelTemplate>
-                                    </HxRadioButtonList>
-                                </BSGridCell>
-                            </div>
-                        </HxFilterForm>
-
+<CascadingValue Name="Title" Value="@CardTitle">
+    <CascadingValue Name="NotAuthMsg" Value="@NotAuthorizedMessage">
+        <LayoutView Layout="typeof(AuthBaseLayout)">
+            <h1>Account Register</h1>
+            <div class="container-fluid">
+                <HxFilterForm TModel="CreateUserModel" Model="_Model" Context="formContext">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserId" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-person-badge me-2"></i><DisplayName For="@(() => formContext.UserId)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.UserName" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-person me-2"></i><DisplayName For="@(() => formContext.UserName)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
                     </div>
-                </div>
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.One">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Post" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <DisplayName For="@(() => formContext.Post)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.One">
+                            <HxInputText LabelType="LabelType.Floating" @bind-Value="formContext.Tel" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-telephone me-2"></i><DisplayName For="@(() => formContext.Tel)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Email" @bind-Value="formContext.Email" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-envelope-at me-2"></i><DisplayName For="@(() => formContext.Email)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                    </div>
+                    <div class="row">
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Pwd" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Pwd)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                        <BSGridCell Wrap="Constants.WrapperSize.Two">
+                            <HxInputText LabelType="LabelType.Floating" Type="InputType.Password" @bind-Value="formContext.Confirmpwd" ValidationMessageMode="ValidationMessageMode.Floating"
+                                         LabelCssClass="ps-3"
+                                         InputCssClass="bg-body-secondary ps-3 rounded-top-1">
+                                <LabelTemplate>
+                                    <i class="bi bi-incognito me-2"></i><DisplayName For="@(() => formContext.Confirmpwd)" />
+                                </LabelTemplate>
+                            </HxInputText>
+                        </BSGridCell>
+                    </div>
+                    <div class="row">
+                        <BSGridCell Wrap="CN.WrapperSize.Two">
+                            <HxRadioButtonList TValue="bool" TItem="KeyValuePair<string, bool>" Data="@YesNoList" @bind-Value="formContext.IsAdmin" Inline="true" ItemTextSelector="@(i => i.Key)"
+                                               ItemValueSelector="@(i=> i.Value)" LabelCssClass="pe-3">
+                                <LabelTemplate>
+                                    <DisplayName For="@(() => formContext.IsAdmin)" />
+                                </LabelTemplate>
+                            </HxRadioButtonList>
+                        </BSGridCell>
+                    </div>
+                </HxFilterForm>
+
             </div>
         </LayoutView>
-    </Authorized>
-    <NotAuthorized>
-        <LayoutView Layout="typeof(BaseLayout)">
-            <PageTitle>Not Authorized</PageTitle>
-            <h1>Not Authorized</h1>
-            <p>You are not authorized to view this account create page.</p>
-        </LayoutView>
-    </NotAuthorized>
-</AuthorizeView>
+    </CascadingValue>
+
+</CascadingValue>
+
 
 
 @code {
+
+    private string CardTitle { get; set; } = "Account Register";
+    private string NotAuthorizedMessage { get; set; } = "You are not authorized to access Account Register";
+
     private CreateUserModel _Model = new();
     private IEnumerable<KeyValuePair<string,bool>>  YesNoList = Array.Empty<KeyValuePair<string, bool>>();
 
@@ -121,6 +114,15 @@
             YesNoList = yesnolist.Value.Select(a=> new KeyValuePair<string, bool>(a.Key,bool.Parse(a.Value)));
         }
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            PageUrl = Navmanner.Uri;
+            StateHasChanged();
+        }
     }
 
     // 2. Triggers ONLY if model data annotation validation passes

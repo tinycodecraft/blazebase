@@ -71,16 +71,38 @@
 <div class="container">
     <main role="main" class="pb-3">
         <div class="ribbon"></div>
+        <AuthorizeView Context="authContext" >
+            <Authorized>
+                <PageTitle>@CardTitle</PageTitle>
+                <div class="card-container">
+                    <div class="card squeeze-mw shadow-elevation-2">
+                        <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
+                            @Body
+                        </CascadingValue>
+                    </div>
+                </div>
 
-        <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
-            @Body
-        </CascadingValue>
+            </Authorized>
+            <NotAuthorized>
+                <PageTitle>Not Authorized(@(CardTitle))</PageTitle>
+                <h1>Not Authorized</h1>
+                <p>@NotAuthorizedMessage</p>
+            </NotAuthorized>
+
+        </AuthorizeView>
+
         
     </main>
 </div>
 
 
 @code {
+
+    [CascadingParameter(Name ="Title")]
+    public string CardTitle { get; set; } = "You Unnamed Page";
+    [CascadingParameter(Name = "NotAuthMsg")]
+    public string NotAuthorizedMessage { get; set; } = "You are not authorized to view this page";
+
     private string CurrentPageUrl { get; set; } = string.Empty;
     private string RelativeCurrentPageUrl => NavigationManager.ToBaseRelativePath(CurrentPageUrl);
 
