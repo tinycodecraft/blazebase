@@ -6,7 +6,7 @@
         <LayoutView Layout="typeof(AuthBaseLayout)">
             <h1>Account Register</h1>
             <div class="container-fluid">
-                <HxFilterForm TModel="CreateUserModel" Model="_Model" Context="formContext">
+                <HxFilterForm TModel="CreateUserModel" @bind-Model="_Model" @bind-Model:after="HandleModelChanged" Context="formContext">
                     <DataAnnotationsValidator />
                     <div class="row">
                         <BSGridCell Wrap="Constants.WrapperSize.Two">
@@ -87,6 +87,9 @@
                             </HxRadioButtonList>
                         </BSGridCell>
                     </div>
+                    <div class="row">
+                        <HxSubmit Text="Save" Color="ThemeColor.Primary" ></HxSubmit>
+                    </div>
                 </HxFilterForm>
 
             </div>
@@ -116,13 +119,16 @@
 
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+
+    protected override async Task  OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
-        {
-            PageUrl = Navmanner.Uri;
-            StateHasChanged();
-        }
+        await base.OnAfterRenderAsync(firstRender);
+         
+    }
+
+    private async Task HandleModelChanged()
+    {
+         
     }
 
     // 2. Triggers ONLY if model data annotation validation passes

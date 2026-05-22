@@ -112,6 +112,8 @@
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
+
         if (firstRender)
         {
             Itlog.LogInformation("OnAfterRenderAsync firstRender fired");
@@ -124,7 +126,7 @@
                 _options.RemoveUrl = Settings.Value.FileRemove;
                 _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
-                PageUrl = Navmanner.Uri;
+                
                 StateHasChanged();
             }
 

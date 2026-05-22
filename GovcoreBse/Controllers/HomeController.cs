@@ -141,13 +141,13 @@ public class HomeController : Controller
 
     }
 
-
+    #region Unused 
     public IActionResult Privacy()
     {
         string? cultureCookieValue = this.HttpContext.Session.GetString(SK.SESSION_CULTURE);
 
-        
-        if(string.IsNullOrEmpty(cultureCookieValue))
+
+        if (string.IsNullOrEmpty(cultureCookieValue))
         {
             this.HttpContext.Request.Cookies.TryGetValue(
                 CookieRequestCultureProvider.DefaultCookieName, out cultureCookieValue);
@@ -166,9 +166,9 @@ public class HomeController : Controller
 
     public IActionResult ChangeLang(ChangeLangModel model)
     {
-        if(model.IsSubmit)
+        if (model.IsSubmit)
         {
-            this.HttpContext.SetLangCookie(model.SelectedLanguage,year:1,day:0);
+            this.HttpContext.SetLangCookie(model.SelectedLanguage, year: 1, day: 0);
 
             return LocalRedirect("/");
 
@@ -184,6 +184,9 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    #endregion
+
+
 }
 
 #region Other examples

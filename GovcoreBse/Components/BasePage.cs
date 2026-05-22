@@ -4,14 +4,22 @@ using GovcoreBse.Manner;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
 {
+
+    [CascadingParameter(Name ="PreviousLocation")]
+    protected string ReferrerUrl { get; set; }
     // usse for redirecting to other page, or get current url
     // i.e. Navmanner.NavigateTo("login", forceLoad: true);
     [CascadingParameter(Name = "CurrentLocation")]
     protected string PageUrl { get; set; }
+
+    [Inject]
+    protected IJSRuntime Js { get; set; } = default!;
 
     [Inject]    
     protected NavigationManager Navmanner { get; set; }= default!;
@@ -35,6 +43,27 @@ public class BasePage: CoreCancellableComponent
     protected string? GetUserId()
     {
         return Manner?.UserState?.UserID;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if(firstRender)
+        {
+            PageUrl = Navmanner.Uri;
+            var curresult = await Js.InvokeAsync<string>("eval", "window.location.href");
+            // Invoke the browser's native document.referrer API
+            var result = await Js.InvokeAsync<string>("eval", "history.state?.prevUrl ?? document.referrer");
+            if (!string.IsNullOrEmpty(result))
+            {
+                ReferrerUrl = result;
+            }
+
+            StateHasChanged();
+        }
+
     }
 
     public virtual async ValueTask<FN.IFilePondLoadRequest> OnFilePondRemoveFile(FN.IFilePondLoadRequest request, CancellationToken cancellationToken )

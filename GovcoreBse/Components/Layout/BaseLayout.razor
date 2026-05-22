@@ -71,16 +71,21 @@
 <div class="container">
     <main role="main" class="pb-3">
         <div class="ribbon"></div>
-
-        <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
-            @Body
+        <CascadingValue Name="PreviousLocation" Value="PreviousPageUrl">
+            <CascadingValue Name="CurrentLocation" Value="CurrentPageUrl">
+                @Body
+            </CascadingValue>
         </CascadingValue>
-        
     </main>
 </div>
-
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2023 - GovcoreBse - <a href="@PreviousPageUrl">Back Url</a>
+    </div>
+</footer>
 
 @code {
+    private string PreviousPageUrl { get; set; } = string.Empty;
     private string CurrentPageUrl { get; set; } = string.Empty;
     private string RelativeCurrentPageUrl => NavigationManager.ToBaseRelativePath(CurrentPageUrl);
 
@@ -97,8 +102,10 @@
         NavigationManager.LocationChanged += OnLocationChanged;
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
+
         if(firstRender)
         {
             var userState = manner.UserState;
@@ -109,10 +116,18 @@
             }
             CurrentPageUrl = NavigationManager.Uri;
 
+            // Invoke the browser's native document.referrer API
+            var result = await js.InvokeAsync<string>("eval", "document.referrer");
+            if(!string.IsNullOrEmpty(result))
+            {
+                PreviousPageUrl = result;
+            }
+            
+
             StateHasChanged();
         }
 
-        return base.OnAfterRenderAsync(firstRender);
+        
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
