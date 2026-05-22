@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
 
 namespace GovcoreBse.Control;
 
@@ -12,11 +14,13 @@ namespace GovcoreBse.Control;
 public class ExampleJsInterop : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> moduleTask;
+    private readonly ILogger<ExampleJsInterop> mylogger;
 
-    public ExampleJsInterop(IJSRuntime jsRuntime)
+    public ExampleJsInterop(IJSRuntime jsRuntime,ILogger<ExampleJsInterop> logger)
     {
         moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/GovcoreBse.Control/js/exampleJsInterop.js").AsTask());
+        mylogger = logger;
     }
 
     public async ValueTask<string> Prompt(string message)
@@ -30,6 +34,14 @@ public class ExampleJsInterop : IAsyncDisposable
         if (moduleTask.IsValueCreated)
         {
             var module = await moduleTask.Value;
+            try
+            {
+                await module.InvokeVoidAsync("dispose");
+            }
+            catch (Exception ex) {
+                mylogger.LogDebug($"trying to dispose script ExampleJsInterop with error: {ex.Message}");
+
+            }
             await module.DisposeAsync();
         }
     }
