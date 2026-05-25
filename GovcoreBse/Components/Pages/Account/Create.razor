@@ -2,7 +2,7 @@
 @inject IHxMessengerService Messenger 
 @inherits BasePage
 
-<CascadingValue Name="PageState" Value="PageState">
+<CascadingValue Name="PageState" Value="@PageState">
     <CascadingValue Name="Title" Value="@CardTitle">
         <CascadingValue Name="NotAuthMsg" Value="@NotAuthorizedMessage">
             <LayoutView Layout="typeof(AuthBaseLayout)">

@@ -8,7 +8,7 @@ public class LayoutStateModel
     public string CurrentUrl { get; set; }
     public event Action? OnLayoutChange;
     
-    public void UpdateState(string  referrerUrl,string currentUrl)
+    public void UpdateState(string  currentUrl,string referrerUrl)
     {
         ReferrerUrl = referrerUrl;
         CurrentUrl = currentUrl;

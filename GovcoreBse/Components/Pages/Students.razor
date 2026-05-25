@@ -6,7 +6,7 @@
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
 @inject ILogger<Students> Itlog
-<CascadingValue Name="PageState" Value="PageState">
+<CascadingValue Name="PageState" Value="@PageState">
     <AuthorizeView Context="authContext">
         <Authorized>
             <LayoutView Layout="typeof(BaseLayout)">
