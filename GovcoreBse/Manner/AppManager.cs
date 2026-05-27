@@ -1,4 +1,6 @@
-﻿namespace GovcoreBse.Manner;
+﻿using GovcoreBse.Store.Setup;
+
+namespace GovcoreBse.Manner;
 
 public class AppManager
 {
@@ -86,6 +88,7 @@ public class AppManager
                     // token expired
                     return null;
                 }
+                userState = userState.AsEmptyWhenNull();
             }
 
             return userState;

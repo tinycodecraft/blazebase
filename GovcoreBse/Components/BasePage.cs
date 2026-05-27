@@ -11,6 +11,9 @@ namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
 {
+    protected string CardTitle { get; set; }
+
+    protected string NotAuthorizedMessage { get; set; }
 
     [Inject]
     protected LayoutStateModel PageState { get; set; }

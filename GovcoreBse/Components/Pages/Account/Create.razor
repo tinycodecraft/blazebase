@@ -104,11 +104,19 @@
 
 @code {
 
-    private string CardTitle { get; set; } = "Account Register";
-    private string NotAuthorizedMessage { get; set; } = "You are not authorized to access Account Register";
+
+
 
     private CreateUserModel _Model = new();
     private IEnumerable<KeyValuePair<string,bool>>  YesNoList = Array.Empty<KeyValuePair<string, bool>>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CardTitle = "Account Register";
+        NotAuthorizedMessage = "You are not authorized to access Account Register";
+
+    }
 
     protected override async Task OnParametersSetAsync()
     {

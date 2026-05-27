@@ -10,8 +10,8 @@
     <AuthorizeView Context="authContext">
         <Authorized>
             <LayoutView Layout="typeof(BaseLayout)">
-                <PageTitle>Students</PageTitle>
-                <h1>Students</h1>
+                <PageTitle>@CardTitle</PageTitle>
+                <h1>@CardTitle</h1>
                 <QuickGrid Items="@students" Pagination="@pagination">
                     <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
                     <TemplateColumn Title="Name" SortBy="@sortByName">
@@ -52,7 +52,7 @@
             <LayoutView Layout="typeof(BaseLayout)">
                 <PageTitle>Not Authorized</PageTitle>
                 <h1>Not Authorized</h1>
-                <p>You are not authorized to view this Students page.</p>
+                <p>@NotAuthorizedMessage</p>
             </LayoutView>
         </NotAuthorized>
     </AuthorizeView>
@@ -102,6 +102,10 @@
     protected override void OnInitialized()
     {
         AttachType ??= "G";
+
+        CardTitle = "Students";
+        NotAuthorizedMessage = "You are not authorized to view this Students page.";
+
         base.OnInitialized();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
