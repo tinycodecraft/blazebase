@@ -2,6 +2,7 @@
 using GovcoreBse.Control;
 using GovcoreBse.Manner;
 using GovcoreBse.Models;
+using GovcoreBse.Store.Commands;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
@@ -11,6 +12,7 @@ namespace GovcoreBse.Components;
 
 public class BasePage: CoreCancellableComponent
 {
+    protected string RequireRoles { get; set; }
     protected string CardTitle { get; set; }
 
     protected string NotAuthorizedMessage { get; set; }
@@ -49,6 +51,12 @@ public class BasePage: CoreCancellableComponent
     }
     protected override void OnInitialized()
     {
+       base.OnInitialized();
+        
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
         
     }
 

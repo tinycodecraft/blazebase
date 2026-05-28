@@ -6,57 +6,65 @@
 @using Soenneker.Blazor.FilePond.Enums
 @using Soenneker.Utils.Random
 @inject ILogger<Students> Itlog
-<CascadingValue Name="PageState" Value="@PageState">
-    <AuthorizeView Context="authContext">
-        <Authorized>
-            <LayoutView Layout="typeof(BaseLayout)">
-                <PageTitle>@CardTitle</PageTitle>
-                <h1>@CardTitle</h1>
-                <QuickGrid Items="@students" Pagination="@pagination">
-                    <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
-                    <TemplateColumn Title="Name" SortBy="@sortByName">
-                        <div class="flex items-center">
-                            <nobr>
-                                <strong>@context.FirstName @context.LastName</strong>
-                            </nobr>
-                        </div>
-                    </TemplateColumn>
-                    <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
-                </QuickGrid>
+<CascadingValue Name="Roles" Value="@RequireRoles">
+    <CascadingValue Name="PageState" Value="@PageState">
+        <CascadingValue Name="Title" Value="@CardTitle">
+            <CascadingValue Name="NotAuthMsg" Value="@NotAuthorizedMessage">
+                <AuthorizeView Context="authContext">
+                    <Authorized>
+                        <LayoutView Layout="typeof(BaseLayout)">
+                            <PageTitle>@CardTitle</PageTitle>
+                            <h1>@CardTitle</h1>
+                            <QuickGrid Items="@students" Pagination="@pagination">
+                                <PropertyColumn Property="@(_ => _.Id)" Sortable="true" />
+                                <TemplateColumn Title="Name" SortBy="@sortByName">
+                                    <div class="flex items-center">
+                                        <nobr>
+                                            <strong>@context.FirstName @context.LastName</strong>
+                                        </nobr>
+                                    </div>
+                                </TemplateColumn>
+                                <PropertyColumn Property="@(_ => _.School)" Sortable="true" />
+                            </QuickGrid>
 
-                <Paginator State="@pagination" />
+                            <Paginator State="@pagination" />
 
-                <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
-                <div class="row g-3">
-                    <div class="col-12">
-                        <input type="hidden" id="@CN.Setting.AntiForgeryId" value="@GetToken()" />
-                    </div>
-                    <div class="col-12">
-                        <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
-                                  OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"></FilePond>
-                    </div>
-                    <div class="col-6">
-                        <HxButton Text="Add Files"
-                                  Color="ThemeColor.Primary"
-                                  OnClick="AddFiles" />
-                        <HxButton Text="Add Limbo File"
-                                  Color="ThemeColor.Secondary"
-                                  OnClick="AddLimboFile" />
-                    </div>
+                            <a href="#" @onclick="OnCallInterJs" @onclick:preventDefault="true">Click Me (Example to inject JavaScript to invoke)</a>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <input type="hidden" id="@CN.Setting.AntiForgeryId" value="@GetToken()" />
+                                </div>
+                                <div class="col-12">
+                                    <FilePond @key="AttachType" @ref="FilePondObj" Options="_options" OnInit="OnInit" UrlModel="_model"
+                                              OnServerFileLoad="OnFilePondLoadFile" OnServerFileRemove="OnFilePondRemoveFile"></FilePond>
+                                </div>
+                                <div class="col-6">
+                                    <HxButton Text="Add Files"
+                                              Color="ThemeColor.Primary"
+                                              OnClick="AddFiles" />
+                                    <HxButton Text="Add Limbo File"
+                                              Color="ThemeColor.Secondary"
+                                              OnClick="AddLimboFile" />
+                                </div>
 
-                </div>
+                            </div>
 
-            </LayoutView>
-        </Authorized>
-        <NotAuthorized>
-            <LayoutView Layout="typeof(BaseLayout)">
-                <PageTitle>Not Authorized</PageTitle>
-                <h1>Not Authorized</h1>
-                <p>@NotAuthorizedMessage</p>
-            </LayoutView>
-        </NotAuthorized>
-    </AuthorizeView>
+                        </LayoutView>
+                    </Authorized>
+                    <NotAuthorized>
+                        <LayoutView Layout="typeof(BaseLayout)">
+                            <PageTitle>Not Authorized</PageTitle>
+                            <h1>Not Authorized</h1>
+                            <p>@NotAuthorizedMessage</p>
+                        </LayoutView>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </CascadingValue>
+        </CascadingValue>
+        
+    </CascadingValue>
 </CascadingValue>
+
 
 
 
@@ -107,8 +115,8 @@
 
         CardTitle = "Students";
         NotAuthorizedMessage = "You are not authorized to view this Students page.";
+        RequireRoles = "User";
 
-        
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -126,8 +134,6 @@
                 _options.RemoveUrl = Settings.Value.FileRemove;
                 _options.TypeTag = CN.Setting.FILEPOND_ATTCHTYPE;
                 _options.TypeTagValue = AttachType;
-
-
 
 
                 StateHasChanged();

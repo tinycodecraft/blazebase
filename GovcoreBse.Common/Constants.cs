@@ -135,11 +135,14 @@ public class Constants
 
         public const string SETT_DOCTYPE = "DocType";
         public const string SETT_DOCMAXCNT = "DocMaxCnt";
+        public const string SETT_LINKSYSTM = "LinkSystem";
 
         public const string DOCTYPE_GENERAL = "G";
 
         public const string LANG_ENG = "en-US";
         public const string LANG_CHI = "zh-HK";
+
+        public const string WILDCARD_SYSTEM = "*";
 
     }
 

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Cortex.Mediator;
+using GovcoreBse.Store.Commands;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace GovcoreBse.Manner;
 
@@ -9,13 +12,15 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
     private readonly AppManager appManager;
     private readonly ILogger<CookieAuthStateProvider> logger;
     private readonly IHttpContextAccessor accessor;
-    public CookieAuthStateProvider(AppManager manager,ILogger<CookieAuthStateProvider> mlogger,IHttpContextAccessor maccessor)
+    private readonly IMediator commander;
+    public CookieAuthStateProvider(AppManager manager,ILogger<CookieAuthStateProvider> mlogger,IHttpContextAccessor maccessor,IMediator cmd)
     {
         appManager = manager;
         logger = mlogger;
         accessor = maccessor;
+        commander = cmd;
     }
-    public override Task<AuthenticationState> GetAuthenticationStateAsync()
+    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
         try
@@ -25,6 +30,7 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
 
             if (userState != null)
             {
+                var result = await  commander.SendQueryAsync(new GetRolesQuery(userState.UserID));
                 var identity = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, userState.UserName),
@@ -35,20 +41,28 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
                     new Claim("IsAdmin", userState.IsAdmin.ToString()),
                     new Claim("Division", userState.Division ),
                 }, CN.Setting.AuthenticationCookieName);
-                var user = new ClaimsPrincipal(identity);
+                if(!result.IsError)
+                {
+                    foreach(var r in result.Value.RoleNames)
+                    {
+                        identity.AddClaim(new Claim( ClaimTypes.Role, r));
+                    }
+                }
                 
-                return Task.FromResult(new AuthenticationState(user));
+                var user = new ClaimsPrincipal(identity);
+               
+                return new AuthenticationState(user);
             }
             else
             {
                 
-                return Task.FromResult(new AuthenticationState(anonymous));
+                return new AuthenticationState(anonymous);
             }
         }
         catch(Exception ex)
         {
             logger.LogError(ex, "Error in GetAuthenticationStateAsync");
         }
-        return Task.FromResult(new AuthenticationState(anonymous));
+        return new AuthenticationState(anonymous);
     }
 }

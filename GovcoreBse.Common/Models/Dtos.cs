@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace GovcoreBse.Common.Models;
 
+
+public class UserRoleDto
+{
+    public string LinkSystem { get; set;  }
+    public int Level { get; set;  }
+    public string[] RoleNames { get; set; }
+}
+
 public class UserDto
 {
 

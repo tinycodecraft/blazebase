@@ -72,7 +72,7 @@
 <div class="container">
     <main role="main" class="pb-3">
         <div class="ribbon"></div>
-        <AuthorizeView Context="authContext" >
+        <AuthorizeView Context="authContext" Roles="@RequireRoles" >
             <Authorized>
                 <PageTitle>@CardTitle</PageTitle>
                 <div class="card-container">
@@ -101,6 +101,10 @@
 
 
 @code {
+
+    [CascadingParameter(Name = "Roles")]
+    private string RequireRoles { get; set; } = string.Empty;
+
     [CascadingParameter(Name ="PageState")]
     private LayoutStateModel? layoutState { get; set; } 
 

@@ -7,6 +7,34 @@ using Microsoft.EntityFrameworkCore;
 namespace GovcoreBse.Store.Commands
 {
 
+    public record GetRolesQuery(string userid) : IQuery<ErrorOr<UserRoleDto>>;
+    public class GetRolesQueryHandler: IQueryHandler<GetRolesQuery,ErrorOr<UserRoleDto>>
+    {
+        private readonly IBlazeLogDbContext context;
+        public GetRolesQueryHandler(IBlazeLogDbContext ctx)
+        {
+            context = ctx;
+        }
+
+        public async Task<ErrorOr<UserRoleDto>> Handle(GetRolesQuery query,CancellationToken cancellationToken)
+        {
+            var linksystem = context.CoreSettings.FirstOrDefault(e => e.SettingId == DK.SETT_LINKSYSTM)?.SettingValue;
+            var uquery = from u in context.CoreUsers.Where(x=> x.UserId ==query.userid)
+                         join r in context.CoreRoles.Where(x => x.LinkSystem == linksystem || x.LinkSystem== DK.WILDCARD_SYSTEM) on u.level equals r.level
+                         select new { r.RoleName, u.UserId , u.level} ;
+            if (uquery.Any() && linksystem!=null) {
+                var datum = uquery.FirstOrDefault();
+                var roles =await uquery.Select(x => x.RoleName).ToArrayAsync();
+                return new UserRoleDto { Level = datum!.level, LinkSystem = linksystem, RoleNames = roles };
+
+            }
+            
+            return Error.NotFound("UserRoleNotFound", $"User {query.userid} for Role not located");
+        }
+    }
+
+
+
     public record GetUserQuery(string userId) : IQuery<ErrorOr<UserDto>>;
 
     public class GetUserQueryHandler: IQueryHandler<GetUserQuery,ErrorOr<UserDto>>
