@@ -36,6 +36,7 @@ public class CookieAuthStateProvider: AuthenticationStateProvider
                     new Claim("Division", userState.Division ),
                 }, CN.Setting.AuthenticationCookieName);
                 var user = new ClaimsPrincipal(identity);
+                
                 return Task.FromResult(new AuthenticationState(user));
             }
             else

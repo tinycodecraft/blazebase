@@ -13,6 +13,7 @@ public partial class BlazeLogDbContext : DbContext
     {
     }
 
+    public virtual DbSet<CoreRole> CoreRoles { get; set; }
     public virtual DbSet<CoreActivityLog> CoreActivityLogs { get; set; }
 
     public virtual DbSet<CoreFileDoc> CoreFileDocs { get; set; }
@@ -50,6 +51,17 @@ public partial class BlazeLogDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreUser_updatedAt");
         });
+
+        modelBuilder.Entity<CoreRole>(entity =>
+        {
+            entity.Property(e => e.level)
+                .HasDefaultValue(-1)
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreRole_level");
+            entity.Property(e => e.updatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_CoreRole_updatedAt");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

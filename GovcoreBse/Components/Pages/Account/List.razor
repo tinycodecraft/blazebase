@@ -1,0 +1,27 @@
+﻿@page "/account/list"
+@inherits BasePage
+@inject ILogger<List> Itlog
+
+<CascadingValue Name="PageState" Value="@PageState">
+    <CascadingValue Name="Title" Value="@CardTitle">
+        <CascadingValue Name="NotAuthMsg" Value="@NotAuthorizedMessage">
+            <LayoutView Layout="typeof(AuthBaseLayout)">
+                <h1>@CardTitle</h1>
+                <div class="container-fluid">
+                </div>
+            </LayoutView>
+        </CascadingValue>
+
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CardTitle = "Account List";
+        NotAuthorizedMessage = "You are not authorized to access Account List";
+
+    }
+}

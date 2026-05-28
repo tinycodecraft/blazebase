@@ -101,12 +101,14 @@
     }
     protected override void OnInitialized()
     {
+        base.OnInitialized();
+
         AttachType ??= "G";
 
         CardTitle = "Students";
         NotAuthorizedMessage = "You are not authorized to view this Students page.";
 
-        base.OnInitialized();
+        
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

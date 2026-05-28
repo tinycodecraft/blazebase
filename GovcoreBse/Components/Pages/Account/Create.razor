@@ -6,7 +6,7 @@
     <CascadingValue Name="Title" Value="@CardTitle">
         <CascadingValue Name="NotAuthMsg" Value="@NotAuthorizedMessage">
             <LayoutView Layout="typeof(AuthBaseLayout)">
-                <h1>Account Register</h1>
+                <h1>@CardTitle</h1>
                 <div class="container-fluid">
                     <HxFilterForm TModel="CreateUserModel" @bind-Model="_Model" @bind-Model:after="HandleModelChanged" Context="formContext">
                         <DataAnnotationsValidator />

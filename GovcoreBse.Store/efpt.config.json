@@ -5,9 +5,9 @@
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "IrregularWords": null,
-   "MinimumProductVersion": "2.6.1382",
-   "ModelNamespace": "Models",
-   "OutputContextPath": "Models",
+   "MinimumProductVersion": "2.6.1604",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
    "OutputPath": "Models",
    "PluralRules": null,
    "PreserveCasingWithRegex": true,
@@ -19,19 +19,7 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[CoreActivityLog]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CoreFileDoc]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CoreSetting]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[CoreUser]",
+         "Name": "[dbo].[CoreRole]",
          "ObjectType": 0
       }
    ],
@@ -41,7 +29,7 @@
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDatabaseNamesForRoutines": true,
-   "UseDateOnlyTimeOnly": false,
+   "UseDateOnlyTimeOnly": true,
    "UseDbContextSplitting": false,
    "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": false,
@@ -50,12 +38,12 @@
    "UseInflector": true,
    "UseInternalAccessModifiersForSprocsAndFunctions": false,
    "UseLegacyPluralizer": false,
-   "UseManyToManyEntity": true,
+   "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": true,
    "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
-   "UseNullableReferences": true,
+   "UseNullableReferences": false,
    "UsePrefixNavigationNaming": false,
    "UseSchemaFolders": false,
    "UseSchemaNamespaces": false,
